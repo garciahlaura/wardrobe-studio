@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Capsule Builder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:  #2A3550;
+    --slate: #7A8599;
+    --dove:  #C0BDB8;
+    --ecru:  #F5F0EB;
+    --powder:#B8CEDD;
+    --rule:  #E2DED9;
+    --bg:    #FAFAF8;
+    --bg-ref:#F2EEE9;
+    --text:  #2C2C2C;
+    --light: #6B6B6B;
+    --sage:  #8FAF8B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 24px;
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,6vw,44px); font-weight: 300; line-height: 1.1; margin-bottom: 8px; }
+  .header h1 em { font-style: italic; color: var(--powder); }
+  .header-sub { font-size: 12px; opacity: 0.6; line-height: 1.6; max-width: 460px; }
+
+  .main { max-width: 860px; margin: 0 auto; padding: 0 0 60px; }
+
+  /* ── BUILDER FORM ── */
+  .builder {
+    padding: 24px;
+    background: white;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .builder-title {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  @media(max-width:520px){ .form-grid { grid-template-columns: 1fr; } }
+
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slate); font-weight: 500; }
+
+  select, input[type=number] {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    padding: 10px 12px;
+    width: 100%;
+    outline: none;
+    -webkit-appearance: none;
+    transition: border-color 0.15s;
+  }
+  select:focus, input:focus { border-color: var(--navy); }
+
+  /* ── TRIP TYPE GRID ── */
+  .trip-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .trip-type {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .trip-type:hover { border-color: var(--slate); }
+  .trip-type.selected { background: var(--navy); border-color: var(--navy); color: white; }
+
+  .trip-icon { font-size: 22px; line-height: 1; }
+  .trip-name { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; line-height: 1.3; }
+  .trip-desc { font-size: 10px; opacity: 0.7; line-height: 1.3; }
+  .trip-type.selected .trip-desc { opacity: 0.7; }
+
+  /* ── WEATHER TOGGLE ── */
+  .weather-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .weather-btn {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+  }
+  .weather-btn:hover { border-color: var(--slate); }
+  .weather-btn.selected { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* ── BUILD BUTTON ── */
+  .btn-build {
+    background: var(--navy);
+    color: white;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.15s;
+  }
+  .btn-build:hover { opacity: 0.85; }
+
+  /* ── RESULTS ── */
+  .results { padding: 24px; display: none; }
+  .results.visible { display: block; }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .results-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px,4vw,32px);
+    font-weight: 300;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+
+  .results-summary {
+    font-size: 11px;
+    color: var(--light);
+    text-align: right;
+  }
+
+  .btn-print {
+    background: none;
+    border: 1px solid var(--rule);
+    font-size: 10px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    cursor: pointer;
+    color: var(--slate);
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .btn-print:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* ── PACK GRID ── */
+  .pack-section {
+    margin-bottom: 24px;
+  }
+
+  .pack-section-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pack-section-title::after { content:''; flex:1; height:1px; background:var(--rule); }
+
+  .pack-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media(min-width:600px){ .pack-grid { grid-template-columns: repeat(3,1fr); } }
+
+  .pack-item {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .pack-item.hero { border-left: 3px solid var(--navy); }
+  .pack-item.owned { border-left: 3px solid var(--sage); }
+  .pack-item.buy   { border-left: 3px solid #C4879A; }
+
+  .pack-check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    accent-color: var(--navy);
+    margin-top: 1px;
+    cursor: pointer;
+  }
+
+  .pack-info { flex: 1; min-width: 0; }
+
+  .pack-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+
+  .pack-detail {
+    font-size: 11px;
+    color: var(--light);
+    line-height: 1.45;
+  }
+
+  .pack-badge {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .badge-hero  { background: #EEF2F8; color: var(--navy); }
+  .badge-owned { background: #EEF5EE; color: #3A7A3A; }
+  .badge-buy   { background: #F5EEF2; color: #7A3A5A; }
+
+  /* ── OUTFIT COMBOS ── */
+  .combo-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .combo {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 13px 16px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .combo-dots { display: flex; gap: 4px; flex-shrink: 0; }
+  .cdot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0; }
+
+  .combo-detail {}
+  .combo-name { font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+  .combo-pieces { font-size: 11.5px; color: var(--light); line-height: 1.5; }
+  .combo-occ { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate); margin-top: 3px; }
+
+  /* ── PACKING RULE ── */
+  .pack-rule {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.55;
+    opacity: 0.95;
+  }
+
+  /* ── WEIGHT / SIZE ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    background: white;
+    padding: 12px 14px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .stat-lbl {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 3px;
+  }
+
+  @media print {
+    .builder { display: none; }
+    .results { display: block !important; }
+    .btn-print { display: none; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Wardrobe System</div>
+  <h1>Travel Capsule <em>Builder</em></h1>
+  <div class="header-sub">Select your trip type, duration, and climate. Your personal capsule — drawn from pieces you own — is generated instantly.</div>
+</div>
+
+<div class="main">
+
+  <!-- BUILDER -->
+  <div class="builder">
+    <div class="builder-title">Configure your trip</div>
+
+    <!-- TRIP TYPE -->
+    <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--slate);font-weight:500;margin-bottom:10px;">Trip type</div>
+    <div class="trip-types" id="tripTypes">
+      <div class="trip-type selected" data-type="city" onclick="selectTrip(this)">
+        <span class="trip-icon">🏙️</span>
+        <span class="trip-name">City Break</span>
+        <span class="trip-desc">Culture, dining, walking</span>
+      </div>
+      <div class="trip-type" data-type="work" onclick="selectTrip(this)">
+        <span class="trip-icon">💼</span>
+        <span class="trip-name">Work Trip</span>
+        <span class="trip-desc">Meetings + evenings</span>
+      </div>
+      <div class="trip-type" data-type="beach" onclick="selectTrip(this)">
+        <span class="trip-icon">🌊</span>
+        <span class="trip-name">Beach / Sun</span>
+        <span class="trip-desc">Relaxed, warm weather</span>
+      </div>
+      <div class="trip-type" data-type="family" onclick="selectTrip(this)">
+        <span class="trip-icon">👶</span>
+        <span class="trip-name">Family Trip</span>
+        <span class="trip-desc">Practical + presentable</span>
+      </div>
+      <div class="trip-type" data-type="weekend" onclick="selectTrip(this)">
+        <span class="trip-icon">🌿</span>
+        <span class="trip-name">Weekend Away</span>
+        <span class="trip-desc">Casual, 2–3 nights</span>
+      </div>
+    </div>
+
+    <!-- WEATHER -->
+    <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--slate);font-weight:500;margin-bottom:10px;">Climate</div>
+    <div class="weather-row" id="weatherBtns">
+      <button class="weather-btn selected" data-weather="warm" onclick="selectWeather(this)">☀️ Warm (18°C+)</button>
+      <button class="weather-btn" data-weather="mild" onclick="selectWeather(this)">🌤️ Mild (12–18°C)</button>
+      <button class="weather-btn" data-weather="cold" onclick="selectWeather(this)">❄️ Cold (under 12°C)</button>
+    </div>
+
+    <!-- DURATION -->
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Number of nights</label>
+        <input type="number" id="nights" value="4" min="1" max="14"/>
+      </div>
+      <div class="form-field">
+        <label>Bag type</label>
+        <select id="bagType">
+          <option value="cabin">Cabin bag only</option>
+          <option value="check" selected>Checked bag</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-build" onclick="buildCapsule()">Build my capsule →</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="results-header">
+      <div>
+        <div class="results-title" id="resultsTitle">City Break · Warm · 4 nights</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn-print" onclick="window.print()">Print / Save</button>
+        <button class="btn-print" onclick="document.getElementById('results').classList.remove('visible');window.scrollTo(0,0)">← Change</button>
+      </div>
+    </div>
+
+    <div class="stats-row" id="statsRow">
+      <div class="stat"><div class="stat-val" id="statPieces">0</div><div class="stat-lbl">Pieces</div></div>
+      <div class="stat"><div class="stat-val" id="statOutfits">0</div><div class="stat-lbl">Outfits</div></div>
+      <div class="stat"><div class="stat-val" id="statDays">0</div><div class="stat-lbl">Days covered</div></div>
+    </div>
+
+    <div id="packingList"></div>
+    <div id="outfitCombos"></div>
+    <div id="packingRule"></div>
+  </div>
+
+</div>
+
+<script>
+let tripType = 'city';
+let weather  = 'warm';
+
+function selectTrip(el) {
+  document.querySelectorAll('.trip-type').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  tripType = el.dataset.type;
+}
+
+function selectWeather(el) {
+  document.querySelectorAll('.weather-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  weather = el.dataset.weather;
+}
+
+// ── CAPSULE DATABASE ──────────────────────────────────────────────────────────
+// Each piece: name, cat, colour, owned (true = already in wardrobe), hero, when
+const ALL_PIECES = {
+  // Tops
+  ecru_blouse:    { name:'Écru silk blouse',         cat:'Top',      col:'#F5F0EB', owned:true,  hero:false, temp:['warm','mild'],       trips:['city','work','beach','weekend'] },
+  corn_blouse:    { name:'Cornflower silk blouse',    cat:'Top',      col:'#7B9FD4', owned:false, hero:false, temp:['warm','mild','cold'], trips:['city','work','weekend'] },
+  ecru_turtle:    { name:'Écru cashmere turtleneck',  cat:'Top',      col:'#F5F0EB', owned:true,  hero:true,  temp:['mild','cold'],        trips:['city','work','weekend','family'] },
+  navy_crew:      { name:'Navy cashmere crew',        cat:'Top',      col:'#2A3550', owned:false, hero:false, temp:['mild','cold'],        trips:['city','work','weekend','family'] },
+  breton:         { name:'Breton stripe top',         cat:'Top',      col:'#F5F0EB', owned:false, hero:false, temp:['warm','mild'],        trips:['city','beach','family','weekend'] },
+  stripe_shirt:   { name:'Blue stripe sleeveless shirt',cat:'Top',   col:'#7B9FD4', owned:true,  hero:true,  temp:['warm'],               trips:['city','beach','family','weekend'] },
+  white_shirt:    { name:'White tailored shirt',      cat:'Top',      col:'#F8F8F8', owned:false, hero:false, temp:['warm','mild'],        trips:['city','work','beach','weekend'] },
+  ecru_cami:      { name:'Écru silk camisole',        cat:'Top',      col:'#F5F0EB', owned:false, hero:false, temp:['warm'],               trips:['city','beach','work'] },
+
+  // Bottoms
+  navy_trousers:  { name:'Navy slim trousers',        cat:'Bottom',   col:'#2A3550', owned:false, hero:true,  temp:['warm','mild','cold'], trips:['city','work','weekend','family'] },
+  slate_trousers: { name:'Slate grey trousers',       cat:'Bottom',   col:'#7A8599', owned:false, hero:false, temp:['warm','mild','cold'], trips:['city','work','weekend'] },
+  indigo_jeans:   { name:'Dark straight-leg jeans',   cat:'Bottom',   col:'#3B5998', owned:false, hero:false, temp:['mild','cold'],        trips:['city','family','weekend'] },
+  white_shorts:   { name:'White tailored shorts',     cat:'Bottom',   col:'#F8F8F8', owned:true,  hero:false, temp:['warm'],               trips:['beach','family','weekend'] },
+  linen_trousers: { name:'Écru linen trousers',       cat:'Bottom',   col:'#F5F0EB', owned:false, hero:false, temp:['warm'],               trips:['city','beach','weekend'] },
+
+  // Dresses
+  navy_dress:     { name:'Navy wrap dress',           cat:'Dress',    col:'#2A3550', owned:false, hero:true,  temp:['warm','mild'],        trips:['city','work','beach','family','weekend'] },
+  lav_dress:      { name:'Lavender wrap dress',       cat:'Dress',    col:'#B8A9C9', owned:false, hero:false, temp:['warm','mild'],        trips:['city','beach','weekend'] },
+  mauve_dress:    { name:'Mauve bias-cut dress',      cat:'Dress',    col:'#A0768A', owned:false, hero:false, temp:['warm','mild'],        trips:['city','work','weekend'] },
+
+  // Outerwear
+  navy_blazer:    { name:'Fitted navy blazer',        cat:'Layer',    col:'#2A3550', owned:false, hero:true,  temp:['warm','mild','cold'], trips:['city','work','weekend','family'] },
+  denim_jacket:   { name:'Denim jacket',              cat:'Layer',    col:'#5B7EC9', owned:true,  hero:true,  temp:['warm','mild'],        trips:['city','beach','family','weekend'] },
+  dove_cardi:     { name:'Dove grey cashmere cardigan',cat:'Layer',   col:'#C0BDB8', owned:false, hero:false, temp:['mild','cold'],        trips:['city','work','weekend'] },
+  trench:         { name:'Trench coat',               cat:'Outer',    col:'#C4BAB0', owned:false, hero:false, temp:['mild'],               trips:['city','work','weekend'] },
+  wool_coat:      { name:'Wool coat (navy)',           cat:'Outer',    col:'#2A3550', owned:false, hero:false, temp:['cold'],               trips:['city','work','weekend'] },
+
+  // Shoes
+  trainers:       { name:'White leather trainers',    cat:'Shoes',    col:'#F8F8F8', owned:true,  hero:true,  temp:['warm','mild','cold'], trips:['city','beach','family','weekend'] },
+  flat_mule:      { name:'Pointed flat mule (nude)',  cat:'Shoes',    col:'#C4BAB0', owned:false, hero:false, temp:['warm','mild'],        trips:['city','work','weekend'] },
+  loafer:         { name:'Tan loafer',                cat:'Shoes',    col:'#C4BAB0', owned:false, hero:false, temp:['mild','cold'],        trips:['city','work','weekend','family'] },
+  silver_mule:    { name:'Silver flat mule',          cat:'Shoes',    col:'#C0C0C0', owned:false, hero:false, temp:['warm','mild'],        trips:['city','work','beach','weekend'] },
+  sandal:         { name:'Flat leather sandal',       cat:'Shoes',    col:'#C8A97A', owned:false, hero:false, temp:['warm'],               trips:['city','beach','family','weekend'] },
+  chelsea:        { name:'Chelsea boot (black)',       cat:'Shoes',    col:'#2A2020', owned:false, hero:false, temp:['cold'],               trips:['city','work','weekend'] },
+
+  // Bags
+  tote:           { name:'Leather tote',              cat:'Bag',      col:'#C8A97A', owned:false, hero:true,  temp:['warm','mild','cold'], trips:['city','work','weekend','family'] },
+  crossbody:      { name:'Small crossbody',           cat:'Bag',      col:'#1A1A1A', owned:false, hero:false, temp:['warm','mild','cold'], trips:['city','beach','family','weekend'] },
+  scarf:          { name:'Silk scarf (navy/écru)',    cat:'Acc',      col:'#2A3550', owned:false, hero:false, temp:['warm','mild','cold'], trips:['city','work','weekend'] },
+};
+
+// ── OUTFIT COMBINATIONS per trip type + weather ────────────────────────────────
+const COMBOS = {
+  city_warm: [
+    { name:'Day exploring', dots:['#F5F0EB','#3B5998','#C8A97A'],      pieces:'Écru blouse · Linen trousers · Flat sandal',                 occ:'Sightseeing · Lunch' },
+    { name:'Smart dinner',  dots:['#2A3550','#C8A97A'],                pieces:'Navy wrap dress · Flat leather sandal',                      occ:'Evening · Restaurant' },
+    { name:'Travel day',    dots:['#2A3550','#F5F0EB','#C4BAB0'],      pieces:'Navy trousers · Stripe shirt · Flat mule',                   occ:'Airport · Transit' },
+    { name:'Casual lunch',  dots:['#7B9FD4','#F8F8F8','#F8F8F8'],      pieces:'Cornflower blouse · White shorts · White trainers',          occ:'Daytime · Café' },
+    { name:'Date night',    dots:['#A0768A','#F5F0EB','#C0C0C0'],      pieces:'Mauve dress · Écru cami under · Silver flat mule',           occ:'Evening' },
+  ],
+  city_mild: [
+    { name:'Day out',       dots:['#F5F0EB','#2A3550','#2A3550'],      pieces:'Écru turtleneck · Navy trousers · Navy blazer',              occ:'Exploring · Lunch' },
+    { name:'Smart evening', dots:['#B8A9C9','#2A3550','#C4BAB0'],      pieces:'Lavender dress · Navy blazer · Flat mule',                   occ:'Dinner · Evening' },
+    { name:'Travel day',    dots:['#F5F0EB','#3B5998','#5B7EC9'],      pieces:'Breton · Straight-leg jeans · Denim jacket',                 occ:'Transit' },
+    { name:'Walking day',   dots:['#7B9FD4','#2A3550','#F8F8F8'],      pieces:'Cornflower blouse · Navy trousers · White trainers',         occ:'Sightseeing' },
+    { name:'Dinner',        dots:['#2A3550','#C4BAB0'],                pieces:'Navy wrap dress · Loafer',                                   occ:'Restaurant' },
+  ],
+  city_cold: [
+    { name:'Day out',       dots:['#F5F0EB','#2A3550','#2A3550','#C4BAB0'], pieces:'Écru turtleneck · Blazer · Navy trousers · Trench over', occ:'Sightseeing' },
+    { name:'Evening',       dots:['#F5F0EB','#A0768A','#C0C0C0'],      pieces:'Écru turtleneck under mauve dress · Silver mule',            occ:'Dinner' },
+    { name:'Walking',       dots:['#F5F0EB','#3B5998','#2A2020'],      pieces:'Écru turtleneck · Straight-leg jeans · Chelsea boot',        occ:'Exploring' },
+    { name:'Smart day',     dots:['#7B9FD4','#7A8599','#2A2020'],      pieces:'Cornflower blouse · Slate trousers · Chelsea boot',          occ:'Meetings · Lunch' },
+  ],
+  work_warm: [
+    { name:'Office day',    dots:['#F5F0EB','#2A3550','#2A3550'],      pieces:'Écru blouse · Navy trousers · Navy blazer',                  occ:'Office · Meetings' },
+    { name:'Client dinner', dots:['#2A3550','#C4BAB0'],                pieces:'Navy wrap dress · Flat mule',                                occ:'Evening' },
+    { name:'Travel day',    dots:['#7B9FD4','#2A3550','#C4BAB0'],      pieces:'Cornflower blouse · Navy trousers · Flat mule',              occ:'Airport · Transit' },
+    { name:'Presentation',  dots:['#7B9FD4','#2A3550','#2A3550'],      pieces:'Cornflower blouse · Navy trousers · Navy blazer',            occ:'Meetings' },
+    { name:'Dinner',        dots:['#A0768A','#F5F0EB','#C0C0C0'],      pieces:'Mauve dress · Écru cami · Silver mule',                      occ:'Evening' },
+  ],
+  work_mild: [
+    { name:'Office day',    dots:['#F5F0EB','#2A3550','#2A3550'],      pieces:'Écru turtleneck · Navy blazer · Navy trousers',              occ:'Office · Meetings' },
+    { name:'Evening',       dots:['#2A3550','#C4BAB0'],                pieces:'Navy wrap dress · Flat mule',                                occ:'Dinner' },
+    { name:'Travel',        dots:['#F5F0EB','#7A8599','#C4BAB0'],      pieces:'Écru turtleneck · Slate trousers · Loafer',                  occ:'Transit' },
+    { name:'Smart casual',  dots:['#F5F0EB','#3B5998','#2A3550'],      pieces:'Breton · Jeans · Navy blazer',                               occ:'Business casual' },
+  ],
+  work_cold: [
+    { name:'Office day',    dots:['#F5F0EB','#2A3550','#2A3550','#2A3550'], pieces:'Écru turtleneck · Blazer · Navy trousers · Wool coat', occ:'Office' },
+    { name:'Dinner',        dots:['#F5F0EB','#2A3550','#C0C0C0'],      pieces:'Écru turtleneck under navy dress · Silver mule',             occ:'Evening' },
+    { name:'Casual day',    dots:['#F5F0EB','#3B5998','#2A2020'],      pieces:'Écru turtleneck · Jeans · Chelsea boot',                     occ:'Downtime' },
+  ],
+  beach_warm: [
+    { name:'Beach day',     dots:['#F5F0EB','#F8F8F8','#C8A97A'],      pieces:'Stripe shirt tied · White shorts · Flat sandal',            occ:'Beach · Poolside' },
+    { name:'Lunch out',     dots:['#7B9FD4','#F8F8F8','#C8A97A'],      pieces:'Cornflower blouse · White shorts · Flat sandal',            occ:'Restaurant · Town' },
+    { name:'Evening',       dots:['#2A3550','#C8A97A'],                pieces:'Navy wrap dress · Flat sandal',                              occ:'Dinner' },
+    { name:'Travel',        dots:['#F5F0EB','#2A3550','#F8F8F8'],      pieces:'Écru blouse · Navy trousers · White trainers',               occ:'Airport' },
+    { name:'Date night',    dots:['#A0768A','#F5F0EB','#C0C0C0'],      pieces:'Mauve dress · Écru cami · Silver mule',                      occ:'Evening' },
+  ],
+  family_warm: [
+    { name:'Theme park',    dots:['#F5F0EB','#F8F8F8','#F8F8F8'],      pieces:'Breton · White shorts · White trainers',                    occ:'Active day' },
+    { name:'Lunch',         dots:['#7B9FD4','#F8F8F8','#F8F8F8'],      pieces:'Cornflower blouse · White shorts · White trainers',         occ:'Restaurant' },
+    { name:'Evening out',   dots:['#2A3550','#5B7EC9','#C4BAB0'],      pieces:'Navy wrap dress · Denim jacket · Flat mule',                 occ:'Dinner with family' },
+    { name:'Active day',    dots:['#F5F0EB','#3B5998','#F8F8F8'],      pieces:'Stripe shirt · Straight-leg jeans · White trainers',        occ:'Walking · Parks' },
+    { name:'Travel',        dots:['#F5F0EB','#3B5998','#5B7EC9'],      pieces:'Écru turtleneck · Jeans · Denim jacket',                     occ:'Airport · Transit' },
+  ],
+  family_mild: [
+    { name:'Activity day',  dots:['#F5F0EB','#3B5998','#5B7EC9'],      pieces:'Breton · Straight-leg jeans · Denim jacket',                occ:'Active' },
+    { name:'Lunch',         dots:['#F5F0EB','#2A3550','#C4BAB0'],      pieces:'Écru turtleneck · Navy trousers · Loafer',                   occ:'Restaurant' },
+    { name:'Evening',       dots:['#2A3550','#5B7EC9','#C4BAB0'],      pieces:'Navy wrap dress · Denim jacket · Flat mule',                 occ:'Dinner' },
+    { name:'Travel',        dots:['#F5F0EB','#3B5998','#F8F8F8'],      pieces:'Écru turtleneck · Jeans · White trainers',                   occ:'Airport' },
+  ],
+  weekend_warm: [
+    { name:'Morning',       dots:['#F5F0EB','#3B5998','#F8F8F8'],      pieces:'Breton · Straight-leg jeans · White trainers',              occ:'Exploring · Café' },
+    { name:'Lunch',         dots:['#7B9FD4','#2A3550','#C4BAB0'],      pieces:'Cornflower blouse · Navy trousers · Flat mule',              occ:'Restaurant' },
+    { name:'Evening',       dots:['#2A3550','#C8A97A'],                pieces:'Navy wrap dress · Flat sandal',                              occ:'Dinner' },
+  ],
+  weekend_mild: [
+    { name:'Day out',       dots:['#F5F0EB','#2A3550','#5B7EC9'],      pieces:'Écru turtleneck · Navy trousers · Denim jacket',             occ:'Exploring' },
+    { name:'Lunch',         dots:['#F5F0EB','#7A8599','#C4BAB0'],      pieces:'Écru blouse · Slate trousers · Flat mule',                   occ:'Restaurant' },
+    { name:'Evening',       dots:['#B8A9C9','#2A3550','#C4BAB0'],      pieces:'Lavender dress · Navy blazer · Flat mule',                   occ:'Dinner' },
+  ],
+  weekend_cold: [
+    { name:'Morning',       dots:['#F5F0EB','#3B5998','#2A2020'],      pieces:'Écru turtleneck · Straight-leg jeans · Chelsea boot',        occ:'Café · Walk' },
+    { name:'Lunch',         dots:['#2A3550','#7A8599','#2A2020'],      pieces:'Navy crew · Slate trousers · Chelsea boot',                   occ:'Restaurant' },
+    { name:'Evening',       dots:['#F5F0EB','#A0768A','#C0C0C0'],      pieces:'Écru turtleneck under mauve dress · Silver mule',             occ:'Dinner' },
+  ],
+};
+
+// ── PACKING LISTS per trip type + weather ─────────────────────────────────────
+const LISTS = {
+  city_warm:   ['ecru_blouse','corn_blouse','stripe_shirt','ecru_cami','navy_trousers','linen_trousers','navy_dress','mauve_dress','navy_blazer','denim_jacket','flat_mule','sandal','silver_mule','tote','crossbody','scarf'],
+  city_mild:   ['ecru_turtle','corn_blouse','breton','navy_trousers','slate_trousers','navy_dress','lav_dress','navy_blazer','dove_cardi','trench','flat_mule','loafer','tote','crossbody','scarf'],
+  city_cold:   ['ecru_turtle','navy_crew','corn_blouse','navy_trousers','indigo_jeans','mauve_dress','navy_blazer','wool_coat','chelsea','silver_mule','tote','scarf'],
+  work_warm:   ['ecru_blouse','corn_blouse','ecru_cami','navy_trousers','slate_trousers','navy_dress','mauve_dress','navy_blazer','flat_mule','silver_mule','tote','scarf'],
+  work_mild:   ['ecru_turtle','corn_blouse','breton','navy_trousers','slate_trousers','indigo_jeans','navy_dress','navy_blazer','dove_cardi','trench','flat_mule','loafer','tote'],
+  work_cold:   ['ecru_turtle','navy_crew','corn_blouse','navy_trousers','indigo_jeans','navy_dress','navy_blazer','wool_coat','chelsea','silver_mule','tote'],
+  beach_warm:  ['stripe_shirt','breton','ecru_blouse','ecru_cami','white_shorts','linen_trousers','navy_dress','mauve_dress','denim_jacket','sandal','flat_mule','silver_mule','trainers','crossbody'],
+  beach_mild:  ['stripe_shirt','breton','ecru_blouse','white_shorts','navy_dress','denim_jacket','dove_cardi','flat_mule','trainers','sandal','crossbody'],
+  family_warm: ['stripe_shirt','breton','ecru_blouse','white_shorts','navy_trousers','navy_dress','denim_jacket','trainers','sandal','flat_mule','tote','crossbody'],
+  family_mild: ['ecru_turtle','breton','ecru_blouse','navy_trousers','indigo_jeans','navy_dress','denim_jacket','navy_blazer','trainers','loafer','flat_mule','tote','crossbody'],
+  family_cold: ['ecru_turtle','navy_crew','breton','navy_trousers','indigo_jeans','navy_dress','navy_blazer','wool_coat','trainers','chelsea','tote','crossbody'],
+  weekend_warm:['stripe_shirt','breton','ecru_blouse','navy_trousers','white_shorts','navy_dress','denim_jacket','trainers','sandal','flat_mule','crossbody'],
+  weekend_mild:['ecru_turtle','breton','ecru_blouse','navy_trousers','indigo_jeans','lav_dress','denim_jacket','navy_blazer','flat_mule','loafer','trainers','crossbody'],
+  weekend_cold:['ecru_turtle','navy_crew','navy_trousers','indigo_jeans','mauve_dress','navy_blazer','wool_coat','chelsea','silver_mule','tote'],
+};
+
+function buildCapsule() {
+  const nights  = parseInt(document.getElementById('nights').value) || 4;
+  const bagType = document.getElementById('bagType').value;
+  const key     = `${tripType}_${weather}`;
+
+  const pieceKeys = LISTS[key] || LISTS['city_warm'];
+  const combos    = COMBOS[key] || COMBOS['city_warm'];
+
+  // Adjust list length by nights and bag type
+  let maxPieces = bagType === 'cabin' ? Math.min(10, nights + 4) : nights + 8;
+  maxPieces = Math.max(8, Math.min(maxPieces, 20));
+  const pieces = pieceKeys.slice(0, maxPieces).map(k => ALL_PIECES[k]).filter(Boolean);
+
+  // Group by category
+  const cats = ['Top','Bottom','Dress','Layer','Outer','Shoes','Bag','Acc'];
+  const catLabels = { Top:'Tops', Bottom:'Bottoms', Dress:'Dresses', Layer:'Layers', Outer:'Outerwear', Shoes:'Shoes', Bag:'Bags', Acc:'Accessories' };
+
+  let packHtml = '';
+  cats.forEach(cat => {
+    const catPieces = pieces.filter(p => p.cat === cat);
+    if (!catPieces.length) return;
+    packHtml += `<div class="pack-section">
+      <div class="pack-section-title">${catLabels[cat]}</div>
+      <div class="pack-grid">`;
+    catPieces.forEach(p => {
+      const cls   = p.hero ? 'hero' : p.owned ? 'owned' : '';
+      const badge = p.hero ? '<span class="pack-badge badge-hero">Hero</span>' : p.owned ? '<span class="pack-badge badge-owned">Owned</span>' : '<span class="pack-badge badge-buy">Gap</span>';
+      packHtml += `<div class="pack-item ${cls}">
+        <input type="checkbox" class="pack-check">
+        <div class="pack-info">
+          <div class="pack-name">${p.name}</div>
+          <div class="pack-detail">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.col};border:1px solid rgba(0,0,0,0.1);vertical-align:middle;margin-right:5px;"></span>
+          </div>
+        </div>
+        ${badge}
+      </div>`;
+    });
+    packHtml += `</div></div>`;
+  });
+
+  // Outfits
+  const displayCombos = combos.slice(0, Math.min(combos.length, nights + 1));
+  let comboHtml = '<div class="pack-section"><div class="pack-section-title">Outfit combinations</div><div class="combo-list">';
+  displayCombos.forEach(c => {
+    const dots = c.dots.map(d => `<div class="cdot" style="background:${d}"></div>`).join('');
+    comboHtml += `<div class="combo">
+      <div class="combo-dots">${dots}</div>
+      <div class="combo-detail">
+        <div class="combo-name">${c.name}</div>
+        <div class="combo-pieces">${c.pieces}</div>
+        <div class="combo-occ">${c.occ}</div>
+      </div>
+    </div>`;
+  });
+  comboHtml += '</div></div>';
+
+  // Rule
+  const rules = {
+    city:    '"Every piece must work for walking, eating, and one evening out."',
+    work:    '"Smart enough for a client. Comfortable enough for a delayed train."',
+    beach:   '"One piece undressed for the beach, redressed for dinner."',
+    family:  '"Hands-free, machine-washable, polished from a distance."',
+    weekend: '"Nothing you'd be precious about. Everything you'd be happy to be photographed in."',
+  };
+
+  const tripNames = { city:'City Break', work:'Work Trip', beach:'Beach', family:'Family Trip', weekend:'Weekend Away' };
+  const weatherNames = { warm:'Warm', mild:'Mild', cold:'Cold' };
+
+  document.getElementById('resultsTitle').textContent = `${tripNames[tripType]} · ${weatherNames[weather]} · ${nights} nights`;
+  document.getElementById('statPieces').textContent   = pieces.length;
+  document.getElementById('statOutfits').textContent  = displayCombos.length;
+  document.getElementById('statDays').textContent     = `${nights + 1}`;
+  document.getElementById('packingList').innerHTML    = packHtml;
+  document.getElementById('outfitCombos').innerHTML   = comboHtml;
+  document.getElementById('packingRule').innerHTML    = `<div class="pack-rule">${rules[tripType] || rules.city}</div>`;
+
+  const resultsEl = document.getElementById('results');
+  resultsEl.classList.add('visible');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>

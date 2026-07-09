@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabric Care Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:   #2A3550;
+    --slate:  #7A8599;
+    --dove:   #C0BDB8;
+    --ecru:   #F5F0EB;
+    --powder: #B8CEDD;
+    --rule:   #E2DED9;
+    --bg:     #FAFAF8;
+    --text:   #2C2C2C;
+    --light:  #6B6B6B;
+    --safe:   #3A7A3A;
+    --safe-bg:#EEF5EE;
+    --warn:   #7A6030;
+    --warn-bg:#F5F0E8;
+    --danger: #8A3A3A;
+    --danger-bg:#F5EEEE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 24px;
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,6vw,44px); font-weight: 300; line-height: 1.1; margin-bottom: 10px; }
+  .header h1 em { font-style: italic; color: var(--powder); }
+  .header-sub { font-size: 12px; opacity: 0.6; line-height: 1.65; max-width: 480px; }
+
+  /* ── STICKY NAV ── */
+  .tab-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    color: var(--slate);
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── MAIN ── */
+  .main { max-width: 900px; margin: 0 auto; padding: 0 0 60px; }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+  /* ── FABRIC CARD ── */
+  .fabric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .fabric-card {
+    background: white;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .fabric-card-head {
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .fabric-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .fabric-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+
+  .fabric-sub {
+    font-size: 11px;
+    color: var(--light);
+    line-height: 1.4;
+  }
+
+  .fabric-body { padding: 14px 16px; }
+
+  /* ── CARE ROWS ── */
+  .care-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 12.5px;
+  }
+  .care-row:last-child { border-bottom: none; }
+
+  .care-symbol {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .care-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    width: 60px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    line-height: 1.3;
+  }
+
+  .care-detail { color: var(--text); line-height: 1.5; flex: 1; }
+
+  .care-tip {
+    font-size: 11px;
+    color: var(--light);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  /* ── ALERT BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+  .badge-safe   { background: var(--safe-bg);   color: var(--safe);   }
+  .badge-warn   { background: var(--warn-bg);   color: var(--warn);   }
+  .badge-danger { background: var(--danger-bg); color: var(--danger); }
+
+  /* ── WASH SYMBOL SVGs ── */
+  .ws { display: block; }
+
+  /* ── SYMBOL LEGEND ── */
+  .legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+  }
+
+  .legend-item {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .legend-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .legend-desc {
+    font-size: 10px;
+    color: var(--light);
+    line-height: 1.4;
+  }
+
+  /* ── EMERGENCY GUIDE ── */
+  .emergency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+
+  .emergency-card {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+  }
+
+  .stain-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stain-steps {
+    list-style: none;
+    padding: 0;
+    counter-reset: steps;
+  }
+
+  .stain-steps li {
+    font-size: 12px;
+    color: var(--text);
+    padding: 5px 0 5px 24px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    line-height: 1.4;
+    counter-increment: steps;
+  }
+
+  .stain-steps li:last-child { border-bottom: none; }
+
+  .stain-steps li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--slate);
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  .fabric-warn {
+    font-size: 11px;
+    background: var(--warn-bg);
+    color: var(--warn);
+    padding: 4px 8px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── STORAGE SECTION ── */
+  .storage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media(max-width:500px){ .storage-grid { grid-template-columns: 1fr; } }
+
+  .storage-card {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+  }
+
+  .storage-item-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .storage-rules {
+    list-style: none;
+    padding: 0;
+  }
+
+  .storage-rules li {
+    font-size: 12px;
+    color: var(--text);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .storage-rules li:last-child { border-bottom: none; }
+
+  .storage-rules li::before {
+    content: '–';
+    color: var(--slate);
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+
+  /* ── TIP BAR ── */
+  .tip {
+    background: var(--navy);
+    color: white;
+    padding: 16px 24px;
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+  .tip strong { font-weight: 500; }
+
+  /* ── WASH SYMBOLS (SVG) ── */
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Wardrobe Reference</div>
+  <h1>Fabric <em>Care</em></h1>
+  <div class="header-sub">Wash temperatures, dry clean guidance, storage rules, and stain removal for every fabric in your wardrobe. Treat the clothes properly and they last a decade.</div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('fabrics',this)">Fabrics</button>
+  <button class="tab-btn" onclick="showTab('symbols',this)">Care symbols</button>
+  <button class="tab-btn" onclick="showTab('stains',this)">Stain guide</button>
+  <button class="tab-btn" onclick="showTab('storage',this)">Storage</button>
+</nav>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 1: FABRICS -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="panel active" id="panel-fabrics">
+
+  <div class="section">
+    <div class="section-title">Investment fabrics — handle with care</div>
+    <div class="fabric-grid">
+
+      <!-- CASHMERE -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#F5F0EB;">🧶</div>
+          <div>
+            <div class="fabric-name">Cashmere</div>
+            <div class="fabric-sub">Turtlenecks · Crew necks · Cardigan</div>
+            <span class="badge badge-warn">Handle with care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">30°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">30°C max, delicate cycle or hand wash. Cold water preferred.<div class="care-tip">Turn inside out. Use a cashmere-specific detergent or baby shampoo.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#C04040" stroke-width="1.5"/><line x1="4" y1="10" x2="28" y2="26" stroke="#C04040" stroke-width="1.5"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Never tumble dry. Heat destroys cashmere fibres permanently.<div class="care-tip">Lay flat on a clean towel to dry — never hang, it stretches.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#C04040" stroke-width="1.5"/><line x1="6" y1="6" x2="26" y2="26" stroke="#C04040" stroke-width="1.5"/></svg>
+            <span class="care-label">Iron</span>
+            <div class="care-detail">Never iron directly. Steam only, from a distance.<div class="care-tip">A garment steamer is the best investment for cashmere care.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="8" fill="#2A3550" font-family="Inter">P</text></svg>
+            <span class="care-label">Dry clean</span>
+            <div class="care-detail">Dry clean is safe but not always necessary for light wear.<div class="care-tip">Dry clean once a season. Hand wash between wears if lightly worn.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">🪱</span>
+            <span class="care-label">Pilling</span>
+            <div class="care-detail">Use a cashmere comb or fabric shaver after every 3–4 wears.<div class="care-tip">Pilling is normal — removal makes it look new again.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">🦋</span>
+            <span class="care-label">Storage</span>
+            <div class="care-detail">Fold, never hang. Store with cedar balls or lavender sachets.<div class="care-tip">Wash before storing for the season — moths are attracted to body oils.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SILK -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#EEF2F7;">✨</div>
+          <div>
+            <div class="fabric-name">Silk</div>
+            <div class="fabric-sub">Blouses · Camisole · Scarf</div>
+            <span class="badge badge-warn">Handle with care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">30°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">30°C max, hand wash preferred. Silk delicate cycle if machine washing.<div class="care-tip">Use a silk-specific detergent. Never wring — press gently in a towel.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#C04040" stroke-width="1.5"/><line x1="4" y1="10" x2="28" y2="26" stroke="#C04040" stroke-width="1.5"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Never tumble dry. Heat and agitation destroy silk permanently.</div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="28" text-anchor="middle" font-size="7" fill="#2A3550" font-family="Inter">LOW</text></svg>
+            <span class="care-label">Iron</span>
+            <div class="care-detail">Low heat only, inside out, while slightly damp.<div class="care-tip">Place a cotton cloth between iron and silk. Steam is safer than direct contact.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#3A7A3A" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="8" fill="#3A7A3A" font-family="Inter">P</text></svg>
+            <span class="care-label">Dry clean</span>
+            <div class="care-detail">Dry clean is the safest option for structured silk blouses.<div class="care-tip">For fluid silk camisoles and scarves, careful hand washing is fine.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">⚠️</span>
+            <span class="care-label">Avoid</span>
+            <div class="care-detail">Perfume, deodorant, and sweat weaken silk fibres over time.<div class="care-tip">Apply perfume before dressing. Let it dry before silk touches skin.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINEN -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#F2EEE9;">🌿</div>
+          <div>
+            <div class="fabric-name">Linen</div>
+            <div class="fabric-sub">Trousers · Blazer · Summer shirts</div>
+            <span class="badge badge-safe">Easy care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">40°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">40°C, gentle cycle. Linen is robust compared to silk and cashmere.<div class="care-tip">Wash inside out to prevent fading. Dark linens may bleed initially.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#7A6030" stroke-width="1.5"/><circle cx="16" cy="18" r="4" fill="none" stroke="#7A6030" stroke-width="1.2"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Low heat tumble dry is acceptable, but may shrink slightly.<div class="care-tip">Remove slightly damp and hang to finish — prevents excessive creasing.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="28" text-anchor="middle" font-size="7" fill="#2A3550" font-family="Inter">HIGH</text></svg>
+            <span class="care-label">Iron</span>
+            <div class="care-detail">Linen irons beautifully at high heat while still slightly damp.<div class="care-tip">Linen creases are part of its character — not every crease needs removing.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">📏</span>
+            <span class="care-label">Shrink</span>
+            <div class="care-detail">Linen can shrink 3–5% on first wash at high temperatures.<div class="care-tip">Pre-wash before first wear if unsure of size. Always wash at 30–40°C after that.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WOOL / MERINO -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#EEEFF2;">🐑</div>
+          <div>
+            <div class="fabric-name">Wool &amp; Merino</div>
+            <div class="fabric-sub">Coat · Blazer · Merino knitwear</div>
+            <span class="badge badge-warn">Handle with care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">30°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">30°C wool cycle or hand wash cold. Never hot — will felt irreversibly.<div class="care-tip">Merino is more robust than cashmere and can handle gentle machine washing.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#C04040" stroke-width="1.5"/><line x1="4" y1="10" x2="28" y2="26" stroke="#C04040" stroke-width="1.5"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Never tumble dry wool or merino. Heat causes permanent felting and shrinkage.</div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="28" text-anchor="middle" font-size="7" fill="#2A3550" font-family="Inter">MED</text></svg>
+            <span class="care-label">Iron</span>
+            <div class="care-detail">Medium heat with steam, inside out. Use a pressing cloth on the wool coat.<div class="care-tip">The wool coat rarely needs ironing — hang in a steamy bathroom to refresh.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#3A7A3A" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="8" fill="#3A7A3A" font-family="Inter">P</text></svg>
+            <span class="care-label">Dry clean</span>
+            <div class="care-detail">The wool coat should be professionally dry cleaned once per season.<div class="care-tip">Merino knitwear can be hand washed — dry clean is only needed for structured wool pieces.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DENIM -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#EEF2F7;">👖</div>
+          <div>
+            <div class="fabric-name">Denim</div>
+            <div class="fabric-sub">Straight-leg jeans · Denim jacket</div>
+            <span class="badge badge-safe">Easy care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">30°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">30°C cold, inside out to preserve colour.<div class="care-tip">Wash less often than you think — airing between wears keeps dark denim looking new for longer.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#7A6030" stroke-width="1.5"/><circle cx="16" cy="18" r="4" fill="none" stroke="#7A6030" stroke-width="1.2"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Low heat or air dry. High heat fades and shrinks denim significantly.<div class="care-tip">Hang to dry when possible — denim holds its shape better when air-dried.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">💡</span>
+            <span class="care-label">Tip</span>
+            <div class="care-detail">Wash dark indigo jeans inside out with a tablespoon of white vinegar first wash — sets the dye and prevents bleeding.<div class="care-tip">Dark denim fading is the main enemy. Cold water and infrequent washing are your best tools.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COTTON -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#F0F4F0;">☁️</div>
+          <div>
+            <div class="fabric-name">Cotton</div>
+            <div class="fabric-sub">Breton · White shirt · Shorts</div>
+            <span class="badge badge-safe">Easy care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">40°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">40°C for most cotton. 60°C for whites if needed.<div class="care-tip">Wash Bretons inside out — navy stripes can bleed initially.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#3A7A3A" stroke-width="1.5"/><circle cx="16" cy="18" r="4" fill="none" stroke="#3A7A3A" stroke-width="1.2"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Tumble dry on medium heat. Cotton is robust.<div class="care-tip">Remove promptly — cotton creases badly if left in the drum.</div></div>
+          </div>
+          <div class="care-row">
+            <path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5"/>
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="28" text-anchor="middle" font-size="7" fill="#2A3550" font-family="Inter">HIGH</text></svg>
+            <span class="care-label">Iron</span>
+            <div class="care-detail">Cotton irons well at high heat while damp.<div class="care-tip">White shirts iron best with a little starch spray — keeps the collar crisp all day.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">📏</span>
+            <span class="care-label">Shrink</span>
+            <div class="care-detail">Cotton shrinks at 60°C+. Wash at 40°C to maintain size.<div class="care-tip">First wash at 30°C if the item fits perfectly off the rack — plays it safe.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEATHER -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#F2EEE9;">👜</div>
+          <div>
+            <div class="fabric-name">Leather</div>
+            <div class="fabric-sub">Tote · Crossbody · Loafer · Flat mule</div>
+            <span class="badge badge-danger">Never wash</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#C04040" stroke-width="1.5"/><line x1="8" y1="8" x2="24" y2="24" stroke="#C04040" stroke-width="1.5"/></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">Never machine wash or submerge leather. Water damages the hide and causes stiffening.<div class="care-tip">Wipe with a slightly damp cloth only. Dry immediately.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">✨</span>
+            <span class="care-label">Clean</span>
+            <div class="care-detail">Use a leather cleaner or saddle soap monthly for bags and shoes.<div class="care-tip">A soft cloth and leather conditioner (like Saphir) keeps leather supple and prevents cracking.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">💧</span>
+            <span class="care-label">Rain</span>
+            <div class="care-detail">If leather gets wet, stuff the bag with tissue paper and let dry naturally away from heat.<div class="care-tip">Apply leather protector spray at the start of each season — especially for shoes.</div></div>
+          </div>
+          <div class="care-row">
+            <span style="font-size:18px;width:32px;text-align:center;flex-shrink:0;">🌡️</span>
+            <span class="care-label">Storage</span>
+            <div class="care-detail">Store bags stuffed with tissue, in their dust bag. Never in plastic which traps moisture.<div class="care-tip">Shoes: cedar shoe trees maintain shape and absorb moisture between wears.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISCOSE / MODAL -->
+      <div class="fabric-card">
+        <div class="fabric-card-head">
+          <div class="fabric-icon" style="background:#F5EEEE;">🌺</div>
+          <div>
+            <div class="fabric-name">Viscose &amp; Modal</div>
+            <div class="fabric-sub">Fluid dresses · Bias-cut pieces</div>
+            <span class="badge badge-warn">Handle with care</span>
+          </div>
+        </div>
+        <div class="fabric-body">
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="20" text-anchor="middle" font-size="10" fill="#2A3550" font-family="Inter">30°</text></svg>
+            <span class="care-label">Wash</span>
+            <div class="care-detail">30°C max, hand wash or delicate cycle. Viscose is weakest when wet — handle gently.<div class="care-tip">Mesh laundry bag in machine protects the fabric during the cycle.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="16" rx="2" fill="none" stroke="#C04040" stroke-width="1.5"/><line x1="4" y1="10" x2="28" y2="26" stroke="#C04040" stroke-width="1.5"/></svg>
+            <span class="care-label">Tumble dry</span>
+            <div class="care-detail">Never tumble dry — viscose shrinks and distorts.<div class="care-tip">Hang to dry away from direct sunlight which fades the colour.</div></div>
+          </div>
+          <div class="care-row">
+            <svg class="care-symbol" width="32" height="32" viewBox="0 0 32 32"><path d="M16 6 L20 18 L8 10 L24 10 L12 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5"/><text x="16" y="28" text-anchor="middle" font-size="7" fill="#2A3550" font-family="Inter">LOW</text></svg>
+            <span class="care-label">Iron</span>
+            <div class="care-detail">Low heat only, inside out while slightly damp. Steam is better than direct contact.<div class="care-tip">Viscose is the easiest fluid fabric to iron when damp — becomes difficult when fully dry.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>The golden rule:</strong> when in doubt, wash cooler and slower. You can always re-wash something that isn't quite clean. You cannot un-shrink cashmere or un-felt wool.
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 2: CARE SYMBOLS -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="panel" id="panel-symbols">
+  <div class="section">
+    <div class="section-title">Washing symbols</div>
+    <div class="legend-grid">
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#2A3550" stroke-width="1.8"/><text x="22" y="27" text-anchor="middle" font-size="13" fill="#2A3550" font-family="Inter" font-weight="500">30</text></svg>
+        <div class="legend-name">Wash 30°C</div>
+        <div class="legend-desc">Delicate / cool wash. Most silk, cashmere, wool</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#2A3550" stroke-width="1.8"/><text x="22" y="27" text-anchor="middle" font-size="13" fill="#2A3550" font-family="Inter" font-weight="500">40</text></svg>
+        <div class="legend-name">Wash 40°C</div>
+        <div class="legend-desc">Normal wash. Cotton, linen, denim</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#2A3550" stroke-width="1.8"/><line x1="10" y1="22" x2="34" y2="22" stroke="#2A3550" stroke-width="1.5"/></svg>
+        <div class="legend-name">Gentle cycle</div>
+        <div class="legend-desc">One bar = reduced agitation</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#C04040" stroke-width="1.8"/><line x1="10" y1="10" x2="34" y2="34" stroke="#C04040" stroke-width="1.8"/></svg>
+        <div class="legend-name">Do not wash</div>
+        <div class="legend-desc">Wipe clean or dry clean only</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><rect x="6" y="14" width="32" height="22" rx="3" fill="none" stroke="#2A3550" stroke-width="1.8"/><circle cx="22" cy="25" r="6" fill="none" stroke="#2A3550" stroke-width="1.5"/></svg>
+        <div class="legend-name">Tumble dry</div>
+        <div class="legend-desc">Circle in square = safe to tumble</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><rect x="6" y="14" width="32" height="22" rx="3" fill="none" stroke="#C04040" stroke-width="1.8"/><line x1="6" y1="14" x2="38" y2="36" stroke="#C04040" stroke-width="1.8"/></svg>
+        <div class="legend-name">Do not tumble</div>
+        <div class="legend-desc">X through square = lay flat or hang</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><path d="M22 8 L28 22 L10 12 L34 12 L16 22 Z" fill="none" stroke="#2A3550" stroke-width="1.8"/></svg>
+        <div class="legend-name">Iron</div>
+        <div class="legend-desc">Iron symbol — dots indicate heat level</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><path d="M22 8 L28 22 L10 12 L34 12 L16 22 Z" fill="none" stroke="#C04040" stroke-width="1.8"/><line x1="10" y1="10" x2="34" y2="34" stroke="#C04040" stroke-width="1.8"/></svg>
+        <div class="legend-name">Do not iron</div>
+        <div class="legend-desc">X through iron = steam or air only</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#2A3550" stroke-width="1.8"/><text x="22" y="27" text-anchor="middle" font-size="13" fill="#2A3550" font-family="Inter" font-weight="500">P</text></svg>
+        <div class="legend-name">Dry clean (P)</div>
+        <div class="legend-desc">Professional dry cleaning — safe for all</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#C04040" stroke-width="1.8"/><text x="22" y="27" text-anchor="middle" font-size="13" fill="#C04040" font-family="Inter" font-weight="500">P</text><line x1="8" y1="8" x2="36" y2="36" stroke="#C04040" stroke-width="1.8"/></svg>
+        <div class="legend-name">Do not dry clean</div>
+        <div class="legend-desc">Some treated fabrics react badly to solvents</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><rect x="6" y="8" width="32" height="28" rx="2" fill="none" stroke="#2A3550" stroke-width="1.8"/><line x1="6" y1="20" x2="38" y2="20" stroke="#2A3550" stroke-width="1.5"/></svg>
+        <div class="legend-name">Hand wash</div>
+        <div class="legend-desc">Square with hand — gentle hand wash only</div>
+      </div>
+
+      <div class="legend-item">
+        <svg width="44" height="44" viewBox="0 0 44 44"><path d="M8 36 L8 28 L36 28 L36 36" fill="none" stroke="#2A3550" stroke-width="1.8"/><line x1="22" y1="28" x2="22" y2="10" stroke="#2A3550" stroke-width="1.8"/></svg>
+        <div class="legend-name">Hang to dry</div>
+        <div class="legend-desc">Hang on a line or hanger — do not tumble</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 3: STAIN GUIDE -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="panel" id="panel-stains">
+  <div class="section">
+    <div class="section-title">Act immediately — every stain</div>
+    <div class="tip" style="margin-bottom:16px;">
+      <strong>The universal rule:</strong> blot, never rub. Rubbing spreads the stain and damages fibres. Cold water first — hot water sets protein stains permanently.
+    </div>
+    <div class="emergency-grid">
+
+      <div class="emergency-card">
+        <div class="stain-name">☕ Coffee or tea</div>
+        <ol class="stain-steps">
+          <li>Blot immediately with a clean cloth — do not rub</li>
+          <li>Flush with cold water from the back of the fabric</li>
+          <li>Apply a small amount of washing-up liquid, work gently</li>
+          <li>Rinse in cold water and wash as normal</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On silk: skip washing-up liquid, use cool water only and take to dry cleaner</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">🍷 Red wine</div>
+        <ol class="stain-steps">
+          <li>Blot immediately — absorb as much as possible</li>
+          <li>Pour cold sparkling water directly onto the stain</li>
+          <li>Sprinkle salt to absorb remaining wine, leave 5 mins</li>
+          <li>Brush off salt, flush with cold water, wash as normal</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On cashmere or silk: cold water blot only, take to dry cleaner</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">💄 Lipstick / makeup</div>
+        <ol class="stain-steps">
+          <li>Scrape off any excess with a clean knife edge gently</li>
+          <li>Apply micellar water or makeup remover to a cotton pad</li>
+          <li>Blot from outside of stain toward centre</li>
+          <li>Wash with gentle detergent in cold water</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On silk: micellar water only, dry clean if persists</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">🫒 Oil / food grease</div>
+        <ol class="stain-steps">
+          <li>Blot off excess oil immediately — do not spread</li>
+          <li>Apply cornstarch or baby powder, leave 15–30 mins</li>
+          <li>Brush off powder, apply a small drop of washing-up liquid</li>
+          <li>Leave 10 mins, rinse with warm water, wash as normal</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On cashmere: powder method only, then dry clean</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">💦 Sweat / deodorant</div>
+        <ol class="stain-steps">
+          <li>Soak in cold water immediately — do not let dry</li>
+          <li>Apply white vinegar or lemon juice to the area</li>
+          <li>Leave 30 mins, then wash as normal</li>
+          <li>For yellow marks: mix bicarbonate of soda with water to a paste, apply, leave 1hr</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On silk: vinegar only, very diluted. Avoid anything acidic on delicate silk</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">🩸 Blood</div>
+        <ol class="stain-steps">
+          <li>Cold water only — hot water sets blood permanently</li>
+          <li>Rinse under cold running water from the back of fabric</li>
+          <li>Apply hydrogen peroxide (test in hidden area first)</li>
+          <li>Rinse thoroughly, wash in cold water</li>
+        </ol>
+        <div class="fabric-warn">⚠️ Never use hot water or tumble dry until stain is fully gone</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">🖊️ Ink / pen</div>
+        <ol class="stain-steps">
+          <li>Place a clean cloth under the stain immediately</li>
+          <li>Dab with rubbing alcohol or hand sanitiser</li>
+          <li>Blot — do not rub. Work from outside in</li>
+          <li>Rinse with cold water, wash as normal</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On cashmere or silk: take to dry cleaner — alcohol can damage delicate fibres</div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="stain-name">🌿 Grass / mud</div>
+        <ol class="stain-steps">
+          <li>Let mud dry completely before treating — wet mud spreads</li>
+          <li>Brush off dried mud carefully</li>
+          <li>Apply washing-up liquid to the stain, work in gently</li>
+          <li>Rinse with cold water, wash as normal</li>
+        </ol>
+        <div class="fabric-warn">⚠️ On white cotton: white vinegar pre-treatment helps with grass green staining</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 4: STORAGE -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="panel" id="panel-storage">
+  <div class="section">
+    <div class="section-title">Seasonal storage rules</div>
+    <div class="tip" style="margin-bottom:16px;">
+      <strong>Before storing anything:</strong> always wash or dry clean first. Moths and mildew are attracted to body oils, not clean fabric. Never store anything soiled.
+    </div>
+    <div class="storage-grid">
+
+      <div class="storage-card">
+        <div class="storage-item-name">🧶 Cashmere</div>
+        <ul class="storage-rules">
+          <li>Fold — never hang. Hanging stretches the shoulders permanently</li>
+          <li>Store in breathable cotton bags or pillowcases — not plastic</li>
+          <li>Add cedar balls or lavender sachets — replace every 6 months</li>
+          <li>Check for pilling before storing and remove with a cashmere comb</li>
+          <li>Wash or dry clean before packing away for the season</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">✨ Silk</div>
+        <ul class="storage-rules">
+          <li>Hang on padded hangers — not wire which distorts shoulders</li>
+          <li>Store away from direct light — silk fades and weakens in sunlight</li>
+          <li>Garment bag for structured silk blouses</li>
+          <li>Silk scarves: rolled or folded flat in a drawer, not compressed</li>
+          <li>Never store near cedar — the oils can stain light-coloured silk</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">🧥 Wool coat</div>
+        <ul class="storage-rules">
+          <li>Dry clean before summer storage — essential, not optional</li>
+          <li>Hang on a wide, padded hanger — never fold for long periods</li>
+          <li>Store in a breathable garment bag with cedar</li>
+          <li>Brush with a clothes brush after each wear to remove dust</li>
+          <li>Never compress — wool loses its structure permanently</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">👜 Leather bags</div>
+        <ul class="storage-rules">
+          <li>Stuff with acid-free tissue paper to maintain shape</li>
+          <li>Store in the original dust bag or a cotton pillowcase</li>
+          <li>Never in plastic — leather needs to breathe</li>
+          <li>Condition with leather cream before storing for the season</li>
+          <li>Store upright, not crushed under other bags</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">👟 Shoes</div>
+        <ul class="storage-rules">
+          <li>Cedar shoe trees in leather shoes between every wear</li>
+          <li>Trainers: clean before storing, stuff with tissue to hold shape</li>
+          <li>Leather shoes: condition before off-season storage</li>
+          <li>Flat mules: store on a shoe rack, not stacked</li>
+          <li>Never store in airtight boxes — leather needs airflow</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">👖 Denim</div>
+        <ul class="storage-rules">
+          <li>Hang or fold — either works for denim</li>
+          <li>Wash inside out, hang to dry to maintain colour</li>
+          <li>Dark denim: store away from direct light between wears</li>
+          <li>No need for special seasonal storage — denim is year-round</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">👗 Fluid dresses (viscose / silk)</div>
+        <ul class="storage-rules">
+          <li>Hang on padded hangers — creases fall out naturally</li>
+          <li>Store in garment bags away from direct light</li>
+          <li>Do not compress — viscose and silk crease permanently when packed tight</li>
+          <li>If travelling: roll gently in tissue paper rather than fold</li>
+        </ul>
+      </div>
+
+      <div class="storage-card">
+        <div class="storage-item-name">🌿 Linen</div>
+        <ul class="storage-rules">
+          <li>Hang or fold — linen is forgiving and creases shake out</li>
+          <li>Store clean — linen can yellow if stored with residual oils</li>
+          <li>Pack away in autumn with lavender — natural moth deterrent</li>
+          <li>A slight crease is expected and part of linen's character</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">The seasonal switch checklist</div>
+    <div style="background:white;border:1px solid var(--rule);padding:18px 20px;">
+      <div style="font-size:13px;color:var(--text);line-height:2;">
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Wash or dry clean everything before storing — never store worn items</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Check all cashmere for pilling — treat with cashmere comb before folding away</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Replace cedar balls and lavender sachets (every 6 months)</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Condition leather bags and shoes before storing</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Stuff leather bags with tissue paper to hold shape</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Insert cedar shoe trees in all leather shoes</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Check for any repairs needed — loose buttons, loose seams — before storing</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;"><input type="checkbox" style="accent-color:var(--navy);width:16px;height:16px;"> <span>Photograph the stored pieces so you remember what you have when the season returns</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showTab(tab, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

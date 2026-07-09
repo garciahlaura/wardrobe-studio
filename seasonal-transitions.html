@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seasonal Transition Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:    #2A3550;
+    --slate:   #7A8599;
+    --dove:    #C0BDB8;
+    --ecru:    #F5F0EB;
+    --powder:  #B8CEDD;
+    --rose:    #C4879A;
+    --sage:    #8FAF8B;
+    --corn:    #7B9FD4;
+    --mauve:   #A0768A;
+    --rule:    #E2DED9;
+    --bg:      #FAFAF8;
+    --text:    #2C2C2C;
+    --light:   #6B6B6B;
+
+    /* Season tints */
+    --spring-bg: #F0F4F0;
+    --spring-acc: #8FAF8B;
+    --summer-bg: #EEF2F7;
+    --summer-acc: #7B9FD4;
+    --autumn-bg: #F2EEE9;
+    --autumn-acc: #A0768A;
+    --winter-bg: #EEEFF2;
+    --winter-acc: #2A3550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 24px;
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,6vw,44px); font-weight: 300; line-height: 1.1; margin-bottom: 10px; }
+  .header h1 em { font-style: italic; color: var(--powder); }
+  .header-sub { font-size: 12px; opacity: 0.6; line-height: 1.65; max-width: 480px; }
+
+  /* ── SEASON NAV ── */
+  .season-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .season-nav::-webkit-scrollbar { display: none; }
+  .season-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 14px 12px 12px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    color: var(--slate);
+    transition: all 0.18s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .season-btn:hover { color: var(--navy); }
+  .season-btn.active { color: var(--navy); }
+  .season-btn.active.spring { border-bottom-color: var(--spring-acc); }
+  .season-btn.active.summer { border-bottom-color: var(--summer-acc); }
+  .season-btn.active.autumn { border-bottom-color: var(--autumn-acc); }
+  .season-btn.active.winter { border-bottom-color: var(--winter-acc); }
+
+  .season-icon { font-size: 18px; line-height: 1; }
+
+  /* ── SEASON PANEL ── */
+  .season-panel { display: none; }
+  .season-panel.active { display: block; }
+
+  .season-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .season-header.spring { background: var(--spring-bg); }
+  .season-header.summer { background: var(--summer-bg); }
+  .season-header.autumn { background: var(--autumn-bg); }
+  .season-header.winter { background: var(--winter-bg); }
+
+  .season-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 300;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .season-subtitle { font-size: 13px; color: var(--light); margin-bottom: 16px; }
+
+  .season-months {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .month-pill {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid var(--rule);
+    color: var(--navy);
+  }
+  .month-pill.current { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 900px; margin: 0 auto; padding: 0 0 60px; }
+
+  /* ── PIECE GRID ── */
+  .section-block {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .block-title {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .block-title::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+  .piece-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .piece-card {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .piece-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+
+  .piece-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .piece-how {
+    font-size: 11px;
+    color: var(--light);
+    line-height: 1.5;
+  }
+
+  .piece-tag {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 2px;
+    align-self: flex-start;
+  }
+  .tag-hero    { background: #EEF2F8; color: var(--navy); }
+  .tag-layer   { background: #F0F4F0; color: #4A7043; }
+  .tag-swap    { background: var(--autumn-bg); color: #7A6A30; }
+  .tag-store   { background: #F5EEEE; color: #8A4040; }
+  .tag-new     { background: #F0EEF5; color: #5A4A7A; }
+
+  /* ── OUTFIT EXAMPLES ── */
+  .outfit-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .outfit-ex {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .outfit-dots {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .odot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+
+  .outfit-detail { min-width: 0; }
+
+  .outfit-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .outfit-pieces {
+    font-size: 11.5px;
+    color: var(--light);
+    line-height: 1.6;
+  }
+
+  .outfit-occasion {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 4px;
+  }
+
+  /* ── TRANSITION RULE ── */
+  .transition-rule {
+    background: var(--navy);
+    color: white;
+    padding: 18px 24px;
+    margin: 0;
+  }
+  .rule-eyebrow { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.5; margin-bottom: 6px; }
+  .rule-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; line-height: 1.5; opacity: 0.92; }
+
+  /* ── WHAT TO STORE / BRING OUT ── */
+  .swap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+  }
+  @media(max-width:500px){ .swap-grid { grid-template-columns: 1fr; } }
+
+  .swap-col {
+    background: white;
+    padding: 20px 20px 16px;
+  }
+  .swap-col-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .swap-col-title.out  { color: #8A4040; }
+  .swap-col-title.in   { color: #3A6035; }
+
+  .swap-list { list-style: none; padding: 0; }
+  .swap-list li {
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .swap-list li:last-child { border-bottom: none; }
+  .swap-list li::before { font-size: 10px; flex-shrink: 0; }
+  .swap-col.out .swap-list li::before { content: '↓'; color: #C04040; }
+  .swap-col.in  .swap-list li::before { content: '↑'; color: #3A7A35; }
+
+  /* ── FABRIC TEMP GUIDE ── */
+  .temp-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+  }
+  .temp-row:last-child { border-bottom: none; }
+  .temp-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    min-width: 68px;
+    text-align: center;
+  }
+  .temp-cold   { background: #EEF2F8; color: var(--navy); }
+  .temp-cool   { background: #EEF4EE; color: #3A6035; }
+  .temp-warm   { background: #F2EEE9; color: #7A6A30; }
+  .temp-hot    { background: #F5EEEE; color: #8A4040; }
+  .temp-fabric { color: var(--text); }
+  .temp-avoid  { font-size: 11px; color: var(--light); font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Cool Summer Wardrobe</div>
+  <h1>Seasonal <em>Transitions</em></h1>
+  <div class="header-sub">How your core pieces shift across the year — what to layer, what to swap, and what to store. The same 20 pieces, four different wardrobes.</div>
+</div>
+
+<!-- SEASON NAV -->
+<nav class="season-nav">
+  <button class="season-btn spring active" onclick="showSeason('spring',this)">
+    <span class="season-icon">🌿</span>Spring
+  </button>
+  <button class="season-btn summer" onclick="showSeason('summer',this)">
+    <span class="season-icon">☀️</span>Summer
+  </button>
+  <button class="season-btn autumn" onclick="showSeason('autumn',this)">
+    <span class="season-icon">🍂</span>Autumn
+  </button>
+  <button class="season-btn winter" onclick="showSeason('winter',this)">
+    <span class="season-icon">❄️</span>Winter
+  </button>
+</nav>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SPRING -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="season-panel spring active" id="panel-spring">
+  <div class="season-header spring">
+    <div class="season-title">Spring</div>
+    <div class="season-subtitle">Transitional layering — the same pieces, lighter combinations</div>
+    <div class="season-months">
+      <span class="month-pill">March</span>
+      <span class="month-pill">April</span>
+      <span class="month-pill">May</span>
+    </div>
+  </div>
+
+  <div class="transition-rule">
+    <div class="rule-eyebrow">Spring rule</div>
+    <div class="rule-text">"Keep the navy and écru base — just remove one layer and add one lighter piece."</div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Heroes this season</div>
+    <div class="piece-grid">
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A3550"></div>
+        <div class="piece-name">Navy blazer</div>
+        <div class="piece-how">Over a blouse or turtleneck — replaces the winter coat as temperatures rise</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#5B7EC9"></div>
+        <div class="piece-name">Denim jacket</div>
+        <div class="piece-how">Lighter alternative to blazer. Perfect for weekends and nursery runs</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#F5F0EB"></div>
+        <div class="piece-name">Écru turtleneck</div>
+        <div class="piece-how">Under a blazer in early spring. Removed as it warms — transitions to blouse-only days</div>
+        <span class="piece-tag tag-layer">Layer</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#C0BDB8"></div>
+        <div class="piece-name">Dove grey cardigan</div>
+        <div class="piece-how">Replace the heavy coat indoors. Draped over shoulders is the spring way to wear it</div>
+        <span class="piece-tag tag-layer">Layer</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#7B9FD4"></div>
+        <div class="piece-name">Cornflower blouse</div>
+        <div class="piece-how">Comes out of rotation from winter. Alone or under a blazer — your best spring office piece</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#F5F0EB;border:1px solid #ddd"></div>
+        <div class="piece-name">White leather trainers</div>
+        <div class="piece-how">Back in full rotation. Chelsea boots move to occasional use</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">5 Spring outfit formulas</div>
+    <div class="outfit-strip">
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A3550"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru blouse + navy trousers + navy blazer</div>
+          <div class="outfit-pieces">Add a silk scarf loosely tied — the spring version of the core uniform</div>
+          <div class="outfit-occasion">Office · Meetings</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#3B5998"></div>
+          <div class="odot" style="background:#5B7EC9"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Breton + straight-leg jeans + denim jacket</div>
+          <div class="outfit-pieces">White trainers. The weekend uniform that never looks underdressed</div>
+          <div class="outfit-occasion">Weekend · Nursery run</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#B8A9C9"></div>
+          <div class="odot" style="background:#5B7EC9"></div>
+          <div class="odot" style="background:#C4BAB0;border-color:#ddd"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Lavender wrap dress + denim jacket + flat mule</div>
+          <div class="outfit-pieces">Casual lunch or school pick-up. Remove the jacket for evenings</div>
+          <div class="outfit-occasion">Casual · Evening</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#7A8599"></div>
+          <div class="odot" style="background:#C0BDB8"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru turtleneck + slate trousers + dove cardigan draped</div>
+          <div class="outfit-pieces">Cool March days — tonal and quiet</div>
+          <div class="outfit-occasion">Office · Early spring</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#7B9FD4"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#C4BAB0;border-color:#ddd"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Cornflower blouse + navy trousers + loafer</div>
+          <div class="outfit-pieces">No blazer needed as temperatures rise. Silver earrings only</div>
+          <div class="outfit-occasion">Office · Warm days</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Wardrobe swap</div>
+    <div class="swap-grid">
+      <div class="swap-col out">
+        <div class="swap-col-title out">Pack away</div>
+        <ul class="swap-list">
+          <li>Heavy wool coat</li>
+          <li>Thick chunky knits</li>
+          <li>Knee-high boots</li>
+          <li>Fleece layers</li>
+        </ul>
+      </div>
+      <div class="swap-col in">
+        <div class="swap-col-title in">Bring out</div>
+        <ul class="swap-list">
+          <li>Cornflower + écru blouses</li>
+          <li>White leather trainers</li>
+          <li>Flat leather sandals</li>
+          <li>Silk scarf</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Fabrics for spring</div>
+    <div class="temp-row"><span class="temp-badge temp-cool">Cool days</span><span class="temp-fabric">Fine cashmere, silk blouses, cotton — light layers</span></div>
+    <div class="temp-row"><span class="temp-badge temp-warm">Warm days</span><span class="temp-fabric">Linen, silk, lightweight cotton — single layer</span></div>
+    <div class="temp-row"><span class="temp-badge temp-cool">Evenings</span><span class="temp-fabric">Always bring the blazer or cardigan — evenings drop quickly</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SUMMER -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="season-panel summer" id="panel-summer">
+  <div class="season-header summer">
+    <div class="season-title">Summer</div>
+    <div class="season-subtitle">Single layers, minimum pieces, maximum ease</div>
+    <div class="season-months">
+      <span class="month-pill">June</span>
+      <span class="month-pill">July</span>
+      <span class="month-pill">August</span>
+    </div>
+  </div>
+
+  <div class="transition-rule">
+    <div class="rule-eyebrow">Summer rule</div>
+    <div class="rule-text">"One piece dressed up or down by the shoes. The rest is heat management."</div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Heroes this season</div>
+    <div class="piece-grid">
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#F5F0EB;border:1px solid #ddd"></div>
+        <div class="piece-name">Blue stripe sleeveless shirt</div>
+        <div class="piece-how">Your hero piece comes into its own. Tied at the waist, open over a cami, or alone with shorts</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A3550"></div>
+        <div class="piece-name">Navy wrap dress</div>
+        <div class="piece-how">Above-knee in summer. Alone with flat sandals for evening. One piece = complete outfit</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#7B9FD4"></div>
+        <div class="piece-name">Cornflower blouse</div>
+        <div class="piece-how">Alone, tucked into white shorts or navy trousers. No blazer needed</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#C8A97A"></div>
+        <div class="piece-name">Flat leather sandal</div>
+        <div class="piece-how">The summer shoe. Cognac with navy, silver with the lavender or mauve dress</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#F8F8F8;border:1px solid #ddd"></div>
+        <div class="piece-name">White tailored shorts</div>
+        <div class="piece-how">With the stripe shirt or cornflower blouse. Clean and polished, not casual</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#C0C0C0"></div>
+        <div class="piece-name">Silver flat mule</div>
+        <div class="piece-how">Evening shoe in summer — replaces the blazer as the outfit-elevating element</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">5 Summer outfit formulas</div>
+    <div class="outfit-strip">
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#C8A97A"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Stripe shirt tied + navy trousers + flat sandal</div>
+          <div class="outfit-pieces">Your most-reached-for summer combination. Works everywhere</div>
+          <div class="outfit-occasion">Office · Lunch · Evening</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#7B9FD4"></div>
+          <div class="odot" style="background:#F8F8F8;border-color:#ddd"></div>
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Cornflower blouse + white shorts + white trainers</div>
+          <div class="outfit-pieces">Weekend and travel days. The blue keeps it from looking too casual</div>
+          <div class="outfit-occasion">Weekend · Travel</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#C8A97A"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Navy wrap dress + flat leather sandal</div>
+          <div class="outfit-pieces">Two items. Silver jewellery. Done. Works for dinner, lunch, and everything between</div>
+          <div class="outfit-occasion">Evening · Dinner · Lunch</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#A0768A"></div>
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#C0C0C0"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Mauve bias-cut dress + écru cami under + silver flat mule</div>
+          <div class="outfit-pieces">The cami adds coverage and a layered look. Best summer evening outfit</div>
+          <div class="outfit-occasion">Date night · Dinner</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#C4BAB0;border-color:#ddd"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru blouse + white shorts + pointed flat mule (nude)</div>
+          <div class="outfit-pieces">Head-to-toe light tones — works in the heat, looks expensive</div>
+          <div class="outfit-occasion">Casual smart · Holiday</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Wardrobe swap</div>
+    <div class="swap-grid">
+      <div class="swap-col out">
+        <div class="swap-col-title out">Pack away</div>
+        <ul class="swap-list">
+          <li>Cashmere knitwear</li>
+          <li>Trench + wool coats</li>
+          <li>Chelsea boots</li>
+          <li>Heavy blazer (keep light one)</li>
+        </ul>
+      </div>
+      <div class="swap-col in">
+        <div class="swap-col-title in">Bring out</div>
+        <ul class="swap-list">
+          <li>White shorts</li>
+          <li>Flat leather sandals</li>
+          <li>Silver flat mule</li>
+          <li>Silk scarf as headband</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Fabrics for summer</div>
+    <div class="temp-row"><span class="temp-badge temp-hot">Hot days</span><span class="temp-fabric">Linen, silk, lightweight cotton — breathable naturals only</span></div>
+    <div class="temp-row"><span class="temp-badge temp-warm">Office</span><span class="temp-fabric">Silk blouses — cool to wear, polished in AC. Avoid polyester which traps heat</span></div>
+    <div class="temp-row"><span class="temp-badge temp-cool">Evenings</span><span class="temp-fabric">A light blazer or denim jacket still useful — outdoor restaurants and venues</span></div>
+    <div class="temp-row"><span class="temp-badge temp-hot">Avoid</span><span class="temp-fabric temp-avoid">Cashmere, wool, heavy cotton, anything with lining</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- AUTUMN -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="season-panel autumn" id="panel-autumn">
+  <div class="season-header autumn">
+    <div class="season-title">Autumn</div>
+    <div class="season-subtitle">Layering season — your wardrobe is at its most versatile</div>
+    <div class="season-months">
+      <span class="month-pill">September</span>
+      <span class="month-pill">October</span>
+      <span class="month-pill">November</span>
+    </div>
+  </div>
+
+  <div class="transition-rule">
+    <div class="rule-eyebrow">Autumn rule</div>
+    <div class="rule-text">"Add one layer at a time. Turtleneck under blazer. Blazer under trench. Never all three at once."</div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Heroes this season</div>
+    <div class="piece-grid">
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#F5F0EB;border:1px solid #ddd"></div>
+        <div class="piece-name">Écru cashmere turtleneck</div>
+        <div class="piece-how">Returns in September. Under a blazer for office. Alone on mild days. The single most versatile autumn piece</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#C4BAB0;border:1px solid #ddd"></div>
+        <div class="piece-name">Trench coat</div>
+        <div class="piece-how">Comes out in September, stays until November. Belted over everything from jeans to dresses</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A3550"></div>
+        <div class="piece-name">Navy blazer</div>
+        <div class="piece-how">Under the trench on colder days. Over the turtleneck for the office. Works harder in autumn than any other season</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#C4BAB0;border:1px solid #ddd"></div>
+        <div class="piece-name">Loafer</div>
+        <div class="piece-how">The autumn shoe. Transitions from sandal season to boot season. Tan with navy, black with charcoal</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A2020"></div>
+        <div class="piece-name">Chelsea boot</div>
+        <div class="piece-how">From October onwards. With straight-leg jeans, navy trousers, or under a dress</div>
+        <span class="piece-tag tag-new">Brings out</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#C0BDB8"></div>
+        <div class="piece-name">Dove grey cardigan</div>
+        <div class="piece-how">Indoor layer over a blouse. The meeting-room piece when it's cold inside but warm outside</div>
+        <span class="piece-tag tag-layer">Layer</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">5 Autumn outfit formulas</div>
+    <div class="outfit-strip">
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#C4BAB0;border-color:#ddd"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru turtleneck + navy trousers + trench coat</div>
+          <div class="outfit-pieces">The autumn uniform. Loafer or Chelsea boot. Never needs to be more complicated than this</div>
+          <div class="outfit-occasion">Office · Daily</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#7B9FD4"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A3550"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Cornflower blouse + navy blazer + navy trousers</div>
+          <div class="outfit-pieces">Tonal navy with the blouse as a colour lift. Add the trench over for the commute</div>
+          <div class="outfit-occasion">Office · Meetings</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#3B5998"></div>
+          <div class="odot" style="background:#2A2020"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Breton + straight-leg jeans + Chelsea boot</div>
+          <div class="outfit-pieces">The autumn weekend formula. Denim jacket or blazer over</div>
+          <div class="outfit-occasion">Weekend · Casual</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#B8A9C9"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A2020"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Lavender wrap dress + navy blazer + Chelsea boot</div>
+          <div class="outfit-pieces">Extends the dress into autumn. The boot and blazer do the seasonal work</div>
+          <div class="outfit-occasion">Smart casual · Dinner</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#7A8599"></div>
+          <div class="odot" style="background:#C4BAB0;border-color:#ddd"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Navy cashmere crew + slate trousers + loafer</div>
+          <div class="outfit-pieces">Tonal and effortless. The smarter side of knitwear dressing</div>
+          <div class="outfit-occasion">Office · Café · Casual</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Wardrobe swap</div>
+    <div class="swap-grid">
+      <div class="swap-col out">
+        <div class="swap-col-title out">Pack away</div>
+        <ul class="swap-list">
+          <li>White shorts</li>
+          <li>Flat leather sandals</li>
+          <li>Silver mule (to occasional)</li>
+          <li>Sleeveless summer tops</li>
+        </ul>
+      </div>
+      <div class="swap-col in">
+        <div class="swap-col-title in">Bring out</div>
+        <ul class="swap-list">
+          <li>Cashmere turtleneck + crew</li>
+          <li>Trench coat</li>
+          <li>Chelsea boots</li>
+          <li>Loafers back in full rotation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Fabrics for autumn</div>
+    <div class="temp-row"><span class="temp-badge temp-cool">Sept–Oct</span><span class="temp-fabric">Fine cashmere, silk, cotton — still light but layerable</span></div>
+    <div class="temp-row"><span class="temp-badge temp-cold">Nov</span><span class="temp-fabric">Cashmere, wool blends, lined pieces — warmth starts to matter</span></div>
+    <div class="temp-row"><span class="temp-badge temp-warm">Office</span><span class="temp-fabric">Silk blouses still work with cardigan over — save the heavy knits for outside</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- WINTER -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="season-panel winter" id="panel-winter">
+  <div class="season-header winter">
+    <div class="season-title">Winter</div>
+    <div class="season-subtitle">Maximum layering — the turtleneck is your foundation for everything</div>
+    <div class="season-months">
+      <span class="month-pill">December</span>
+      <span class="month-pill">January</span>
+      <span class="month-pill">February</span>
+    </div>
+  </div>
+
+  <div class="transition-rule">
+    <div class="rule-eyebrow">Winter rule</div>
+    <div class="rule-text">"Build from the turtleneck up. It's the thermal base that makes every other piece work harder."</div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Heroes this season</div>
+    <div class="piece-grid">
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#F5F0EB;border:1px solid #ddd"></div>
+        <div class="piece-name">Écru cashmere turtleneck</div>
+        <div class="piece-how">The thermal foundation. Under blazers, under the wool coat alone, tucked into a dress. Worn almost every day</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A3550"></div>
+        <div class="piece-name">Wool coat (navy/charcoal)</div>
+        <div class="piece-how">The winter outer anchor. Over everything — turtleneck alone, full blazer outfit, evening dress</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A3550"></div>
+        <div class="piece-name">Navy blazer</div>
+        <div class="piece-how">Mid-layer between turtleneck and coat. The blazer-over-turtleneck combination is your strongest winter office look</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A2020"></div>
+        <div class="piece-name">Chelsea boot</div>
+        <div class="piece-how">Main shoe December–February. With jeans, trousers, and under dresses. The only cold-weather shoe you need</div>
+        <span class="piece-tag tag-hero">Hero</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#2A3550"></div>
+        <div class="piece-name">Navy cashmere crew</div>
+        <div class="piece-how">On days when a turtleneck feels too much. Same warmth, slightly more relaxed</div>
+        <span class="piece-tag tag-layer">Layer</span>
+      </div>
+      <div class="piece-card">
+        <div class="piece-swatch" style="background:#A0768A"></div>
+        <div class="piece-name">Mauve bias-cut dress</div>
+        <div class="piece-how">Evening in winter: écru turtleneck underneath, wool coat over the top. One unexpected combination that always works</div>
+        <span class="piece-tag tag-layer">Layer under</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">5 Winter outfit formulas</div>
+    <div class="outfit-strip">
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A2020"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru turtleneck + navy blazer + navy trousers + Chelsea boot</div>
+          <div class="outfit-pieces">The winter office uniform. Wool coat over for the commute. Completely assembled in under 4 minutes</div>
+          <div class="outfit-occasion">Office · Daily</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#7B9FD4"></div>
+          <div class="odot" style="background:#7A8599"></div>
+          <div class="odot" style="background:#2A2020"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Cornflower blouse + slate trousers + Chelsea boot</div>
+          <div class="outfit-pieces">The blouse alone in a warm office. Dove cardigan for meetings or colder days</div>
+          <div class="outfit-occasion">Office · Meetings</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#3B5998"></div>
+          <div class="odot" style="background:#2A2020"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru turtleneck + straight-leg jeans + Chelsea boot</div>
+          <div class="outfit-pieces">The weekend winter formula. Denim jacket under the wool coat for extra warmth</div>
+          <div class="outfit-occasion">Weekend · Casual</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#F5F0EB;border-color:#ddd"></div>
+          <div class="odot" style="background:#A0768A"></div>
+          <div class="odot" style="background:#C0C0C0"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Écru turtleneck under mauve dress + silver flat mule</div>
+          <div class="outfit-pieces">The winter evening formula. Turtleneck as base layer makes the dress seasonally appropriate</div>
+          <div class="outfit-occasion">Evening · Date night</div>
+        </div>
+      </div>
+      <div class="outfit-ex">
+        <div class="outfit-dots">
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A3550"></div>
+          <div class="odot" style="background:#2A2020"></div>
+        </div>
+        <div class="outfit-detail">
+          <div class="outfit-name">Navy crew + navy trousers + Chelsea boot</div>
+          <div class="outfit-pieces">All-navy tonal dressing — very chic in winter. Silver jewellery is essential to break it up</div>
+          <div class="outfit-occasion">Office · Smart casual</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Wardrobe swap</div>
+    <div class="swap-grid">
+      <div class="swap-col out">
+        <div class="swap-col-title out">Rest</div>
+        <ul class="swap-list">
+          <li>Flat leather sandals</li>
+          <li>White shorts</li>
+          <li>Sleeveless pieces (to evening only)</li>
+          <li>Linen trousers</li>
+        </ul>
+      </div>
+      <div class="swap-col in">
+        <div class="swap-col-title in">Full rotation</div>
+        <ul class="swap-list">
+          <li>All cashmere — turtleneck + crew</li>
+          <li>Wool coat</li>
+          <li>Chelsea boots — daily</li>
+          <li>Dove cardigan as indoor layer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="block-title">Fabrics for winter</div>
+    <div class="temp-row"><span class="temp-badge temp-cold">Cold days</span><span class="temp-fabric">Cashmere, merino wool, quality wool blends — natural fibres only</span></div>
+    <div class="temp-row"><span class="temp-badge temp-cool">Office</span><span class="temp-fabric">Silk blouses still work — offices are warm. Cashmere cardigan over for the commute</span></div>
+    <div class="temp-row"><span class="temp-badge temp-cold">Evening</span><span class="temp-fabric">Layer cleverly — turtleneck under a dress is warmer than a coat over a bare dress</span></div>
+    <div class="temp-row"><span class="temp-badge temp-hot">Avoid</span><span class="temp-fabric temp-avoid">Synthetic fleece, acrylic knits, polyester blends — they pill and look cheap fast</span></div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showSeason(season, btn) {
+  // Hide all panels
+  document.querySelectorAll('.season-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
+
+  // Show selected
+  document.getElementById('panel-' + season).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Highlight current month
+const month = new Date().getMonth(); // 0-11
+const seasonMap = {
+  2:'spring', 3:'spring', 4:'spring',
+  5:'summer', 6:'summer', 7:'summer',
+  8:'autumn', 9:'autumn', 10:'autumn',
+  11:'winter', 0:'winter', 1:'winter'
+};
+const currentSeason = seasonMap[month];
+
+// Auto-open current season
+const activeBtn = document.querySelector('.season-btn.' + currentSeason);
+if (activeBtn) {
+  document.querySelectorAll('.season-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + currentSeason).classList.add('active');
+  activeBtn.classList.add('active');
+}
+
+// Highlight current month pills
+const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const currentMonthName = monthNames[month];
+document.querySelectorAll('.month-pill').forEach(pill => {
+  if (pill.textContent.trim() === currentMonthName) {
+    pill.classList.add('current');
+  }
+});
+</script>
+</body>
+</html>

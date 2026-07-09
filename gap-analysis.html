@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wardrobe Gap Analysis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:   #2A3550;
+    --slate:  #7A8599;
+    --dove:   #C0BDB8;
+    --ecru:   #F5F0EB;
+    --powder: #B8CEDD;
+    --rule:   #E2DED9;
+    --bg:     #FAFAF8;
+    --bg-ref: #F2EEE9;
+    --text:   #2C2C2C;
+    --light:  #6B6B6B;
+    --sage:   #8FAF8B;
+    --rose:   #C4879A;
+    --corn:   #7B9FD4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 24px;
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px,6vw,40px); font-weight: 300; line-height: 1.1; margin-bottom: 10px; }
+  .header h1 em { font-style: italic; color: var(--powder); }
+  .header-sub { font-size: 12px; opacity: 0.6; line-height: 1.6; max-width: 460px; }
+
+  .progress-section {
+    background: white;
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 24px;
+  }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .progress-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--slate); font-weight: 500; }
+  .progress-count { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--navy); font-weight: 300; }
+  .progress-track { height: 4px; background: var(--rule); border-radius: 2px; }
+  .progress-fill  { height: 4px; background: var(--navy); border-radius: 2px; transition: width 0.5s ease; }
+  .progress-cats { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+  .progress-cat { font-size: 11px; color: var(--light); display: flex; align-items: center; gap: 5px; }
+  .cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .main { padding: 20px 24px 60px; max-width: 860px; margin: 0 auto; }
+
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  @media(min-width:500px){ .summary-grid { grid-template-columns: repeat(4,1fr); } }
+  .summary-card { background: white; border: 1px solid var(--rule); padding: 14px; text-align: center; }
+  .summary-val { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--navy); line-height: 1; }
+  .summary-lbl { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate); margin-top: 4px; }
+
+  .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid var(--rule); overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slate); padding: 10px 16px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; font-weight: 500; transition: all 0.15s; background: none; border-top: none; border-left: none; border-right: none; font-family: 'Inter', sans-serif; }
+  .tab:hover { color: var(--navy); }
+  .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+  .gaps-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .gap-card { background: white; border: 1px solid var(--rule); overflow: hidden; transition: box-shadow 0.15s; }
+  .gap-card:hover { box-shadow: 0 2px 12px rgba(42,53,80,0.08); }
+  .gap-card.owned { border-left: 4px solid var(--sage); background: #F8FBF8; }
+
+  .gap-card-inner { padding: 16px 18px; display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; align-items: start; }
+
+  .gap-rank { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 2px; }
+  .gap-rank-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--navy); line-height: 1; }
+  .gap-rank-label { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dove); }
+
+  .gap-body { min-width: 0; }
+  .gap-name { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 4px; }
+  .gap-colour { font-size: 11px; color: var(--light); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .colour-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+  .gap-why { font-size: 12.5px; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+  .gap-unlocks-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate); margin-bottom: 6px; font-weight: 500; }
+  .gap-outfits { display: flex; flex-wrap: wrap; gap: 5px; }
+  .outfit-tag { font-size: 10px; background: var(--bg-ref); color: var(--navy); padding: 3px 8px; border-radius: 2px; }
+
+  .gap-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .unlock-score { text-align: center; }
+  .unlock-num { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--navy); line-height: 1; }
+  .unlock-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate); }
+
+  .priority-badge { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; padding: 4px 9px; border-radius: 2px; }
+  .priority-high   { background: #EEF2F8; color: var(--navy); }
+  .priority-medium { background: var(--bg-ref); color: #7A6A30; }
+  .priority-low    { background: #F2F2F2; color: var(--slate); }
+
+  .own-toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 10px; color: var(--slate); letter-spacing: 0.1em; text-transform: uppercase; user-select: none; margin-top: 4px; }
+  .own-toggle input { cursor: pointer; accent-color: var(--navy); width: 14px; height: 14px; }
+  .own-toggle.checked { color: var(--sage); }
+
+  .budget-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--light); margin-top: 10px; flex-wrap: wrap; }
+
+  .owned-banner { background: #EEF5EE; padding: 6px 18px; font-size: 11px; color: var(--sage); font-weight: 500; letter-spacing: 0.08em; border-top: 1px solid #D4EAD4; }
+
+  .tip { background: var(--navy); color: white; padding: 16px 20px; font-size: 12.5px; line-height: 1.7; margin-top: 24px; }
+  .tip strong { font-weight: 500; }
+
+  .empty-state { text-align: center; padding: 48px 24px; color: var(--slate); }
+  .empty-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--navy); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Wardrobe Intelligence</div>
+  <h1>Gap <em>Analysis</em></h1>
+  <div class="header-sub">Every missing piece ranked by how many new outfit combinations it unlocks. Tick items off as you acquire them.</div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-top">
+    <span class="progress-label">Capsule completion</span>
+    <span class="progress-count" id="progressCount">0 / 20 pieces</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-cats" id="progressCats"></div>
+</div>
+
+<div class="main">
+  <div class="summary-grid">
+    <div class="summary-card"><div class="summary-val" id="sumGaps">—</div><div class="summary-lbl">Gaps remaining</div></div>
+    <div class="summary-card"><div class="summary-val" id="sumUnlocks">—</div><div class="summary-lbl">Outfits unlocked</div></div>
+    <div class="summary-card"><div class="summary-val" id="sumPriority">—</div><div class="summary-lbl">High priority</div></div>
+    <div class="summary-card"><div class="summary-val" id="sumOwned">—</div><div class="summary-lbl">Already owned</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="setTab('all',this)">All gaps</button>
+    <button class="tab" onclick="setTab('high',this)">High priority</button>
+    <button class="tab" onclick="setTab('Tops',this)">Tops</button>
+    <button class="tab" onclick="setTab('Bottoms',this)">Bottoms</button>
+    <button class="tab" onclick="setTab('Outerwear',this)">Outerwear</button>
+    <button class="tab" onclick="setTab('Shoes',this)">Shoes</button>
+    <button class="tab" onclick="setTab('Bags',this)">Bags</button>
+    <button class="tab" onclick="setTab('Knitwear',this)">Knitwear</button>
+    <button class="tab" onclick="setTab('owned',this)">✓ Owned</button>
+  </div>
+
+  <div class="gaps-list" id="gapsList"></div>
+
+  <div class="tip">
+    <strong>How to use this:</strong> Work down from rank 1. Each piece unlocks multiple new outfit combinations. Tick items off as you acquire them. Focus on high-priority gaps first — they have the greatest multiplier effect on your existing wardrobe.
+  </div>
+</div>
+
+<script>
+const GAPS = [
+  { id:1, name:"Navy slim tailored trousers", cat:"Bottoms", colour:"#2A3550", colourName:"French Navy", priority:"high", unlocks:10, why:"Your single most versatile bottom. Pairs with every top and anchors both office and smart-casual looks. Straight or slim-straight cut — not tapered, not wide. The slight ankle crop keeps it modern.", outfits:["Daily office","Senior meetings","Networking","Café morning","Smart weekend","Date night","Business casual","Travel","Presentations","Dress day"], budget:{low:40,mid:80,invest:150}, where:"Reiss, Massimo Dutti, Arket" },
+  { id:2, name:"Fitted navy blazer", cat:"Outerwear", colour:"#2A3550", colourName:"French Navy", priority:"high", unlocks:9, why:"Elevates any outfit instantly — turns a Breton and jeans into business casual, a turtleneck into office-ready. Go for one with a slightly shorter, nipped-in body rather than an oversized or boxy cut. The fitted shape reads modern, not corporate.", outfits:["Senior meetings","Business casual","Nursery run","Casual lunch","Evening","Networking","Dress day","Presentations","Weekend smart"], budget:{low:60,mid:120,invest:250}, where:"Reiss, Theory, Equipment" },
+  { id:3, name:"Écru cashmere turtleneck", cat:"Knitwear", colour:"#F5F0EB", colourName:"Écru", priority:"high", unlocks:8, why:"Your hero neckline in your hero colour. Fine or mid-gauge knit keeps it sleek rather than bulky — avoid chunky cable knits which age. Wears alone to the office, under a blazer for meetings, or tucked into a skirt for evening.", outfits:["Daily office","Softer day","Weekend smart","Travel","Park day","Evening","Date night","W5 formula"], budget:{low:80,mid:180,invest:400}, where:"N.Peal, Sézane, Loro Piana" },
+  { id:4, name:"Écru silk blouse", cat:"Tops", colour:"#F5F0EB", colourName:"Écru / Ivory", priority:"high", unlocks:8, why:"The most elegant top in your palette. Look for fluid, slightly oversized cuts rather than stiff structured ones — they read more contemporary. Half-tucked into trousers looks effortlessly put-together rather than trying too hard.", outfits:["Core uniform","Date night","Senior meetings","Smart weekend","Casual lunch","Travel","Business casual","Networking"], budget:{low:40,mid:90,invest:180}, where:"Equipment, L'Agence, Jigsaw" },
+  { id:5, name:"Cornflower blue silk blouse", cat:"Tops", colour:"#7B9FD4", colourName:"Cornflower Blue", priority:"high", unlocks:7, why:"Your most flattering colour. Replaces white in any office outfit and immediately lifts your colouring. A fluid, slightly open collar (not a stiff button-up) keeps it feeling current and relaxed.", outfits:["The Polish","Senior meetings","Networking","Business casual","Dinner","Presentations","Smart weekend"], budget:{low:40,mid:90,invest:180}, where:"Equipment, Jigsaw, & Other Stories" },
+  { id:6, name:"Pointed flat mule", cat:"Shoes", colour:"#C4BAB0", colourName:"Nude / Taupe", priority:"high", unlocks:7, why:"A 3–4cm flat mule is the sweet spot — stable for a full day, polished without being formal, and visually elongating. Pointed or slightly squared toe rather than round, which can date a shoe quickly.", outfits:["Core uniform","The Polish","Dress day","Networking","Senior meetings","Presentations","Date night"], budget:{low:50,mid:100,invest:200}, where:"Russell & Bromley, L.K. Bennett, Massimo Dutti" },
+  { id:7, name:"Slate grey slim trousers", cat:"Bottoms", colour:"#7A8599", colourName:"Slate Grey", priority:"high", unlocks:7, why:"Your second workhorse neutral. Breaks up an all-navy week and pairs particularly well with the écru turtleneck and dusty rose top. Same straight-leg or slim-straight cut as the navy — consistency of silhouette makes mixing easier.", outfits:["Softer day","Café morning","Networking","Core uniform variation","Dusty rose formula","Smart weekend","Business casual"], budget:{low:40,mid:80,invest:150}, where:"Reiss, Arket, COS" },
+  { id:8, name:"Leather tote (tan or black)", cat:"Bags", colour:"#C8A97A", colourName:"Tan or Black", priority:"high", unlocks:7, why:"A structured tote that works for the office. Unstructured totes slouch and look less polished — look for one that stands on its own. Tan is warmer and works beautifully against navy; black is more versatile if you want one bag.", outfits:["Daily office","Business casual","Senior meetings","Networking","Travel","Weekend smart","Café morning"], budget:{low:80,mid:200,invest:450}, where:"Polène, A.P.C., Strathberry" },
+  { id:9, name:"Dove grey cashmere cardigan", cat:"Knitwear", colour:"#C0BDB8", colourName:"Dove Grey", priority:"medium", unlocks:6, why:"The layering piece that softens any outfit. Fine-gauge is key — a thin cardigan can go over a blouse without adding bulk. Over the écru blouse, over a cami in the evening, over a Breton at the weekend.", outfits:["Core uniform","Casual lunch","Weekend smart","Travel layer","Park day","Evening casual"], budget:{low:60,mid:150,invest:320}, where:"Sézane, N.Peal, Arket" },
+  { id:10, name:"Trench coat", cat:"Outerwear", colour:"#C4BAB0", colourName:"Stone / Cool Camel", priority:"medium", unlocks:6, why:"Works over everything from jeans to dresses. The belted version adds a waist to any outfit. Go for a slightly shorter trench (mid-thigh rather than knee-length) — it sits better with midi dresss and keeps proportions modern.", outfits:["Travel formula","Weekend smart","Nursery run","Business casual","Smart casual","Evening arrival"], budget:{low:80,mid:200,invest:500}, where:"Toteme, Arket, Massimo Dutti" },
+  { id:11, name:"Navy cashmere crew neck", cat:"Knitwear", colour:"#2A3550", colourName:"French Navy", priority:"medium", unlocks:5, why:"Works where a turtleneck would feel too formal. Great for café mornings and travel days. Keep the fit close rather than oversized — a neat crew neck reads more polished and sits better under a blazer if needed.", outfits:["Café morning","Travel","Business casual","Weekend","Park day"], budget:{low:60,mid:160,invest:350}, where:"Sézane, N.Peal, Arket" },
+  { id:12, name:"Tan or black loafer", cat:"Shoes", colour:"#C4BAB0", colourName:"Tan or Black", priority:"medium", unlocks:5, why:"The shoe that bridges smart-casual and weekend. A slightly chunky sole (not a platform but not paper-thin) looks current and comfortable. Horsebit detail is classic without being costumey.", outfits:["Softer day","Business casual","Café morning","Weekend smart","Travel"], budget:{low:60,mid:130,invest:280}, where:"Russell & Bromley, Massimo Dutti, Reiss" },
+  { id:13, name:"Navy wool midi coat", cat:"Outerwear", colour:"#2A3550", colourName:"Navy or Charcoal", priority:"medium", unlocks:5, why:"The winter anchor. A clean, unfussy silhouette — no excessive buttons or belts. Worn 5 months of the year over everything. Navy works over your entire palette without conflict. Quality wool coat bought once lasts a decade.", outfits:["Winter office","Travel","Smart weekend","Evening arrival","School run winter"], budget:{low:100,mid:250,invest:600}, where:"Max Mara, Toteme, Arket" },
+  { id:14, name:"Small crossbody bag", cat:"Bags", colour:"#1A1A1A", colourName:"Black", priority:"medium", unlocks:5, why:"Hands-free is essential with a young family. Look for a structured rather than slouchy shape — it photographs better and feels more intentional. Doubles as an evening bag.", outfits:["Nursery run","Park day","Casual lunch","Date night","Evening"], budget:{low:40,mid:120,invest:300}, where:"Polène, A.P.C., Strathberry" },
+  { id:15, name:"Breton stripe top (navy/écru)", cat:"Tops", colour:"#F5F0EB", colourName:"Navy / Écru stripe", priority:"medium", unlocks:4, why:"The ultimate weekend top. Crew neck suits you perfectly. With jeans and a blazer it reads business casual. The key is fit — slightly fitted through the body, not oversized, so it works tucked or half-tucked.", outfits:["Nursery run","Business casual","Park day","Casual weekend"], budget:{low:20,mid:50,invest:90}, where:"Sézane, Saint James, & Other Stories" },
+  { id:16, name:"Dusty mauve midi dress", cat:"Bottoms", colour:"#A0768A", colourName:"Dusty Mauve", priority:"medium", unlocks:4, why:"Your most elegant evening bottom. A fluid fabric (silk, satin, or viscose) rather than a stiff one keeps it feeling easy rather than occasion-specific. Pairs with the écru camisole for date night.", outfits:["Date night","Evening dinner","Weekend lunch","Smart Saturday"], budget:{low:35,mid:80,invest:160}, where:"Sézane, & Other Stories, Jigsaw" },
+  { id:17, name:"Silver flat mule", cat:"Shoes", colour:"#C0C0C0", colourName:"Silver", priority:"low", unlocks:4, why:"Elevates any evening look instantly. Silver works with your cool undertone where gold would fight it. A pointed flat or very low mule in silver works with your cool undertone where gold would fight it. No heel needed — the pointed toe does the elongating work.", outfits:["Date night","Dinner","Evening E1","Evening E2"], budget:{low:50,mid:100,invest:220}, where:"Russell & Bromley, Reiss, Massimo Dutti" },
+  { id:18, name:"White tailored shirt", cat:"Tops", colour:"#F8F8F8", colourName:"White / Écru", priority:"low", unlocks:4, why:"The classic essential. Half-tucked into jeans for weekends, fully tucked into wide-leg trousers for summer, open over a cami as a layer. Look for a slightly relaxed cut — not a stiff formal shirt, but not oversized either.", outfits:["Business casual","Weekend","Summer travel","Casual lunch"], budget:{low:30,mid:70,invest:140}, where:"Arket, COS, Sézane" },
+  { id:19, name:"Dusty rose silk top", cat:"Tops", colour:"#C4879A", colourName:"Dusty Rose", priority:"low", unlocks:3, why:"Your key accent colour in top form. Pairs beautifully with navy and slate trousers. A cami or slip top silhouette works for evening; a blouse cut works for networking. One colour, two uses.", outfits:["Networking","Smart evening","Weekend lunch"], budget:{low:35,mid:80,invest:160}, where:"Equipment, & Other Stories, Jigsaw" },
+  { id:20, name:"Silk scarf (navy / écru print)", cat:"Accessories", colour:"#2A3550", colourName:"Navy / Écru", priority:"low", unlocks:3, why:"The accessory that elevates a simple outfit without adding thought. Tied loosely around the neck rather than knotted formally — the relaxed way to wear it is what makes it feel current rather than dated.", outfits:["Daily office upgrade","Travel","Weekend polish"], budget:{low:20,mid:60,invest:200}, where:"Sézane, & Other Stories, Hermès (invest)" },
+];
+
+const OWNED_KEY = 'gap-owned-ids-v2';
+let owned = new Set(JSON.parse(localStorage.getItem(OWNED_KEY) || '[]'));
+let currentTab = 'all';
+
+function saveOwned() { localStorage.setItem(OWNED_KEY, JSON.stringify([...owned])); }
+
+function toggleOwned(id) {
+  if (owned.has(id)) owned.delete(id); else owned.add(id);
+  saveOwned(); render();
+}
+
+function setTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function render() { renderProgress(); renderSummary(); renderGaps(); }
+
+function renderProgress() {
+  const total = GAPS.length;
+  const ownedCount = GAPS.filter(g => owned.has(g.id)).length;
+  const pct = Math.round((ownedCount / total) * 100);
+  document.getElementById('progressCount').textContent = `${ownedCount} / ${total} pieces`;
+  document.getElementById('progressFill').style.width = pct + '%';
+  const catColors = { 'Tops':'#7B9FD4','Bottoms':'#2A3550','Knitwear':'#C0BDB8','Outerwear':'#4A4A4A','Shoes':'#C4BAB0','Bags':'#C8A97A','Accessories':'#C4879A' };
+  const cats = [...new Set(GAPS.map(g => g.cat))];
+  document.getElementById('progressCats').innerHTML = cats.map(cat => {
+    const catGaps = GAPS.filter(g => g.cat === cat);
+    const co = catGaps.filter(g => owned.has(g.id)).length;
+    return `<div class="progress-cat"><div class="cat-dot" style="background:${catColors[cat]||'#999'}"></div>${cat}: ${co}/${catGaps.length}</div>`;
+  }).join('');
+}
+
+function renderSummary() {
+  const gaps = GAPS.filter(g => !owned.has(g.id));
+  document.getElementById('sumGaps').textContent = gaps.length;
+  document.getElementById('sumUnlocks').textContent = gaps.reduce((s,g) => s + g.unlocks, 0);
+  document.getElementById('sumPriority').textContent = gaps.filter(g => g.priority === 'high').length;
+  document.getElementById('sumOwned').textContent = GAPS.filter(g => owned.has(g.id)).length;
+}
+
+function renderGaps() {
+  let filtered;
+  if (currentTab === 'all')    filtered = GAPS.filter(g => !owned.has(g.id));
+  else if (currentTab === 'owned') filtered = GAPS.filter(g => owned.has(g.id));
+  else if (currentTab === 'high')  filtered = GAPS.filter(g => !owned.has(g.id) && g.priority === 'high');
+  else filtered = GAPS.filter(g => !owned.has(g.id) && g.cat === currentTab);
+
+  if (filtered.length === 0) {
+    document.getElementById('gapsList').innerHTML = `<div class="empty-state"><div class="empty-title">${currentTab === 'owned' ? 'Nothing marked as owned yet' : 'All gaps in this category filled'}</div><div style="font-size:13px;color:var(--slate);">Tick items off as you acquire them.</div></div>`;
+    return;
+  }
+
+  document.getElementById('gapsList').innerHTML = filtered.map((g, idx) => {
+    const isOwned = owned.has(g.id);
+    return `<div class="gap-card ${isOwned ? 'owned' : ''}">
+      <div class="gap-card-inner">
+        <div class="gap-rank">
+          <div class="gap-rank-num" style="${isOwned ? 'color:var(--sage)' : ''}">${isOwned ? '✓' : idx+1}</div>
+          <div class="gap-rank-label">${isOwned ? '' : 'priority'}</div>
+        </div>
+        <div class="gap-body">
+          <div class="gap-name">${g.name}</div>
+          <div class="gap-colour"><div class="colour-dot" style="background:${g.colour}"></div>${g.colourName}</div>
+          <div class="gap-why">${g.why}</div>
+          <div class="gap-unlocks-label">Outfits this unlocks</div>
+          <div class="gap-outfits">${g.outfits.map(o => `<span class="outfit-tag">${o}</span>`).join('')}</div>
+          <div class="budget-row">
+            <span>Budget: £${g.budget.low} – £${g.budget.invest}</span>
+            <span style="color:var(--slate);font-size:10px;"> · ${g.where}</span>
+          </div>
+        </div>
+        <div class="gap-right">
+          <div class="unlock-score">
+            <div class="unlock-num">${g.unlocks}</div>
+            <div class="unlock-label">outfits</div>
+          </div>
+          <div class="priority-badge priority-${g.priority}">${g.priority}</div>
+          <label class="own-toggle ${isOwned ? 'checked' : ''}">
+            <input type="checkbox" ${isOwned ? 'checked' : ''} onchange="toggleOwned(${g.id})">
+            ${isOwned ? 'Owned' : 'Mark owned'}
+          </label>
+        </div>
+      </div>
+      ${isOwned ? '<div class="owned-banner">✓ In your wardrobe</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>

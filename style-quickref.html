@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Style Quick Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #2A3550;
+    --charcoal: #4A4A4A;
+    --slate: #7A8599;
+    --dove: #C0BDB8;
+    --ecru: #F5F0EB;
+    --powder: #B8CEDD;
+    --rose: #C4879A;
+    --sage: #8FAF8B;
+    --cornflower: #7B9FD4;
+    --lavender: #B8A9C9;
+    --mauve: #A0768A;
+    --bg: #FAFAF8;
+    --rule: #E2DED9;
+    --text: #2C2C2C;
+    --text-light: #6B6B6B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 22px;
+  }
+
+  .header-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 8px;
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 6vw, 34px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+
+  .header-title em { color: var(--powder); font-style: italic; }
+
+  .header-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section.reference { background: #F2EEE9; } /* warm tint = refer-back section */
+  .section.analysis  { background: var(--bg); }  /* default = read-once */
+
+  .section-title {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── PAINT-CHIP SWATCHES ── */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+
+  .sw-chip {
+    height: 56px;
+  }
+
+  .sw-info {
+    background: white;
+    padding: 6px 7px;
+  }
+
+  .sw-name {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .sw-hex {
+    font-size: 9px;
+    color: var(--text-light);
+    font-family: monospace;
+    margin-top: 1px;
+  }
+
+  .sw-use {
+    font-size: 9px;
+    color: var(--slate);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ── COLOUR TAGS ── */
+  .tag-group { margin-bottom: 12px; }
+
+  .tag-group-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 7px;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .tag {
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 2px;
+    font-weight: 400;
+  }
+
+  .tag-yes { background: #EBF0F7; color: #1E3056; }
+  .tag-no  { background: #F5EDEC; color: #7A3535; }
+
+  /* ── COMBOS ── */
+  .combo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+  }
+
+  .combo:last-child { border-bottom: none; }
+
+  .combo-dots { display: flex; gap: 5px; flex-shrink: 0; }
+
+  .dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  /* ── FORMULAS ── */
+  .formula-item {
+    display: flex;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .formula-item:last-child { border-bottom: none; }
+
+  .fi-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    width: 68px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    font-weight: 500;
+  }
+
+  .fi-val { font-size: 13.5px; line-height: 1.5; }
+
+  /* ── LISTS ── */
+  ul.ref {
+    list-style: none;
+    columns: 2;
+    column-gap: 20px;
+  }
+
+  @media (max-width: 400px) { ul.ref { columns: 1; } }
+
+  ul.ref li {
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    line-height: 1.4;
+    break-inside: avoid;
+  }
+
+  ul.ref li:last-child { border-bottom: none; }
+
+  ul.ref li::before {
+    content: '–';
+    color: var(--slate);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  /* ── NECKLINES ── */
+  .neckline-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .nl-card {
+    border: 1px solid var(--rule);
+    background: white;
+    padding: 11px 13px;
+    border-radius: 2px;
+  }
+
+  .nl-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .nl-why {
+    font-size: 11px;
+    color: var(--text-light);
+    line-height: 1.4;
+  }
+
+  .nl-card.avoid {
+    border-color: #E8D8D8;
+    background: #FBF7F7;
+  }
+
+  .nl-card.avoid .nl-name { color: #8A4A4A; }
+  .nl-sketch { display:flex; justify-content:center; margin-bottom:10px; }
+    .nl-sketch svg { display:block; }
+
+  /* ── AUDIT ── */
+  .audit-group { margin-bottom: 16px; }
+  .audit-group:last-child { margin-bottom: 0; }
+
+  .audit-group-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .audit-group.hero-group .audit-group-label { font-size: 12px; color: var(--navy); }
+  .audit-group.hero-group .audit-items { background: #EEF2F8; border-left: 4px solid var(--navy); padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: var(--navy); line-height: 1.7; }
+
+  .audit-items {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    padding-left: 22px;
+  }
+
+  .audit-note {
+    font-size: 11px;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* ── SIGNATURE ── */
+  .signature {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .sig-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 4vw, 22px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.55;
+    opacity: 0.92;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .sig-label {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-top: 12px;
+  }
+
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sticky-nav::-webkit-scrollbar { display: none; }
+  .sticky-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    white-space: nowrap;
+    opacity: 0.6;
+    font-weight: 500;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  .sticky-nav a:hover { opacity: 1; }
+  .sticky-nav a.active { opacity: 1; border-bottom: 2px solid var(--powder); }
+
+  /* ── MIX & MATCH MATRIX ── */
+  .matrix-wrap { overflow-x: auto; margin: 16px 0; -webkit-overflow-scrolling: touch; }
+  .matrix-table { border-collapse: collapse; min-width: 480px; width: 100%; font-size: 11.5px; }
+  .matrix-table th, .matrix-table td { border: 1px solid var(--rule); padding: 0; }
+  .matrix-table thead th { background: var(--navy); color: white; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; padding: 8px 10px; text-align: center; min-width: 68px; }
+  .matrix-table thead th:first-child { background: white; min-width: 130px; text-align: left; padding: 8px 12px; }
+  .matrix-table tbody tr:nth-child(even) td { background: #F7F5F2; }
+  .matrix-row-head { background: white !important; font-size: 11px; font-weight: 500; color: var(--navy); padding: 9px 12px; text-align: left; white-space: nowrap; }
+  .matrix-row-sub { font-size: 9px; color: var(--slate); font-weight: 400; display: block; margin-top: 1px; }
+  .matrix-cell { text-align: center; padding: 8px 4px; font-size: 14px; vertical-align: middle; min-width: 68px; }
+  .matrix-cell.perfect { background: #EEF2F8 !important; }
+  .matrix-cell.works { color: #5A8A5A; }
+  .matrix-cell.skip { color: #E0DDD8; font-size: 11px; }
+  .matrix-legend { display: flex; gap: 20px; margin: 12px 0 0; font-size: 12px; color: var(--text-light); flex-wrap: wrap; }
+  .matrix-legend span { display: flex; align-items: center; gap: 6px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Personal Style · Quick Reference</div>
+  <div class="header-title">Navy · Écru · Slate<br><em>Cool Summer</em></div>
+  <div class="header-pills">
+    <span class="pill">Cool undertone</span>
+    <span class="pill">Medium contrast</span>
+    <span class="pill">Silver &amp; white gold</span>
+    <span class="pill">Muted · never vivid</span>
+  </div>
+</div>
+
+<!-- PALETTE: NEUTRALS -->
+<div class="section reference" id="palette">
+  <div class="section-title">Core Neutrals</div>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="sw-chip" style="background:#F5F0EB;"></div>
+      <div class="sw-info"><div class="sw-name">Écru</div><div class="sw-hex">#F5F0EB</div><div class="sw-use">Shirts, knits</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#2A3550;"></div>
+      <div class="sw-info"><div class="sw-name">French Navy</div><div class="sw-hex">#2A3550</div><div class="sw-use">Anchor neutral</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#7A8599;"></div>
+      <div class="sw-info"><div class="sw-name">Slate Grey</div><div class="sw-hex">#7A8599</div><div class="sw-use">Mid-tone</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#C0BDB8;"></div>
+      <div class="sw-info"><div class="sw-name">Dove Grey</div><div class="sw-hex">#C0BDB8</div><div class="sw-use">Soft layers</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#4A4A4A;"></div>
+      <div class="sw-info"><div class="sw-name">Charcoal</div><div class="sw-hex">#4A4A4A</div><div class="sw-use">Softer than black</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#B8CEDD;"></div>
+      <div class="sw-info"><div class="sw-name">Powder Blue</div><div class="sw-hex">#B8CEDD</div><div class="sw-use">Tonal neutral</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PALETTE: ACCENTS -->
+<div class="section reference">
+  <div class="section-title">Accent Colours</div>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="sw-chip" style="background:#7B9FD4;"></div>
+      <div class="sw-info"><div class="sw-name">Cornflower</div><div class="sw-hex">#7B9FD4</div><div class="sw-use">Best blue</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#C4879A;"></div>
+      <div class="sw-info"><div class="sw-name">Dusty Rose</div><div class="sw-hex">#C4879A</div><div class="sw-use">Classic Summer</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#8FAF8B;"></div>
+      <div class="sw-info"><div class="sw-name">Sage</div><div class="sw-hex">#8FAF8B</div><div class="sw-use">Pairs w/ navy</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#B8A9C9;"></div>
+      <div class="sw-info"><div class="sw-name">Lavender</div><div class="sw-hex">#B8A9C9</div><div class="sw-use">Elevated, airy</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#A0768A;"></div>
+      <div class="sw-info"><div class="sw-name">Dusty Mauve</div><div class="sw-hex">#A0768A</div><div class="sw-use">Evening</div></div>
+    </div>
+    <div class="swatch">
+      <div class="sw-chip" style="background:#8891C5;"></div>
+      <div class="sw-info"><div class="sw-name">Periwinkle</div><div class="sw-hex">#8891C5</div><div class="sw-use">Office blouses</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WEAR / AVOID -->
+<div class="section analysis">
+  <div class="section-title">Wear vs Avoid</div>
+
+  <div class="tag-group">
+    <div class="tag-group-label">Cool tones — always yes</div>
+    <div class="tags">
+      <span class="tag tag-yes">French navy</span>
+      <span class="tag tag-yes">Écru</span>
+      <span class="tag tag-yes">Cornflower blue</span>
+      <span class="tag tag-yes">Dusty rose</span>
+      <span class="tag tag-yes">Slate grey</span>
+      <span class="tag tag-yes">Soft sage</span>
+      <span class="tag tag-yes">Powder blue</span>
+      <span class="tag tag-yes">Lavender</span>
+      <span class="tag tag-yes">Dusty mauve</span>
+      <span class="tag tag-yes">Charcoal</span>
+    </div>
+  </div>
+
+  <div class="tag-group" style="margin-bottom:0;">
+    <div class="tag-group-label">Warm &amp; vivid tones — always no</div>
+    <div class="swatch-grid" style="margin-top:10px;">
+      <div class="swatch"><div class="sw-chip" style="background:#8B3A2A;"></div><div class="sw-info"><div class="sw-name">Rust</div><div class="sw-hex">#8B3A2A</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#C9A84C;"></div><div class="sw-info"><div class="sw-name">Mustard</div><div class="sw-hex">#C9A84C</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#C19A6B;"></div><div class="sw-info"><div class="sw-name">Warm Camel</div><div class="sw-hex">#C19A6B</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#6B7C3B;"></div><div class="sw-info"><div class="sw-name">Olive</div><div class="sw-hex">#6B7C3B</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#E8C84A;"></div><div class="sw-info"><div class="sw-name">Golden Yellow</div><div class="sw-hex">#E8C84A</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#C0392B;"></div><div class="sw-info"><div class="sw-name">Tomato Red</div><div class="sw-hex">#C0392B</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#E8714A;"></div><div class="sw-info"><div class="sw-name">Bright Coral</div><div class="sw-hex">#E8714A</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#5C3A1E;"></div><div class="sw-info"><div class="sw-name">Choc. Brown</div><div class="sw-hex">#5C3A1E</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#6AAF2A;"></div><div class="sw-info"><div class="sw-name">Lime Green</div><div class="sw-hex">#6AAF2A</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#7B2D8B;"></div><div class="sw-info"><div class="sw-name">Vivid Purple</div><div class="sw-hex">#7B2D8B</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#1A1A1A;"></div><div class="sw-info"><div class="sw-name">Pure Black</div><div class="sw-hex">#1A1A1A</div></div></div>
+      <div class="swatch"><div class="sw-chip" style="background:#F8F8F8;border:1px solid #ddd;"></div><div class="sw-info"><div class="sw-name">Bright White</div><div class="sw-hex">#F8F8F8</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMBOS -->
+<div class="section reference">
+  <div class="section-title">Signature Combinations</div>
+  <div class="combo">
+    <div class="combo-dots">
+      <div class="dot" style="background:#2A3550;"></div>
+      <div class="dot" style="background:#F5F0EB;border:1px solid #ddd;"></div>
+      <div class="dot" style="background:#C0C0C0;"></div>
+    </div>
+    <span>Navy + Écru + Silver — daily uniform</span>
+  </div>
+  <div class="combo">
+    <div class="combo-dots">
+      <div class="dot" style="background:#7A8599;"></div>
+      <div class="dot" style="background:#C4879A;"></div>
+      <div class="dot" style="background:#E8E4E0;border:1px solid #ddd;"></div>
+    </div>
+    <span>Slate + Dusty Rose + Pearl — femininity without sweetness</span>
+  </div>
+  <div class="combo">
+    <div class="combo-dots">
+      <div class="dot" style="background:#2A3550;"></div>
+      <div class="dot" style="background:#8FAF8B;"></div>
+      <div class="dot" style="background:#7B9FD4;"></div>
+    </div>
+    <span>Navy + Sage + Cornflower — interesting without trying</span>
+  </div>
+  <div class="combo">
+    <div class="combo-dots">
+      <div class="dot" style="background:#4A4A4A;"></div>
+      <div class="dot" style="background:#B8A9C9;"></div>
+      <div class="dot" style="background:#C0C0C0;"></div>
+    </div>
+    <span>Charcoal + Lavender + Silver — evening</span>
+  </div>
+</div>
+
+<!-- NECKLINES -->
+<!-- SHOE GUIDE -->
+<div class="section analysis" id="shoes">
+  <div class="section-title">Shoes</div>
+  <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">No heels. Five shoes cover every occasion.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;">
+
+    <div style="background:white;border:1px solid var(--rule);padding:12px;text-align:center;">
+      <svg width="72" height="36" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 26 Q2 20 12 16 Q28 10 50 12 L68 18 Q70 22 68 26 Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M12 16 Q28 6 50 10 L68 18 Q60 12 46 10 Q28 8 12 16Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <line x1="68" y1="18" x2="70" y2="26" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M2 26 Q0 22 12 16" fill="none" stroke="#B0A898" stroke-width="0.8"/>
+</svg>
+      <div style="font-size:11px;font-weight:500;color:var(--navy);margin-top:8px;">Pointed flat mule</div>
+      <div style="font-size:10px;color:var(--text-light);margin-top:3px;line-height:1.4;">Open back, pointed toe</div>
+      <div style="font-size:9px;color:var(--slate);margin-top:3px;letter-spacing:0.08em;">Nude · Black · Silver</div>
+    </div>
+
+    <div style="background:white;border:1px solid var(--rule);padding:12px;text-align:center;">
+      <svg width="72" height="40" viewBox="0 0 72 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 30 Q2 24 10 20 Q30 12 56 14 L68 20 Q70 28 66 32 L4 32 Z" fill="#3A3028" stroke="#2A2020" stroke-width="0.6"/>
+  <path d="M10 20 Q30 10 56 12 L68 20 Q66 16 56 14 Q30 10 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M10 20 Q6 24 4 30 L12 30 Q10 24 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <path d="M64 22 L68 20 L70 28 L66 32 Q66 28 64 22Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <rect x="28" y="13" width="16" height="4" rx="2" fill="none" stroke="#8A7A60" stroke-width="1.2"/>
+  <line x1="34" y1="13" x2="34" y2="17" stroke="#8A7A60" stroke-width="1"/>
+  <line x1="42" y1="13" x2="42" y2="17" stroke="#8A7A60" stroke-width="1"/>
+</svg>
+      <div style="font-size:11px;font-weight:500;color:var(--navy);margin-top:8px;">Loafer</div>
+      <div style="font-size:10px;color:var(--text-light);margin-top:3px;line-height:1.4;">Horsebit, slight platform</div>
+      <div style="font-size:9px;color:var(--slate);margin-top:3px;letter-spacing:0.08em;">Tan · Black</div>
+    </div>
+
+    <div style="background:white;border:1px solid var(--rule);padding:12px;text-align:center;">
+      <svg width="72" height="42" viewBox="0 0 72 42" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 34 L4 38 Q6 42 14 42 L62 42 Q68 42 70 38 L70 30 Q68 26 62 26 L14 28 Q8 28 4 34Z" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="0.6"/>
+  <path d="M4 34 L70 30" fill="none" stroke="#D0D0D0" stroke-width="1.5"/>
+  <path d="M8 28 Q10 18 20 14 Q36 8 56 12 L68 20 Q70 26 70 30 L4 34 Q4 30 8 28Z" fill="white" stroke="#D8D8D8" stroke-width="0.8"/>
+  <path d="M4 34 Q4 28 8 28 Q6 32 4 34Z" fill="white" stroke="#D8D8D8" stroke-width="0.6"/>
+  <path d="M20 14 Q22 10 28 10 L28 22 Q24 20 20 14Z" fill="white" stroke="#D8D8D8" stroke-width="0.6"/>
+  <line x1="26" y1="12" x2="50" y2="14" stroke="#C0C0C0" stroke-width="0.8"/>
+  <line x1="26" y1="15" x2="50" y2="17" stroke="#C0C0C0" stroke-width="0.8"/>
+  <line x1="26" y1="18" x2="50" y2="20" stroke="#C0C0C0" stroke-width="0.8"/>
+</svg>
+      <div style="font-size:11px;font-weight:500;color:var(--navy);margin-top:8px;">White trainer</div>
+      <div style="font-size:10px;color:var(--text-light);margin-top:3px;line-height:1.4;">Clean leather, lace-up</div>
+      <div style="font-size:9px;color:var(--slate);margin-top:3px;letter-spacing:0.08em;">Already owned ⭐</div>
+    </div>
+
+    <div style="background:white;border:1px solid var(--rule);padding:12px;text-align:center;">
+      <svg width="72" height="36" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 28 Q2 24 10 20 Q34 12 62 16 L70 22 Q72 28 68 30 L4 30 Z" fill="#C8A97A" stroke="#A07840" stroke-width="0.7"/>
+  <path d="M10 20 Q18 14 28 16 Q24 20 10 20Z" fill="#C8A97A" stroke="#A07840" stroke-width="1"/>
+  <path d="M28 14 Q36 10 46 12 L46 18 Q36 16 28 18Z" fill="#C8A97A" stroke="#A07840" stroke-width="1"/>
+  <path d="M58 14 L66 16 L68 24 L60 24 L58 14Z" fill="#C8A97A" stroke="#A07840" stroke-width="0.8"/>
+  <rect x="60" y="17" width="5" height="4" rx="1" fill="none" stroke="#8A6030" stroke-width="1"/>
+</svg>
+      <div style="font-size:11px;font-weight:500;color:var(--navy);margin-top:8px;">Flat leather sandal</div>
+      <div style="font-size:10px;color:var(--text-light);margin-top:3px;line-height:1.4;">Strappy, open toe</div>
+      <div style="font-size:9px;color:var(--slate);margin-top:3px;letter-spacing:0.08em;">Cognac · Silver</div>
+    </div>
+
+    <div style="background:white;border:1px solid var(--rule);padding:12px;text-align:center;">
+      <svg width="56" height="80" viewBox="0 0 56 80" xmlns="http://www.w3.org/2000/svg">
+  <path d="M10 8 Q10 4 28 4 Q46 4 46 8 L46 52 L10 52 Z" fill="#2A2020" stroke="#1A1010" stroke-width="0.8"/>
+  <path d="M10 52 Q4 56 4 62 Q4 70 14 72 L42 72 Q52 70 52 62 Q52 56 46 52Z" fill="#2A2020" stroke="#1A1010" stroke-width="0.8"/>
+  <path d="M4 68 L52 68 L54 76 L2 76 Z" fill="#1A1010" stroke="#0A0808" stroke-width="0.5"/>
+  <path d="M10 20 L10 48" fill="none" stroke="#4A3030" stroke-width="3" stroke-dasharray="2 2"/>
+  <path d="M46 20 L46 48" fill="none" stroke="#4A3030" stroke-width="3" stroke-dasharray="2 2"/>
+  <path d="M22 4 L22 0 L34 0 L34 4" fill="none" stroke="#3A2828" stroke-width="1.2"/>
+</svg>
+      <div style="font-size:11px;font-weight:500;color:var(--navy);margin-top:8px;">Chelsea boot</div>
+      <div style="font-size:10px;color:var(--text-light);margin-top:3px;line-height:1.4;">Ankle, elastic panel</div>
+      <div style="font-size:9px;color:var(--slate);margin-top:3px;letter-spacing:0.08em;">Black · Tan</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section analysis" id="necklines">
+  <div class="section-title">Necklines</div>
+  <div class="neckline-grid">
+    <div class="nl-card">
+      <div class="nl-sketch"><svg width="64" height="52" viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg"><path d="M4 18 L16 10 M16 10 Q32 22 48 10 L48 10 L60 18" fill="none" stroke="#C4BAB0" stroke-width="1.5"/><path d="M16 10 Q32 22 48 10" fill="#EEF2F7" stroke="#2A3550" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+      <div class="nl-name">Crew neck</div>
+      <div class="nl-why">Adds width across chest. Your turtlenecks confirm this works perfectly.</div>
+    </div>
+    <div class="nl-card">
+      <div class="nl-sketch"><svg width="64" height="52" viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg"><path d="M4 18 L16 10 M12 10 L52 10 L48 10 L60 18" fill="none" stroke="#C4BAB0" stroke-width="1.5"/><path d="M12 10 L52 10" fill="#EEF2F7" stroke="#2A3550" stroke-width="1.8" stroke-linejoin="round"/><line x1="12" y1="10" x2="52" y2="10" stroke="#2A3550" stroke-width="2.5"/></svg></div>
+      <div class="nl-name">Boat / Bateau</div>
+      <div class="nl-why">Horizontal line creates visual fullness. Very chic for your frame.</div>
+    </div>
+    <div class="nl-card">
+      <div class="nl-sketch"><svg width="64" height="52" viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg"><path d="M4 18 L16 10 M18 10 L18 24 L46 24 L46 10 L48 10 L60 18" fill="none" stroke="#C4BAB0" stroke-width="1.5"/><path d="M18 10 L18 24 L46 24 L46 10" fill="#EEF2F7" stroke="#2A3550" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+      <div class="nl-name">Square neck</div>
+      <div class="nl-why">Structured edge adds definition. Elegant without relying on décolletage.</div>
+    </div>
+    <div class="nl-card">
+      <div class="nl-sketch"><svg width="64" height="52" viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg"><path d="M4 18 L16 10 M20 10 L20 4 Q32 0 44 4 L44 10 Q32 18 20 10 L48 10 L60 18" fill="none" stroke="#C4BAB0" stroke-width="1.5"/><path d="M20 10 L20 4 Q32 0 44 4 L44 10 Q32 18 20 10" fill="#EEF2F7" stroke="#2A3550" stroke-width="1.8" stroke-linejoin="round"/><rect x="20" y="4" width="24" height="8" rx="4" fill="#EEF2F7" stroke="#2A3550" stroke-width="1.5"/></svg></div>
+      <div class="nl-name">Turtleneck</div>
+      <div class="nl-why">Your hero neckline. Confirmed across multiple photos.</div>
+    </div>
+    <div class="nl-card">
+      <div class="nl-sketch"><svg width="64" height="52" viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg"><path d="M4 18 L16 10 M16 10 Q32 28 48 10 L48 10 L60 18" fill="none" stroke="#C4BAB0" stroke-width="1.5"/><path d="M16 10 Q32 28 48 10" fill="#EEF2F7" stroke="#2A3550" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+      <div class="nl-name">Gentle scoop</div>
+      <div class="nl-why">Soft rounded opening — works well. Not too deep.</div>
+    </div>
+    <div class="nl-card avoid">
+      <div class="nl-sketch"><svg width="64" height="52" viewBox="0 0 64 52" xmlns="http://www.w3.org/2000/svg"><path d="M4 18 L16 10 M20 10 L32 30 L44 10 L48 10 L60 18" fill="none" stroke="#C4BAB0" stroke-width="1.5"/><path d="M20 10 L32 30 L44 10" fill="#FDF0F0" stroke="#8A4040" stroke-width="1.8" stroke-linejoin="round"/><line x1="20" y1="10" x2="32" y2="30" stroke="#C04040" stroke-width="1.8"/><line x1="44" y1="10" x2="32" y2="30" stroke="#C04040" stroke-width="1.8"/></svg></div>
+      <div class="nl-name">V-neck — avoid</div>
+      <div class="nl-why">Draws a vertical line that looks empty with a small bust.</div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTFIT FORMULAS -->
+<div class="section reference" id="formulas">
+  <div class="section-title">Outfit Formulas — Office &amp; Weekend</div>
+
+  <style>
+    .of-grid{display:grid;grid-template-columns:1fr;gap:20px;margin:14px 0 28px}
+    @media(min-width:580px){.of-grid{grid-template-columns:1fr 1fr}}
+    .of-card{background:white;border:1px solid var(--rule);border-radius:3px;overflow:hidden;display:flex;flex-direction:column}
+    .of-sketch{background:#F7F5F2;padding:18px 14px 12px;display:flex;justify-content:center;align-items:flex-end;gap:12px;min-height:140px;border-bottom:1px solid var(--rule)}
+    .of-figure{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .of-label-sm{font-size:9px;color:var(--text-light);letter-spacing:.1em;text-transform:uppercase;text-align:center}
+    .of-body{padding:14px 16px 12px;flex:1}
+    .of-title{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+    .of-row{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);font-size:12.5px;align-items:baseline}
+    .of-row:last-child{border-bottom:none}
+    .of-key{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);width:62px;flex-shrink:0;padding-top:1px}
+    .of-val{color:var(--text);line-height:1.45}
+    .of-cat-label{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,24px);font-weight:400;color:var(--navy);margin:28px 0 4px}
+    .of-cat-label:first-of-type{margin-top:4px}
+    .of-cat-sub{font-size:12px;color:var(--text-light);margin-bottom:14px}
+  </style>
+
+  <div class="of-cat-label">Daily Office</div>
+  <p class="of-cat-sub">Five formulas for every week — assembled in under 5 minutes.</p>
+  <div class="of-grid">
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><path d="M17 11 Q25 7 33 11 L39 21 L39 56 L11 56 L11 21 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M11 21 L3 37 L7 39 L13 25" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M39 21 L47 37 L43 39 L37 25" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><ellipse cx="25" cy="11" rx="8" ry="4" fill="none" stroke="#ccc" stroke-width="1"/><path d="M11 56 L11 106 L23 106 L25 78 L27 106 L39 106 L39 56 Z" fill="#2A3550"/><path d="M13 106 L21 106 L21 110 L9 110 L9 108 Z" fill="#C4BAB0"/></svg><div class="of-label-sm">Blouse</div></div><div class="of-figure"><svg width="42" height="78" viewBox="0 0 42 78" xmlns="http://www.w3.org/2000/svg"><path d="M9 7 Q21 3 33 7 L37 17 L37 71 L5 71 L5 17 Z" fill="#C0BDB8" stroke="#B0ADA8" stroke-width="0.5"/><path d="M5 17 L0 31 L4 33 L7 21" fill="#C0BDB8" stroke="#B0ADA8" stroke-width="0.5"/><path d="M37 17 L42 31 L38 33 L35 21" fill="#C0BDB8" stroke="#B0ADA8" stroke-width="0.5"/><line x1="9" y1="7" x2="15" y2="71" stroke="#aaa" stroke-width="0.7"/><line x1="33" y1="7" x2="27" y2="71" stroke="#aaa" stroke-width="0.7"/></svg><div class="of-label-sm">Cardigan</div></div><div class="of-figure"><svg width="34" height="46" viewBox="0 0 34 46" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="14" width="30" height="28" rx="2" fill="#2A3550"/><path d="M9 14 Q9 6 17 6 Q25 6 25 14" fill="none" stroke="#3A4A60" stroke-width="1.5"/><line x1="2" y1="24" x2="32" y2="24" stroke="#3A4A60" stroke-width="0.8"/></svg><div class="of-label-sm">Tote</div></div></div>
+      <div class="of-body">
+        <div class="of-title">01 — The Core Uniform</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Écru silk blouse — crew or square neck</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Navy slim trousers</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Dove grey cashmere cardigan</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Pointed flat or loafer</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Silver studs + delicate chain</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><path d="M17 11 Q25 7 33 11 L39 21 L39 56 L11 56 L11 21 Z" fill="#7B9FD4" stroke="#6A8EC3" stroke-width="0.6"/><path d="M11 21 L3 37 L7 39 L13 25" fill="#7B9FD4" stroke="#6A8EC3" stroke-width="0.6"/><path d="M39 21 L47 37 L43 39 L37 25" fill="#7B9FD4" stroke="#6A8EC3" stroke-width="0.6"/><ellipse cx="25" cy="11" rx="8" ry="4" fill="none" stroke="#6A8EC3" stroke-width="1"/><path d="M11 56 L11 106 L23 106 L25 78 L27 106 L39 106 L39 56 Z" fill="#2A3550"/><path d="M13 106 L21 106 L21 110 L9 110 L9 108 Z" fill="#C4BAB0"/></svg><div class="of-label-sm">Blouse</div></div><div class="of-figure"><svg width="46" height="88" viewBox="0 0 46 88" xmlns="http://www.w3.org/2000/svg"><path d="M7 6 Q23 2 39 6 L43 18 L43 82 L3 82 L3 18 Z" fill="#2A3550"/><path d="M3 18 L0 34 L4 36 L5 22" fill="#2A3550"/><path d="M43 18 L46 34 L42 36 L41 22" fill="#2A3550"/><line x1="7" y1="6" x2="13" y2="82" stroke="#3A4A60" stroke-width="0.8"/><line x1="39" y1="6" x2="33" y2="82" stroke="#3A4A60" stroke-width="0.8"/><path d="M7 6 L17 22 L23 13" fill="#2A3550" stroke="#3A4A60" stroke-width="0.5"/><path d="M39 6 L29 22 L23 13" fill="#2A3550" stroke="#3A4A60" stroke-width="0.5"/></svg><div class="of-label-sm">Blazer</div></div><div class="of-figure"><svg width="56" height="28" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 26 Q2 20 12 16 Q28 10 50 12 L68 18 Q70 22 68 26 Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M12 16 Q28 6 50 10 L68 18 Q60 12 46 10 Q28 8 12 16Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <line x1="68" y1="18" x2="70" y2="26" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M2 26 Q0 22 12 16" fill="none" stroke="#B0A898" stroke-width="0.8"/>
+</svg><div class="of-label-sm">Flat mule</div></div></div>
+      <div class="of-body">
+        <div class="of-title">02 — The Polish</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Cornflower blue silk blouse</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Navy slim trousers</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Fitted navy blazer</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Pointed flat mule or loafer</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Pearl or white gold drop earrings</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><rect x="17" y="3" width="16" height="11" rx="3" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M13 12 Q25 8 37 12 L41 22 L41 56 L9 56 L9 22 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M9 22 L1 36 L5 38 L11 26" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M41 22 L49 36 L45 38 L39 26" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M9 56 L9 106 L23 106 L25 78 L27 106 L41 106 L41 56 Z" fill="#7A8599"/><path d="M11 106 Q19 102 25 108 L9 110 Z" fill="#C4BAB0"/></svg><div class="of-label-sm">Turtleneck</div></div><div class="of-figure"><svg width="46" height="82" viewBox="0 0 46 82" xmlns="http://www.w3.org/2000/svg"><path d="M7 6 Q23 2 39 6 L43 18 L43 76 L3 76 L3 18 Z" fill="none" stroke="#2A3550" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M3 18 L0 32 L4 34 L5 22" fill="none" stroke="#2A3550" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M43 18 L46 32 L42 34 L41 22" fill="none" stroke="#2A3550" stroke-width="1.5" stroke-dasharray="4 3"/></svg><div class="of-label-sm">+Blazer opt.</div></div><div class="of-figure"><svg width="56" height="32" viewBox="0 0 72 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 30 Q2 24 10 20 Q30 12 56 14 L68 20 Q70 28 66 32 L4 32 Z" fill="#3A3028" stroke="#2A2020" stroke-width="0.6"/>
+  <path d="M10 20 Q30 10 56 12 L68 20 Q66 16 56 14 Q30 10 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M10 20 Q6 24 4 30 L12 30 Q10 24 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <path d="M64 22 L68 20 L70 28 L66 32 Q66 28 64 22Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <rect x="28" y="13" width="16" height="4" rx="2" fill="none" stroke="#8A7A60" stroke-width="1.2"/>
+  <line x1="34" y1="13" x2="34" y2="17" stroke="#8A7A60" stroke-width="1"/>
+  <line x1="42" y1="13" x2="42" y2="17" stroke="#8A7A60" stroke-width="1"/>
+</svg><div class="of-label-sm">Loafer</div></div></div>
+      <div class="of-body">
+        <div class="of-title">03 — The Softer Day</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Écru cashmere turtleneck</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Slate grey slim trousers</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Navy blazer on or over shoulders</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Tan or black loafer</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Small silver hoops</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="54" height="100" viewBox="0 0 54 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sheath bodice -->
+  <path d="M14 10 Q27 6 40 10 L43 46 L11 46 Z" fill="#7B9FD4" opacity="0.75" stroke="#6A8EC3" stroke-width="0.7"/>
+  <!-- Square neckline -->
+  <path d="M17 10 L17 16 L37 16 L37 10" fill="none" stroke="#6A8EC3" stroke-width="1.2"/>
+  <!-- Sleeves long -->
+  <path d="M14 10 L6 28 L12 30 L16 16" fill="#7B9FD4" opacity="0.75" stroke="#6A8EC3" stroke-width="0.6"/>
+  <path d="M40 10 L48 28 L42 30 L38 16" fill="#7B9FD4" opacity="0.75" stroke="#6A8EC3" stroke-width="0.6"/>
+  <!-- Above-knee skirt, slight A-line -->
+  <path d="M11 46 L6 90 Q27 96 48 90 L43 46 Z" fill="#7B9FD4" opacity="0.75" stroke="#6A8EC3" stroke-width="0.7"/>
+  <!-- Flat mule -->
+  <path d="M8 92 L24 90 Q26 94 24 96 L6 96 Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+</svg><div class="of-label-sm">Dress</div></div><div class="of-figure"><svg width="46" height="88" viewBox="0 0 46 88" xmlns="http://www.w3.org/2000/svg"><path d="M7 6 Q23 2 39 6 L43 18 L43 82 L3 82 L3 18 Z" fill="#2A3550"/><path d="M3 18 L0 34 L4 36 L5 22" fill="#2A3550"/><path d="M43 18 L46 34 L42 36 L41 22" fill="#2A3550"/><line x1="7" y1="6" x2="13" y2="82" stroke="#3A4A60" stroke-width="0.8"/><line x1="39" y1="6" x2="33" y2="82" stroke="#3A4A60" stroke-width="0.8"/><path d="M7 6 L17 22 L23 13" fill="#2A3550" stroke="#3A4A60" stroke-width="0.5"/><path d="M39 6 L29 22 L23 13" fill="#2A3550" stroke="#3A4A60" stroke-width="0.5"/></svg><div class="of-label-sm">Blazer</div></div><div class="of-figure"><svg width="56" height="28" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 26 Q2 20 12 16 Q28 10 50 12 L68 18 Q70 22 68 26 Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M12 16 Q28 6 50 10 L68 18 Q60 12 46 10 Q28 8 12 16Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <line x1="68" y1="18" x2="70" y2="26" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M2 26 Q0 22 12 16" fill="none" stroke="#B0A898" stroke-width="0.8"/>
+</svg><div class="of-label-sm">Flat mule</div></div></div>
+      <div class="of-body">
+        <div class="of-title">04 — Dress Day</div>
+        <div class="of-row"><span class="of-key">Dress</span><span class="of-val">Powder blue or navy sheath — boat or square neck</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Fitted navy blazer</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Pointed flat or loafer</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Silver pendant + studs</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><path d="M15 11 Q25 7 35 11 L39 21 L39 51 L11 51 L11 21 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.6"/><line x1="11" y1="26" x2="39" y2="26" stroke="#2A3550" stroke-width="2.8"/><line x1="11" y1="33" x2="39" y2="33" stroke="#2A3550" stroke-width="2.8"/><line x1="11" y1="40" x2="39" y2="40" stroke="#2A3550" stroke-width="2.8"/><line x1="11" y1="47" x2="39" y2="47" stroke="#2A3550" stroke-width="2.8"/><path d="M11 21 L3 35 L7 37 L13 25" fill="#F5F0EB" stroke="#ddd" stroke-width="0.6"/><line x1="3" y1="27" x2="13" y2="27" stroke="#2A3550" stroke-width="2.5"/><path d="M11 51 L11 106 L23 106 L25 76 L27 106 L39 106 L39 51 Z" fill="#3B5998" opacity="0.9"/><path d="M9 106 L25 106 L27 112 L7 112 Z" fill="#F8F8F8" stroke="#eee" stroke-width="0.5"/></svg><div class="of-label-sm">Breton</div></div><div class="of-figure"><svg width="46" height="88" viewBox="0 0 46 88" xmlns="http://www.w3.org/2000/svg"><path d="M7 6 Q23 2 39 6 L43 18 L43 82 L3 82 L3 18 Z" fill="#2A3550"/><path d="M3 18 L0 34 L4 36 L5 22" fill="#2A3550"/><path d="M43 18 L46 34 L42 36 L41 22" fill="#2A3550"/><line x1="7" y1="6" x2="13" y2="82" stroke="#3A4A60" stroke-width="0.8"/><line x1="39" y1="6" x2="33" y2="82" stroke="#3A4A60" stroke-width="0.8"/><path d="M7 6 L17 22 L23 13" fill="#2A3550" stroke="#3A4A60" stroke-width="0.5"/><path d="M39 6 L29 22 L23 13" fill="#2A3550" stroke="#3A4A60" stroke-width="0.5"/></svg><div class="of-label-sm">Blazer</div></div><div class="of-figure"><svg width="56" height="32" viewBox="0 0 72 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 30 Q2 24 10 20 Q30 12 56 14 L68 20 Q70 28 66 32 L4 32 Z" fill="#3A3028" stroke="#2A2020" stroke-width="0.6"/>
+  <path d="M10 20 Q30 10 56 12 L68 20 Q66 16 56 14 Q30 10 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M10 20 Q6 24 4 30 L12 30 Q10 24 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <path d="M64 22 L68 20 L70 28 L66 32 Q66 28 64 22Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <rect x="28" y="13" width="16" height="4" rx="2" fill="none" stroke="#8A7A60" stroke-width="1.2"/>
+  <line x1="34" y1="13" x2="34" y2="17" stroke="#8A7A60" stroke-width="1"/>
+  <line x1="42" y1="13" x2="42" y2="17" stroke="#8A7A60" stroke-width="1"/>
+</svg><div class="of-label-sm">Loafer</div></div></div>
+      <div class="of-body">
+        <div class="of-title">05 — Business Casual</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Navy/écru Breton — crew neck</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Dark indigo jeans</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Navy blazer</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">White trainers or loafer</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Minimal — stud only</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="of-cat-label">Weekend with Family</div>
+  <p class="of-cat-sub">Comfortable and pulled-together — you'll be moving, chasing, and photographed.</p>
+  <div class="of-grid">
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><path d="M15 11 Q25 7 35 11 L39 21 L39 51 L11 51 L11 21 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.6"/><line x1="11" y1="26" x2="39" y2="26" stroke="#2A3550" stroke-width="2.8"/><line x1="11" y1="33" x2="39" y2="33" stroke="#2A3550" stroke-width="2.8"/><line x1="11" y1="40" x2="39" y2="40" stroke="#2A3550" stroke-width="2.8"/><line x1="11" y1="47" x2="39" y2="47" stroke="#2A3550" stroke-width="2.8"/><path d="M11 21 L3 35 L7 37 L13 25" fill="#F5F0EB" stroke="#ddd" stroke-width="0.6"/><line x1="3" y1="27" x2="13" y2="27" stroke="#2A3550" stroke-width="2.5"/><path d="M11 51 L11 106 L23 106 L25 76 L27 106 L39 106 L39 51 Z" fill="#3B5998" opacity="0.9"/><path d="M9 106 L25 106 L27 112 L7 112 Z" fill="#F8F8F8" stroke="#eee" stroke-width="0.5"/></svg><div class="of-label-sm">Breton</div></div><div class="of-figure"><svg width="46" height="82" viewBox="0 0 46 82" xmlns="http://www.w3.org/2000/svg"><path d="M7 6 Q23 2 39 6 L43 18 L43 76 L3 76 L3 18 Z" fill="#5B7EC9" opacity="0.85"/><path d="M3 18 L0 32 L4 34 L5 22" fill="#5B7EC9" opacity="0.85"/><path d="M43 18 L46 32 L42 34 L41 22" fill="#5B7EC9" opacity="0.85"/><line x1="7" y1="6" x2="13" y2="76" stroke="#4A6AB8" stroke-width="0.8"/><line x1="39" y1="6" x2="33" y2="76" stroke="#4A6AB8" stroke-width="0.8"/><rect x="7" y="16" width="9" height="7" rx="1" fill="#4A6AB8" opacity="0.7"/><path d="M7 6 L15 20 L22 12" fill="#5B7EC9" stroke="#4A6AB8" stroke-width="0.5"/><path d="M39 6 L31 20 L24 12" fill="#5B7EC9" stroke="#4A6AB8" stroke-width="0.5"/></svg><div class="of-label-sm">Denim jacket</div></div></div>
+      <div class="of-body">
+        <div class="of-title">W1 — The Nursery Run</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Navy/écru Breton — crew neck</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Dark indigo jeans</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Denim jacket</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">White leather trainers</span></div><div class="of-row"><span class="of-key">Bag</span><span class="of-val">Crossbody — hands free</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><path d="M15 11 Q25 7 35 11 L39 21 L39 56 L11 56 L11 21 Z" fill="#2A3550"/><path d="M11 21 L3 35 L7 37 L13 25" fill="#2A3550"/><path d="M39 21 L47 35 L43 37 L37 25" fill="#2A3550"/><ellipse cx="25" cy="11" rx="10" ry="4" fill="none" stroke="#3A4A60" stroke-width="1.2"/><path d="M11 56 L11 106 L23 106 L25 78 L27 106 L39 106 L39 56 Z" fill="#7A8599"/><path d="M11 106 Q19 102 25 108 L9 110 Z" fill="#C4BAB0"/></svg><div class="of-label-sm">Crew knit</div></div><div class="of-figure"><svg width="34" height="46" viewBox="0 0 34 46" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="14" width="30" height="28" rx="2" fill="#C8A97A"/><path d="M9 14 Q9 6 17 6 Q25 6 25 14" fill="none" stroke="#A07840" stroke-width="1.5"/><line x1="2" y1="24" x2="32" y2="24" stroke="#A07840" stroke-width="0.8"/></svg><div class="of-label-sm">Tote</div></div><div class="of-figure"><svg width="56" height="32" viewBox="0 0 72 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 30 Q2 24 10 20 Q30 12 56 14 L68 20 Q70 28 66 32 L4 32 Z" fill="#3A3028" stroke="#2A2020" stroke-width="0.6"/>
+  <path d="M10 20 Q30 10 56 12 L68 20 Q66 16 56 14 Q30 10 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M10 20 Q6 24 4 30 L12 30 Q10 24 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <path d="M64 22 L68 20 L70 28 L66 32 Q66 28 64 22Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <rect x="28" y="13" width="16" height="4" rx="2" fill="none" stroke="#8A7A60" stroke-width="1.2"/>
+  <line x1="34" y1="13" x2="34" y2="17" stroke="#8A7A60" stroke-width="1"/>
+  <line x1="42" y1="13" x2="42" y2="17" stroke="#8A7A60" stroke-width="1"/>
+</svg><div class="of-label-sm">Loafer</div></div></div>
+      <div class="of-body">
+        <div class="of-title">W2 — Café Morning</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Navy cashmere crew neck</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Slate grey slim trousers</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Tan loafer</span></div><div class="of-row"><span class="of-key">Bag</span><span class="of-val">Tan leather tote</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Silver hoops</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><path d="M13 9 Q25 5 37 9 L41 21 L41 61 L9 61 L9 21 Z" fill="#8BAFC4"/><path d="M13 9 Q25 1 37 9 Q31 15 25 13 Q19 15 13 9Z" fill="#7A9FB4"/><rect x="13" y="44" width="24" height="13" rx="2" fill="#7A9FB4"/><path d="M9 21 L1 37 L7 39 L11 27" fill="#8BAFC4"/><path d="M41 21 L49 37 L43 39 L39 27" fill="#8BAFC4"/><path d="M9 61 L9 106 L23 106 L25 80 L27 106 L41 106 L41 61 Z" fill="#3B5998" opacity="0.9"/><path d="M7 106 L25 106 L27 112 L5 112 Z" fill="#F8F8F8" stroke="#eee" stroke-width="0.5"/></svg><div class="of-label-sm">Hoodie</div></div><div class="of-figure"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path d="M4 20 Q4 8 18 6 Q32 8 32 20 L32 24 Q18 28 4 24 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M4 22 L0 24 Q0 28 4 28 L4 24" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><line x1="4" y1="20" x2="32" y2="20" stroke="#ddd" stroke-width="0.8"/></svg><div class="of-label-sm">Cap</div></div></div>
+      <div class="of-body">
+        <div class="of-title">W3 — Park Day</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Dusty blue or sage hoodie</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Dark indigo jeans</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">White leather trainers</span></div><div class="of-row"><span class="of-key">Extra</span><span class="of-val">Écru cap</span></div><div class="of-row"><span class="of-key">Bag</span><span class="of-val">Crossbody — hands free</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="54" height="96" viewBox="0 0 54 96" xmlns="http://www.w3.org/2000/svg">
+  <!-- Wrap bodice -->
+  <path d="M14 10 Q27 6 40 10 L43 44 L11 44 Z" fill="#2A3550" stroke="#3A4A60" stroke-width="0.7"/>
+  <!-- Crew-ish wrap neckline -->
+  <path d="M14 10 Q20 16 27 14 Q34 16 40 10" fill="none" stroke="#3A4A60" stroke-width="1"/>
+  <!-- Wrap overlap detail -->
+  <path d="M27 14 L22 44" fill="none" stroke="#3A4A60" stroke-width="0.8"/>
+  <!-- Above-knee skirt — slight flare from wrap -->
+  <path d="M11 44 L6 86 Q27 92 48 86 L43 44 Z" fill="#2A3550" stroke="#3A4A60" stroke-width="0.7"/>
+  <!-- Waist tie hint -->
+  <path d="M11 44 Q18 48 22 44" fill="none" stroke="#3A4A60" stroke-width="0.8"/>
+  <!-- Flat sandal cognac -->
+  <path d="M8 88 L24 86 Q26 90 24 92 L6 92 Z" fill="#C8A97A" stroke="#A07840" stroke-width="0.6"/>
+</svg><div class="of-label-sm">Dress</div></div><div class="of-figure"><svg width="46" height="82" viewBox="0 0 46 82" xmlns="http://www.w3.org/2000/svg"><path d="M7 6 Q23 2 39 6 L43 18 L43 76 L3 76 L3 18 Z" fill="#5B7EC9" opacity="0.85"/><path d="M3 18 L0 32 L4 34 L5 22" fill="#5B7EC9" opacity="0.85"/><path d="M43 18 L46 32 L42 34 L41 22" fill="#5B7EC9" opacity="0.85"/><line x1="7" y1="6" x2="13" y2="76" stroke="#4A6AB8" stroke-width="0.8"/><line x1="39" y1="6" x2="33" y2="76" stroke="#4A6AB8" stroke-width="0.8"/><rect x="7" y="16" width="9" height="7" rx="1" fill="#4A6AB8" opacity="0.7"/><path d="M7 6 L15 20 L22 12" fill="#5B7EC9" stroke="#4A6AB8" stroke-width="0.5"/><path d="M39 6 L31 20 L24 12" fill="#5B7EC9" stroke="#4A6AB8" stroke-width="0.5"/></svg><div class="of-label-sm">Denim jacket</div></div></div>
+      <div class="of-body">
+        <div class="of-title">W4 — Casual Lunch</div>
+        <div class="of-row"><span class="of-key">Dress</span><span class="of-val">Navy wrap dress — above knee or midi, crew or square neck</span></div><div class="of-row"><span class="of-key">Layer</span><span class="of-val">Denim jacket</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Flat leather sandal in cognac</span></div><div class="of-row"><span class="of-key">Bag</span><span class="of-val">Small crossbody</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Silver hoops + layered necklace</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch"><div class="of-figure"><svg width="50" height="108" viewBox="0 0 50 108" xmlns="http://www.w3.org/2000/svg"><rect x="17" y="3" width="16" height="11" rx="3" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M13 12 Q25 8 37 12 L41 22 L41 56 L9 56 L9 22 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M9 22 L1 36 L5 38 L11 26" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M41 22 L49 36 L45 38 L39 26" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><path d="M9 56 L9 106 L23 106 L25 78 L27 106 L41 106 L41 56 Z" fill="#7A8599"/><path d="M11 106 Q19 102 25 108 L9 110 Z" fill="#C4BAB0"/></svg><div class="of-label-sm">Turtleneck</div></div><div class="of-figure"><svg width="52" height="98" viewBox="0 0 52 98" xmlns="http://www.w3.org/2000/svg"><path d="M9 7 Q26 3 43 7 L47 21 L47 92 L5 92 L5 21 Z" fill="#C4BAB0"/><path d="M5 21 L0 37 L5 39 L7 25" fill="#C4BAB0"/><path d="M47 21 L52 37 L47 39 L45 25" fill="#C4BAB0"/><line x1="9" y1="7" x2="17" y2="92" stroke="#B0A898" stroke-width="0.8"/><line x1="43" y1="7" x2="35" y2="92" stroke="#B0A898" stroke-width="0.8"/><rect x="5" y="50" width="42" height="5" rx="1" fill="#B0A898"/><rect x="23" y="49" width="6" height="7" rx="1" fill="#A09080"/><path d="M9 7 L19 25 L26 15" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.5"/><path d="M43 7 L33 25 L26 15" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.5"/></svg><div class="of-label-sm">Trench</div></div><div class="of-figure"><svg width="56" height="32" viewBox="0 0 72 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 30 Q2 24 10 20 Q30 12 56 14 L68 20 Q70 28 66 32 L4 32 Z" fill="#3A3028" stroke="#2A2020" stroke-width="0.6"/>
+  <path d="M10 20 Q30 10 56 12 L68 20 Q66 16 56 14 Q30 10 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.8"/>
+  <path d="M10 20 Q6 24 4 30 L12 30 Q10 24 10 20Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <path d="M64 22 L68 20 L70 28 L66 32 Q66 28 64 22Z" fill="#C4BAB0" stroke="#B0A898" stroke-width="0.6"/>
+  <rect x="28" y="13" width="16" height="4" rx="2" fill="none" stroke="#8A7A60" stroke-width="1.2"/>
+  <line x1="34" y1="13" x2="34" y2="17" stroke="#8A7A60" stroke-width="1"/>
+  <line x1="42" y1="13" x2="42" y2="17" stroke="#8A7A60" stroke-width="1"/>
+</svg><div class="of-label-sm">Loafer</div></div></div>
+      <div class="of-body">
+        <div class="of-title">W5 — Weekend Smart</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Écru cashmere turtleneck</span></div><div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Écru or dove grey linen wide-leg</span></div><div class="of-row"><span class="of-key">Outer</span><span class="of-val">Belted trench coat</span></div><div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Tan loafer</span></div><div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Pearl studs + simple chain</span></div>
+      </div>
+    </div>
+
+  <div class="of-cat-label">Evening</div>
+  <p class="of-cat-sub">Two formulas that work for dinner, dates, and occasions.</p>
+  <div class="of-grid">
+    <div class="of-card">
+      <div class="of-sketch">
+        <div class="of-figure"><svg width="44" height="56" viewBox="0 0 44 56" xmlns="http://www.w3.org/2000/svg"><path d="M10 8 Q22 2 34 8 L36 52 L8 52 Z" fill="#F5F0EB" stroke="#ddd" stroke-width="0.8"/><line x1="10" y1="8" x2="8" y2="0" stroke="#ddd" stroke-width="1.2"/><line x1="34" y1="8" x2="36" y2="0" stroke="#ddd" stroke-width="1.2"/></svg><div class="of-label-sm">Cami</div></div>
+        <div class="of-figure"><svg width="48" height="88" viewBox="0 0 48 88" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fitted bodice -->
+  <path d="M10 8 Q24 4 38 8 L40 36 L8 36 Z" fill="#A0768A" stroke="#906070" stroke-width="0.7"/>
+  <!-- Shoulder straps -->
+  <line x1="14" y1="8" x2="12" y2="2" stroke="#906070" stroke-width="1.5"/>
+  <line x1="34" y1="8" x2="36" y2="2" stroke="#906070" stroke-width="1.5"/>
+  <!-- Above-knee skirt flare -->
+  <path d="M8 36 L4 78 Q24 84 44 78 L40 36 Z" fill="#A0768A" stroke="#906070" stroke-width="0.7"/>
+  <!-- Waist seam -->
+  <line x1="8" y1="36" x2="40" y2="36" stroke="#906070" stroke-width="0.8"/>
+</svg><div class="of-label-sm">Dress</div></div>
+        <div class="of-figure"><svg width="56" height="28" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 26 Q2 20 12 16 Q28 10 50 12 L68 18 Q70 22 68 26 Z" fill="#C8C8C8" stroke="#A8A8A8" stroke-width="0.8"/>
+  <path d="M12 16 Q28 6 50 10 L68 18 Q60 12 46 10 Q28 8 12 16Z" fill="#D8D8D8" stroke="#B8B8B8" stroke-width="0.8"/>
+  <path d="M20 10 Q36 6 52 10" fill="none" stroke="white" stroke-width="0.8" opacity="0.6"/>
+  <line x1="68" y1="18" x2="70" y2="26" stroke="#B8B8B8" stroke-width="0.8"/>
+</svg><div class="of-label-sm">Silver flat mule</div></div>
+      </div>
+      <div class="of-body">
+        <div class="of-title">E1 — Date Night</div>
+        <div class="of-row"><span class="of-key">Top</span><span class="of-val">Écru silk camisole</span></div>
+        <div class="of-row"><span class="of-key">Bottom</span><span class="of-val">Dusty mauve bias-cut dress</span></div>
+        <div class="of-row"><span class="of-key">Arrival</span><span class="of-val">Navy blazer — removed at table</span></div>
+        <div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Silver flat mule</span></div>
+        <div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Silver or pearl drop earrings</span></div>
+      </div>
+    </div>
+    <div class="of-card">
+      <div class="of-sketch">
+        <div class="of-figure"><svg width="54" height="96" viewBox="0 0 54 96" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bodice crew neck -->
+  <path d="M16 10 Q27 6 38 10 L42 42 L12 42 Z" fill="#B8A9C9" stroke="#A898B8" stroke-width="0.7"/>
+  <!-- Crew neckline -->
+  <path d="M16 10 Q27 14 38 10" fill="none" stroke="#A898B8" stroke-width="1.2"/>
+  <!-- Sleeves -->
+  <path d="M16 10 L8 26 L14 28 L18 16" fill="#B8A9C9" stroke="#A898B8" stroke-width="0.6"/>
+  <path d="M38 10 L46 26 L40 28 L36 16" fill="#B8A9C9" stroke="#A898B8" stroke-width="0.6"/>
+  <!-- Above-knee skirt -->
+  <path d="M12 42 L8 86 Q27 92 46 86 L42 42 Z" fill="#B8A9C9" stroke="#A898B8" stroke-width="0.7"/>
+  <!-- Waist seam hint -->
+  <line x1="12" y1="42" x2="42" y2="42" stroke="#A898B8" stroke-width="0.8"/>
+  <!-- Flat sandal -->
+  <path d="M10 90 L26 90 L27 94 L9 94 Z" fill="#C0C0C0" stroke="#A8A8A8" stroke-width="0.5"/>
+</svg><div class="of-label-sm">Dress</div></div>
+        <div class="of-figure"><svg width="40" height="72" viewBox="0 0 40 72" xmlns="http://www.w3.org/2000/svg"><path d="M6 5 Q20 2 34 5 L37 15 L37 68 L3 68 L3 15 Z" fill="#2A3550"/><path d="M3 15 L0 28 L3 30 L5 19" fill="#2A3550"/><path d="M37 15 L40 28 L37 30 L35 19" fill="#2A3550"/><line x1="6" y1="5" x2="11" y2="68" stroke="#3A4A60" stroke-width="0.7"/><line x1="34" y1="5" x2="29" y2="68" stroke="#3A4A60" stroke-width="0.7"/><path d="M6 5 L14 19 L20 11" fill="#2A3550" stroke="#3A4A60" stroke-width="0.4"/><path d="M34 5 L26 19 L20 11" fill="#2A3550" stroke="#3A4A60" stroke-width="0.4"/></svg><div class="of-label-sm">Blazer</div></div>
+        <div class="of-figure"><svg width="56" height="28" viewBox="0 0 72 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 26 Q2 20 12 16 Q28 10 50 12 L68 18 Q70 22 68 26 Z" fill="#C8C8C8" stroke="#A8A8A8" stroke-width="0.8"/>
+  <path d="M12 16 Q28 6 50 10 L68 18 Q60 12 46 10 Q28 8 12 16Z" fill="#D8D8D8" stroke="#B8B8B8" stroke-width="0.8"/>
+  <path d="M20 10 Q36 6 52 10" fill="none" stroke="white" stroke-width="0.8" opacity="0.6"/>
+  <line x1="68" y1="18" x2="70" y2="26" stroke="#B8B8B8" stroke-width="0.8"/>
+</svg><div class="of-label-sm">Silver mule</div></div>
+      </div>
+      <div class="of-body">
+        <div class="of-title">E2 — Dinner / Occasion</div>
+        <div class="of-row"><span class="of-key">Dress</span><span class="of-val">Lavender or cornflower midi wrap — crew neck</span></div>
+        <div class="of-row"><span class="of-key">Layer</span><span class="of-val">Navy blazer or leave bare</span></div>
+        <div class="of-row"><span class="of-key">Shoes</span><span class="of-val">Silver flat mule or pointed flat</span></div>
+        <div class="of-row"><span class="of-key">Bag</span><span class="of-val">Navy structured clutch</span></div>
+        <div class="of-row"><span class="of-key">Jewellery</span><span class="of-val">Delicate silver pendant + studs</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOP 10 ESSENTIALS -->
+<div class="section reference" id="essentials">
+  <div class="section-title">Top 10 Essentials</div>
+  <ul class="ref">
+    <li>Écru cashmere turtleneck</li>
+    <li>French navy tailored trousers</li>
+    <li>Fitted navy blazer</li>
+    <li>Cornflower blue silk blouse</li>
+    <li>Dark indigo straight-leg jeans</li>
+    <li>Dove grey cashmere cardigan</li>
+    <li>Navy wool midi coat</li>
+    <li>White leather trainers</li>
+    <li>Pointed flat or loafer</li>
+    <li>Structured leather tote</li>
+  </ul>
+</div>
+
+
+
+<!-- PACKING -->
+<div class="section reference" id="packing">
+  <div class="section-title">Packing List — 10 Pieces, 1 Week</div>
+  <style>
+    .pack-row { display:flex; gap:10px; padding:7px 0; border-bottom:1px solid var(--rule); font-size:13px; align-items:baseline; }
+    .pack-row:last-child { border-bottom:none; }
+    .pack-n { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; color:var(--dove); flex-shrink:0; width:22px; line-height:1; }
+    .pack-item { flex:1; }
+    .pack-item strong { font-weight:500; color:var(--navy); display:block; font-size:13px; }
+    .pack-item span { font-size:11px; color:var(--text-light); }
+    .pack-note { font-size:12px; color:var(--slate); font-style:italic; margin-top:14px; }
+  </style>
+
+  <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">Summer version. Every item pairs with at least 3 others.</p>
+  <div class="pack-row"><div class="pack-n">1</div><div class="pack-item"><strong>Navy slim trousers</strong><span>Day meetings + evenings</span></div></div>
+  <div class="pack-row"><div class="pack-n">2</div><div class="pack-item"><strong>White tailored shorts</strong><span>Casual days</span></div></div>
+  <div class="pack-row"><div class="pack-n">3</div><div class="pack-item"><strong>Écru silk blouse</strong><span>Smart days + evenings tucked into skirt</span></div></div>
+  <div class="pack-row"><div class="pack-n">4</div><div class="pack-item"><strong>Blue stripe sleeveless shirt ⭐</strong><span>Works everywhere — tie at waist</span></div></div>
+  <div class="pack-row"><div class="pack-n">5</div><div class="pack-item"><strong>Dusty mauve bias-cut slip dress</strong><span>Evening — pairs with écru blouse</span></div></div>
+  <div class="pack-row"><div class="pack-n">6</div><div class="pack-item"><strong>Navy wrap dress — above knee or midi</strong><span>One piece = dinner sorted</span></div></div>
+  <div class="pack-row"><div class="pack-n">7</div><div class="pack-item"><strong>Denim jacket ⭐</strong><span>Layer for cool evenings</span></div></div>
+  <div class="pack-row"><div class="pack-n">8</div><div class="pack-item"><strong>White leather trainers ⭐</strong><span>Day shoe — goes with everything</span></div></div>
+  <div class="pack-row"><div class="pack-n">9</div><div class="pack-item"><strong>Silver flat mule</strong><span>Elevates any evening look</span></div></div>
+  <div class="pack-row"><div class="pack-n">10</div><div class="pack-item"><strong>Small crossbody</strong><span>Day + evening bag</span></div></div>
+  <p class="pack-note">⭐ = hero pieces already owned. Full winter list in the complete analysis.</p>
+</div>
+
+
+<!-- MIX & MATCH MATRIX -->
+<div class="section reference" id="matrix">
+  <div class="section-title">Mix &amp; Match Matrix</div>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;max-width:600px;">Every top against every bottom. ⭐ reach for it first · ✓ works well · · skip. Scroll right on mobile.</p>
+  <div class="matrix-wrap">
+    <table class="matrix-table">
+    <thead><tr>
+      <th style="text-align:left;padding:8px 12px;">Top → Bottom</th>
+      <th>Navy<br>Trousers</th>
+      <th>Slate<br>Trousers</th>
+      <th>Indigo<br>Jeans</th>
+      <th>Écru<br>Wide-leg</th>
+      <th>Navy<br>Skirt</th>
+      <th>Mauve<br>Skirt</th>
+      <th>White<br>Shorts</th>
+    </tr></thead>
+
+    <tbody>
+    <tr>
+      <td class="matrix-row-head">Écru silk blouse<span class="matrix-row-sub">crew / square neck</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Cornflower silk blouse<span class="matrix-row-sub">crew / square neck</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Écru cashmere turtleneck<span class="matrix-row-sub">hero piece</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell skip">·</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Navy cashmere crew<span class="matrix-row-sub">knitwear</span></td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell skip">·</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Dove grey cardigan<span class="matrix-row-sub">layering knit</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Breton stripe top<span class="matrix-row-sub">navy / écru</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell perfect">⭐</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">White tailored shirt<span class="matrix-row-sub">écru / ivory</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Dusty blue hoodie<span class="matrix-row-sub">weekend casual</span></td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell perfect">⭐</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Écru silk camisole<span class="matrix-row-sub">evening / layer</span></td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell skip">·</td>
+    </tr>
+    <tr>
+      <td class="matrix-row-head">Dusty rose silk top<span class="matrix-row-sub">accent blouse</span></td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell skip">·</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell perfect">⭐</td>
+      <td class="matrix-cell works">✓</td>
+      <td class="matrix-cell skip">·</td>
+    </tr>
+    </tbody>
+
+    </table>
+  </div>
+  <div class="matrix-legend">
+    <span>⭐ Perfect combination</span>
+    <span>✓ Works well</span>
+    <span>· Skip</span>
+  </div>
+</div>
+
+<!-- AUDIT -->
+<div class="section analysis" id="audit">
+  <div class="section-title">Wardrobe Audit</div>
+
+  <div class="audit-group hero-group">
+    <div class="audit-group-label">⭐ Hero Pieces — never replace</div>
+    <div class="audit-items">Blue stripe sleeveless shirt · White cashmere turtleneck · Denim jacket · White leather trainers</div>
+  </div>
+
+  <div class="audit-group">
+    <div class="audit-group-label">✅ Keep</div>
+    <div class="audit-items">Blue-black abstract print dress · Black/white check top · Christmas jumper · Mint hoodie</div>
+  </div>
+
+  <div class="audit-group">
+    <div class="audit-group-label">🔄 Restyle — add navy blazer to subdue warm tones</div>
+    <div class="audit-items">Black/multi floral dress · Navy/multicolour abstract dress</div>
+  </div>
+
+  <div class="audit-group">
+    <div class="audit-group-label">💰 Sell — wrong season</div>
+    <div class="audit-items">Salmon/coral top · Rust/warm-toned floral dress</div>
+    <div class="audit-note" style="margin-top:4px;padding-left:0;font-size:11px;color:var(--text-light);">These warm/orange tones actively compete with your cool undertone.</div>
+  </div>
+</div>
+
+<!-- SIGNATURE -->
+<div class="signature">
+  <div class="sig-text">"Quietly confident European minimalism — cool, tailored, and effortlessly elegant, built on a navy-and-écru foundation."</div>
+  <div class="sig-label">Your Personal Style Identity · Cool Summer</div>
+</div>
+
+
+<script>
+  // Highlight active nav item based on scroll position
+  const navLinks = document.querySelectorAll('.sticky-nav a');
+  const sections = ['palette','shoes','necklines','formulas','essentials','packing','matrix','audit'];
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 80) current = id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }, {passive: true});
+</script>
+
+</body>
+</html>

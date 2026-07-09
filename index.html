@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Wardrobe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:   #2A3550;
+    --slate:  #7A8599;
+    --dove:   #C0BDB8;
+    --ecru:   #F5F0EB;
+    --powder: #B8CEDD;
+    --rule:   #E2DED9;
+    --bg:     #FAFAF8;
+    --text:   #2C2C2C;
+    --light:  #6B6B6B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 40px 28px 36px;
+  }
+
+  .header-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 12px;
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 8vw, 60px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .header-title em { font-style: italic; color: var(--powder); }
+
+  .header-identity {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: 300;
+    font-style: italic;
+    opacity: 0.7;
+    line-height: 1.5;
+    max-width: 520px;
+    border-left: 2px solid rgba(255,255,255,0.2);
+    padding-left: 16px;
+    margin-top: 20px;
+  }
+
+  /* ── PALETTE STRIP ── */
+  .palette-strip {
+    display: flex;
+    height: 6px;
+  }
+
+  .palette-swatch { flex: 1; }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── TOOL CARDS ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  @media(min-width: 520px) {
+    .tools-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .tool-card {
+    background: white;
+    border: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: box-shadow 0.18s, transform 0.18s;
+    cursor: pointer;
+  }
+
+  .tool-card:hover {
+    box-shadow: 0 4px 20px rgba(42,53,80,0.1);
+    transform: translateY(-1px);
+  }
+
+  .tool-card:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .tool-card-accent {
+    height: 4px;
+  }
+
+  .tool-card-body {
+    padding: 18px 20px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tool-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .tool-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .tool-tag {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .tag-ref      { background: #EEF2F8; color: var(--navy); }
+  .tag-tool     { background: #EEF5EE; color: #3A7A3A; }
+  .tag-mobile   { background: #F5F0E8; color: #7A6030; }
+
+  .tool-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.15;
+    margin-top: 4px;
+  }
+
+  .tool-desc {
+    font-size: 12.5px;
+    color: var(--light);
+    line-height: 1.6;
+  }
+
+  .tool-card-footer {
+    padding: 10px 20px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--slate);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .tool-arrow {
+    font-size: 14px;
+    color: var(--dove);
+    transition: transform 0.15s, color 0.15s;
+  }
+
+  .tool-card:hover .tool-arrow {
+    transform: translateX(4px);
+    color: var(--navy);
+  }
+
+  /* ── PALETTE SECTION ── */
+  .palette-section {
+    margin-bottom: 36px;
+  }
+
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+  }
+
+  .palette-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .p-chip { height: 48px; }
+
+  .p-info {
+    background: white;
+    padding: 6px 7px;
+  }
+
+  .p-name {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .p-hex {
+    font-size: 9px;
+    color: var(--light);
+    font-family: monospace;
+    margin-top: 1px;
+  }
+
+  /* ── QUICK STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    margin-bottom: 36px;
+    border: 1px solid var(--rule);
+  }
+
+  @media(max-width:400px) {
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+  }
+
+  .stat-card {
+    background: white;
+    padding: 16px 14px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 300;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .stat-lbl {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 4px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--navy);
+    color: white;
+    padding: 20px 28px;
+    font-size: 11px;
+    opacity: 0.7;
+    text-align: center;
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Personal Style System</div>
+  <div class="header-title">My<br><em>Wardrobe.</em></div>
+  <div class="header-identity">
+    "Quietly confident European minimalism — cool, tailored, and effortlessly elegant, built on a navy-and-écru foundation."
+  </div>
+</div>
+
+<!-- PALETTE STRIP -->
+<div class="palette-strip">
+  <div class="palette-swatch" style="background:#2A3550"></div>
+  <div class="palette-swatch" style="background:#F5F0EB"></div>
+  <div class="palette-swatch" style="background:#7A8599"></div>
+  <div class="palette-swatch" style="background:#C0BDB8"></div>
+  <div class="palette-swatch" style="background:#B8CEDD"></div>
+  <div class="palette-swatch" style="background:#7B9FD4"></div>
+  <div class="palette-swatch" style="background:#C4879A"></div>
+  <div class="palette-swatch" style="background:#8FAF8B"></div>
+  <div class="palette-swatch" style="background:#B8A9C9"></div>
+  <div class="palette-swatch" style="background:#A0768A"></div>
+</div>
+
+<div class="main">
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-val">CS</div>
+      <div class="stat-lbl">Season</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">20</div>
+      <div class="stat-lbl">Core pieces</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">70+</div>
+      <div class="stat-lbl">Combinations</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">5'</div>
+      <div class="stat-lbl">To get dressed</div>
+    </div>
+  </div>
+
+  <!-- REFERENCE DOCUMENTS -->
+  <div class="section-label">Reference documents</div>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="style-quickref.html">
+      <div class="tool-card-accent" style="background:#2A3550"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">📱</span>
+          <span class="tool-tag tag-mobile">On your phone</span>
+        </div>
+        <div class="tool-name">Quick Reference</div>
+        <div class="tool-desc">Palette swatches, necklines, shoe guide, outfit formulas, mix-and-match matrix, packing list, and wardrobe audit. The one to keep open while shopping or getting dressed.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>Sticky nav · Mobile optimised</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="tool-card" href="style-analysis-full.html">
+      <div class="tool-card-accent" style="background:#7A8599"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">📋</span>
+          <span class="tool-tag tag-ref">Full analysis</span>
+        </div>
+        <div class="tool-name">Style Analysis</div>
+        <div class="tool-desc">Complete 8-part analysis — colour science, image analysis, quiet luxury palette, outfit formulas with sketches, full capsule wardrobe, shopping strategy, and wardrobe audit.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>Print-ready · Colour-coded sections</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- INTERACTIVE TOOLS -->
+  <div class="section-label">Interactive tools</div>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="gap-analysis.html">
+      <div class="tool-card-accent" style="background:#7B9FD4"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">🎯</span>
+          <span class="tool-tag tag-tool">Interactive</span>
+        </div>
+        <div class="tool-name">Gap Analysis</div>
+        <div class="tool-desc">Every missing piece ranked by how many outfits it unlocks. Tick items off as you acquire them. Tracks capsule completion by category.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>20 pieces · Saves progress</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- GUIDES -->
+  <div class="section-label">Guides</div>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="seasonal-transitions.html">
+      <div class="tool-card-accent" style="background:#B8A9C9"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">🌿</span>
+          <span class="tool-tag tag-ref">Seasonal</span>
+        </div>
+        <div class="tool-name">Seasonal Transitions</div>
+        <div class="tool-desc">How your 20 core pieces shift across Spring, Summer, Autumn, and Winter. Hero pieces per season, outfit formulas, wardrobe swap guide, and fabric temperatures. Opens on the current season automatically.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>Auto-opens current season</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="tool-card" href="fabric-care.html">
+      <div class="tool-card-accent" style="background:#C4879A"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">🧶</span>
+          <span class="tool-tag tag-ref">Reference</span>
+        </div>
+        <div class="tool-name">Fabric Care</div>
+        <div class="tool-desc">Wash temperatures, tumble dry guidance, ironing, and dry clean rules for every fabric in your wardrobe. Plus an emergency stain guide and seasonal storage checklist.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>Fabrics · Symbols · Stains · Storage</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- SHOPPING TOOLS -->
+  <div class="section-label">Shopping tools</div>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="should-i-buy.html">
+      <div class="tool-card-accent" style="background:#2A3550"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">🤔</span>
+          <span class="tool-tag tag-tool" style="background:#2A3550;color:white;">AI · New</span>
+        </div>
+        <div class="tool-name">Should I Buy This?</div>
+        <div class="tool-desc">Take a photo in-store or of a Lookiero delivery. Get a full verdict — colour match, silhouette, neckline, whether it fills a gap, outfit ideas, and Lookiero feedback to leave. The most complete shopping tool.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>Colour · Silhouette · Gaps · Outfits · Lookiero</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="tool-card" href="travel-capsule.html">
+      <div class="tool-card-accent" style="background:#8FAF8B"></div>
+      <div class="tool-card-body">
+        <div class="tool-card-top">
+          <span class="tool-icon">🧳</span>
+          <span class="tool-tag tag-tool">Interactive</span>
+        </div>
+        <div class="tool-name">Travel Capsule Builder</div>
+        <div class="tool-desc">Select trip type, climate, and number of nights. Generates a tailored packing list from your wardrobe with outfit combinations. Works for city breaks, work trips, beach, family, and weekends.</div>
+      </div>
+      <div class="tool-card-footer">
+        <span>5 trip types · 3 climates · Printable</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- PALETTE REFERENCE -->
+  <div class="palette-section">
+    <div class="section-label">Your palette — Cool Summer</div>
+    <div class="palette-grid">
+      <div class="palette-card"><div class="p-chip" style="background:#2A3550"></div><div class="p-info"><div class="p-name">French Navy</div><div class="p-hex">#2A3550</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#F5F0EB;border:1px solid #eee"></div><div class="p-info"><div class="p-name">Écru</div><div class="p-hex">#F5F0EB</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#7A8599"></div><div class="p-info"><div class="p-name">Slate Grey</div><div class="p-hex">#7A8599</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#C0BDB8"></div><div class="p-info"><div class="p-name">Dove Grey</div><div class="p-hex">#C0BDB8</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#B8CEDD"></div><div class="p-info"><div class="p-name">Powder Blue</div><div class="p-hex">#B8CEDD</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#7B9FD4"></div><div class="p-info"><div class="p-name">Cornflower</div><div class="p-hex">#7B9FD4</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#C4879A"></div><div class="p-info"><div class="p-name">Dusty Rose</div><div class="p-hex">#C4879A</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#8FAF8B"></div><div class="p-info"><div class="p-name">Sage</div><div class="p-hex">#8FAF8B</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#B8A9C9"></div><div class="p-info"><div class="p-name">Lavender</div><div class="p-hex">#B8A9C9</div></div></div>
+      <div class="palette-card"><div class="p-chip" style="background:#A0768A"></div><div class="p-info"><div class="p-name">Dusty Mauve</div><div class="p-hex">#A0768A</div></div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Cool Summer · Navy · Écru · Slate · Cornflower · Dusty Rose · Sage · Lavender<br>
+  Keep all files in the same folder for links to work
+</div>
+
+</body>
+</html>
