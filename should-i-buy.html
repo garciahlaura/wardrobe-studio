@@ -259,6 +259,54 @@
     color:var(--slate); font-weight:500; width:100%; transition:all 0.15s;
   }
   .btn-retry:hover { border-color:var(--navy); color:var(--navy); }
+
+  /* ── API KEY SETUP ── */
+  .key-setup {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .key-setup-title {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--slate); font-weight: 600; margin-bottom: 8px;
+  }
+  .key-setup-sub {
+    font-size: 12px; color: var(--light); line-height: 1.6; margin-bottom: 14px;
+  }
+  .key-input-row {
+    display: flex; gap: 8px;
+  }
+  .key-input {
+    flex: 1; font-family: 'Inter', sans-serif; font-size: 13px;
+    font-weight: 300; color: var(--text); background: var(--bg);
+    border: 1px solid var(--rule); padding: 10px 12px; outline: none;
+    transition: border-color 0.15s; min-width: 0;
+  }
+  .key-input:focus { border-color: var(--navy); }
+  .key-save-btn {
+    background: var(--navy); color: white; border: none;
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 10px 16px; cursor: pointer; white-space: nowrap;
+    transition: opacity 0.15s; flex-shrink: 0;
+  }
+  .key-save-btn:hover { opacity: 0.85; }
+  .key-status {
+    font-size: 11px; margin-top: 8px; display: none;
+  }
+  .key-status.saved { color: var(--yes); display: block; }
+  .key-status.error { color: var(--no); display: block; }
+  .key-set-indicator {
+    display: none; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--yes);
+  }
+  .key-set-indicator.on { display: flex; }
+  .key-change-btn {
+    font-size: 10px; color: var(--slate); background: none; border: none;
+    cursor: pointer; text-decoration: underline; font-family: 'Inter', sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
 </style>
 </head>
 <body>
@@ -278,6 +326,25 @@
 </div>
 
 <div class="main">
+
+<!-- KEY SETUP -->
+<div class="key-setup" id="keySetup">
+  <div class="key-setup-title">One-time setup — your Gemini API key</div>
+  <div class="key-setup-sub">Paste your free Google Gemini API key below. Saved privately in your browser only — never shared anywhere. You only need to do this once.</div>
+  <div class="key-set-indicator" id="keySetIndicator">
+    <span>✓ API key saved</span>
+    <button class="key-change-btn" onclick="showKeyInput()">Change</button>
+  </div>
+  <div id="keyInputWrap">
+    <div class="key-input-row">
+      <input class="key-input" type="password" id="keyInput" placeholder="AIzaSy..." autocomplete="off"/>
+      <button class="key-save-btn" onclick="saveKey()">Save</button>
+    </div>
+    <div class="key-status" id="keyStatus"></div>
+    <div style="font-size:11px;color:var(--light);margin-top:8px;">Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--navy);">aistudio.google.com/app/apikey</a></div>
+  </div>
+</div>
+
 
   <!-- UPLOAD -->
   <div class="upload-zone" id="uploadZone">
@@ -523,26 +590,37 @@ Analyse the image thoroughly and respond ONLY with valid JSON (no markdown, no b
 }`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64 } },
-            { type: 'text', text: PROMPT }
-          ]
-        }],
-        system: SYSTEM
-      })
-    });
+    const API_KEY = localStorage.getItem('gemini_api_key');
+    if (!API_KEY) {
+      throw new Error('No API key found. Please add your Gemini API key at the top of the page.');
+    }
 
-    if (!res.ok) throw new Error(`API error ${res.status}`);
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: SYSTEM + '\n\n' + PROMPT },
+              { inline_data: { mime_type: 'image/jpeg', data: b64 } }
+            ]
+          }],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 1500,
+          }
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
     const data  = await res.json();
-    const raw   = data.content.map(c => c.text||'').join('');
+    const raw   = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     const clean = raw.replace(/```json|```/g,'').trim();
     render(JSON.parse(clean));
 
@@ -658,6 +736,44 @@ function render(r) {
   div.classList.add('on');
   div.scrollIntoView({ behavior:'smooth', block:'start' });
 }
+
+
+// ── API Key management ────────────────────────────────────────────────────────
+function initKey() {
+  const stored = localStorage.getItem('gemini_api_key');
+  if (stored) {
+    document.getElementById('keySetIndicator').classList.add('on');
+    document.getElementById('keyInputWrap').style.display = 'none';
+  }
+}
+
+function saveKey() {
+  const val = document.getElementById('keyInput').value.trim();
+  if (!val.startsWith('AIza')) {
+    document.getElementById('keyStatus').textContent = 'That doesn\'t look right — the key should start with AIza';
+    document.getElementById('keyStatus').className = 'key-status error';
+    return;
+  }
+  localStorage.setItem('gemini_api_key', val);
+  document.getElementById('keyInput').value = '';
+  document.getElementById('keySetIndicator').classList.add('on');
+  document.getElementById('keyInputWrap').style.display = 'none';
+  document.getElementById('keyStatus').className = 'key-status';
+}
+
+function showKeyInput() {
+  document.getElementById('keySetIndicator').classList.remove('on');
+  document.getElementById('keyInputWrap').style.display = 'block';
+  document.getElementById('keyInput').focus();
+}
+
+// Allow Enter key to save
+document.addEventListener('DOMContentLoaded', () => {
+  initKey();
+  document.getElementById('keyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveKey();
+  });
+});
 
 // ── Drag & drop ───────────────────────────────────────────────────────────────
 const zone = document.getElementById('uploadZone');
