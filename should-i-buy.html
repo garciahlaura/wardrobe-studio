@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Should I Buy This?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:    #2A3550;
+    --slate:   #7A8599;
+    --dove:    #C0BDB8;
+    --ecru:    #F5F0EB;
+    --powder:  #B8CEDD;
+    --corn:    #7B9FD4;
+    --rose:    #C4879A;
+    --sage:    #8FAF8B;
+    --lav:     #B8A9C9;
+    --mauve:   #A0768A;
+    --rule:    #E2DED9;
+    --bg:      #FAFAF8;
+    --text:    #2C2C2C;
+    --light:   #6B6B6B;
+    --yes:     #3A7A3A;
+    --yes-bg:  #EEF5EE;
+    --no:      #8A3A3A;
+    --no-bg:   #F5EEEE;
+    --maybe:   #7A6030;
+    --maybe-bg:#F5F0E8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 24px;
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px,7vw,52px); font-weight: 300; line-height: 1.05; margin-bottom: 10px; }
+  .header h1 em { font-style: italic; color: var(--powder); }
+  .header-sub { font-size: 12px; opacity: 0.6; line-height: 1.65; max-width: 500px; }
+
+  /* palette strip */
+  .strip { display:flex; height:5px; }
+  .strip div { flex:1; }
+
+  /* ── MAIN ── */
+  .main { max-width: 680px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* ── UPLOAD ── */
+  .upload-zone {
+    border: 2px dashed var(--rule);
+    background: white;
+    padding: 44px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--navy); background: var(--ecru); }
+  .upload-zone input {
+    position: absolute; inset: 0; opacity: 0;
+    cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+  .upload-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--navy); margin-bottom: 6px; }
+  .upload-sub { font-size: 12px; color: var(--light); line-height: 1.65; }
+  .upload-tip { font-size: 11px; color: var(--slate); margin-top: 10px; font-style: italic; }
+
+  /* ── PREVIEW ── */
+  .preview-wrap { display:none; margin-bottom:14px; position:relative; }
+  .preview-wrap.on { display:block; }
+  .preview-img { width:100%; max-height:360px; object-fit:contain; background:white; border:1px solid var(--rule); display:block; }
+  .change-btn {
+    position:absolute; top:10px; right:10px;
+    background:rgba(255,255,255,0.95); border:1px solid var(--rule);
+    font-size:10px; font-family:'Inter',sans-serif; letter-spacing:0.12em;
+    text-transform:uppercase; padding:6px 10px; cursor:pointer; color:var(--navy); font-weight:500;
+  }
+
+  /* ── CONTEXT ── */
+  .ctx-panel {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .ctx-panel.on { display: block; }
+
+  .ctx-title {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--slate); font-weight: 600; margin-bottom: 12px;
+  }
+
+  .ctx-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  .ctx-btn {
+    background: var(--bg); border: 1px solid var(--rule);
+    padding: 10px 8px; text-align: center; cursor: pointer;
+    font-size: 11px; font-family: 'Inter', sans-serif; font-weight: 500;
+    color: var(--text); transition: all 0.15s;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+  }
+  .ctx-btn:hover { border-color: var(--slate); }
+  .ctx-btn.on { background: var(--navy); color: white; border-color: var(--navy); }
+  .ctx-btn-icon { font-size: 18px; }
+
+  /* optional note */
+  .note-field {
+    width: 100%; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 300;
+    color: var(--text); background: var(--bg); border: 1px solid var(--rule);
+    padding: 10px 12px; resize: none; outline: none; transition: border-color 0.15s;
+  }
+  .note-field:focus { border-color: var(--navy); }
+  .note-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slate); font-weight: 500; margin-bottom: 6px; display: block; }
+
+  /* ── CTA ── */
+  .btn-ask {
+    background: var(--navy); color: white; border: none;
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 18px 28px; cursor: pointer; width: 100%;
+    margin-bottom: 24px; transition: opacity 0.15s;
+    display: none; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-ask:hover { opacity: 0.85; }
+  .btn-ask:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-ask.on { display: flex; }
+
+  /* ── LOADING ── */
+  .loading { display:none; text-align:center; padding:48px 24px; background:white; border:1px solid var(--rule); margin-bottom:16px; }
+  .loading.on { display:block; }
+  .spinner { width:36px; height:36px; border:2px solid var(--rule); border-top-color:var(--navy); border-radius:50%; animation:spin 0.75s linear infinite; margin:0 auto 18px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; font-style:italic; color:var(--navy); margin-bottom:6px; }
+  .loading-sub { font-size:12px; color:var(--light); }
+
+  /* ── ERROR ── */
+  .error { display:none; background:var(--no-bg); border-left:4px solid var(--no); padding:14px 16px; font-size:13px; color:var(--no); margin-bottom:16px; }
+  .error.on { display:block; }
+
+  /* ── RESULTS ── */
+  .results { display:none; }
+  .results.on { display:block; }
+
+  /* BIG VERDICT */
+  .big-verdict {
+    padding: 24px 22px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .bv-yes   { background:var(--yes-bg);   border-left:5px solid var(--yes);   }
+  .bv-no    { background:var(--no-bg);    border-left:5px solid var(--no);    }
+  .bv-maybe { background:var(--maybe-bg); border-left:5px solid var(--maybe); }
+
+  .bv-icon { font-size:36px; line-height:1; flex-shrink:0; }
+  .bv-body {}
+  .bv-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,5vw,32px); font-weight:400; line-height:1.1; margin-bottom:8px; }
+  .bv-yes   .bv-title { color:var(--yes); }
+  .bv-no    .bv-title { color:var(--no);  }
+  .bv-maybe .bv-title { color:var(--maybe); }
+  .bv-reason { font-size:13.5px; color:var(--text); line-height:1.7; }
+
+  /* SCORE CARDS ROW */
+  .scores-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 14px;
+  }
+
+  .score-card { background:white; padding:14px 12px; text-align:center; }
+  .sc-val { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; color:var(--navy); line-height:1; }
+  .sc-lbl { font-size:9px; letter-spacing:0.13em; text-transform:uppercase; color:var(--slate); margin-top:4px; }
+  .sc-bar-wrap { height:4px; background:var(--rule); border-radius:2px; margin:6px auto 0; max-width:60px; }
+  .sc-bar { height:4px; border-radius:2px; }
+
+  /* DETAIL CARDS */
+  .card {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 10px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--slate); font-weight:600; margin-bottom:10px;
+  }
+
+  .card-text { font-size:13px; color:var(--text); line-height:1.75; }
+
+  /* colour chips */
+  .colour-chips { display:flex; flex-wrap:wrap; gap:10px; margin:8px 0; }
+  .chip { display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .chip-dot { width:30px; height:30px; border-radius:50%; border:1px solid rgba(0,0,0,0.09); }
+  .chip-name { font-size:9px; color:var(--light); text-align:center; max-width:42px; line-height:1.3; }
+  .chip-tag { font-size:8px; font-weight:600; padding:1px 5px; border-radius:2px; }
+  .ct-yes   { background:var(--yes-bg);   color:var(--yes);   }
+  .ct-no    { background:var(--no-bg);    color:var(--no);    }
+  .ct-maybe { background:var(--maybe-bg); color:var(--maybe); }
+
+  /* outfit ideas */
+  .outfit-row {
+    display:flex; align-items:center; gap:12px;
+    padding:8px 0; border-bottom:1px solid var(--rule);
+    font-size:12.5px;
+  }
+  .outfit-row:last-child { border-bottom:none; }
+  .outfit-dots { display:flex; gap:4px; flex-shrink:0; }
+  .odot { width:14px; height:14px; border-radius:50%; border:1px solid rgba(0,0,0,0.08); }
+  .outfit-text { color:var(--text); line-height:1.5; }
+
+  /* checklist */
+  .checklist { list-style:none; padding:0; }
+  .checklist li {
+    font-size:13px; padding:7px 0;
+    border-bottom:1px solid var(--rule);
+    display:flex; gap:10px; align-items:baseline; line-height:1.5;
+  }
+  .checklist li:last-child { border-bottom:none; }
+  .cl-icon { font-size:12px; flex-shrink:0; }
+
+  /* final word */
+  .final-word {
+    background:var(--navy); color:white;
+    padding:22px 22px; margin-bottom:16px;
+  }
+  .fw-eyebrow { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; opacity:0.45; margin-bottom:8px; }
+  .fw-text { font-family:'Cormorant Garamond',serif; font-size:clamp(18px,3.5vw,24px); font-weight:300; font-style:italic; line-height:1.55; opacity:0.92; }
+
+  /* retry */
+  .btn-retry {
+    background:none; border:1px solid var(--rule);
+    font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.16em;
+    text-transform:uppercase; padding:12px 20px; cursor:pointer;
+    color:var(--slate); font-weight:500; width:100%; transition:all 0.15s;
+  }
+  .btn-retry:hover { border-color:var(--navy); color:var(--navy); }
+
+  /* ── API KEY SETUP ── */
+  .key-setup {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .key-setup-title {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--slate); font-weight: 600; margin-bottom: 8px;
+  }
+  .key-setup-sub {
+    font-size: 12px; color: var(--light); line-height: 1.6; margin-bottom: 14px;
+  }
+  .key-input-row {
+    display: flex; gap: 8px;
+  }
+  .key-input {
+    flex: 1; font-family: 'Inter', sans-serif; font-size: 13px;
+    font-weight: 300; color: var(--text); background: var(--bg);
+    border: 1px solid var(--rule); padding: 10px 12px; outline: none;
+    transition: border-color 0.15s; min-width: 0;
+  }
+  .key-input:focus { border-color: var(--navy); }
+  .key-save-btn {
+    background: var(--navy); color: white; border: none;
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 10px 16px; cursor: pointer; white-space: nowrap;
+    transition: opacity 0.15s; flex-shrink: 0;
+  }
+  .key-save-btn:hover { opacity: 0.85; }
+  .key-status {
+    font-size: 11px; margin-top: 8px; display: none;
+  }
+  .key-status.saved { color: var(--yes); display: block; }
+  .key-status.error { color: var(--no); display: block; }
+  .key-set-indicator {
+    display: none; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--yes);
+  }
+  .key-set-indicator.on { display: flex; }
+  .key-change-btn {
+    font-size: 10px; color: var(--slate); background: none; border: none;
+    cursor: pointer; text-decoration: underline; font-family: 'Inter', sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Personal Stylist</div>
+  <h1>Should I Buy<br><em>This?</em></h1>
+  <div class="header-sub">Take a photo in-store or of your Lookiero delivery. Get a full verdict — colour, silhouette, neckline, gaps filled, and outfit ideas — in seconds.</div>
+</div>
+
+<div class="strip">
+  <div style="background:#2A3550"></div><div style="background:#F5F0EB"></div>
+  <div style="background:#7A8599"></div><div style="background:#7B9FD4"></div>
+  <div style="background:#C4879A"></div><div style="background:#8FAF8B"></div>
+  <div style="background:#B8A9C9"></div><div style="background:#A0768A"></div>
+  <div style="background:#C0BDB8"></div><div style="background:#B8CEDD"></div>
+</div>
+
+<div class="main">
+
+<!-- KEY SETUP -->
+<div class="key-setup" id="keySetup">
+  <div class="key-setup-title">One-time setup — your Groq API key</div>
+  <div class="key-setup-sub">Paste your free Google Groq API key below. Saved privately in your browser only — never shared anywhere. You only need to do this once.</div>
+  <div class="key-set-indicator" id="keySetIndicator">
+    <span>✓ API key saved</span>
+    <button class="key-change-btn" onclick="showKeyInput()">Change</button>
+  </div>
+  <div id="keyInputWrap">
+    <div class="key-input-row">
+      <input class="key-input" type="password" id="keyInput" placeholder="gsk_..." autocomplete="off"/>
+      <button class="key-save-btn" onclick="saveKey()">Save</button>
+    </div>
+    <div class="key-status" id="keyStatus"></div>
+    <div style="font-size:11px;color:var(--light);margin-top:8px;">Get a free key at <a href="https://console.groq.com/keys" target="_blank" style="color:var(--navy);">console.groq.com/keys</a></div>
+  </div>
+</div>
+
+
+  <!-- UPLOAD -->
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" accept="image/*" onchange="onFile(this)" id="fileInput">
+    <span class="upload-icon">📸</span>
+    <div class="upload-title">Take a photo or choose from gallery</div>
+    <div class="upload-sub">Works in-store, at home with a Lookiero delivery, or anywhere you spot something you like.</div>
+    <div class="upload-tip">Natural light gives the most accurate colour reading</div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-wrap" id="previewWrap">
+    <img class="preview-img" id="previewImg" src="" alt="">
+    <button class="change-btn" onclick="reset()">Change photo</button>
+  </div>
+
+  <!-- CONTEXT PANEL -->
+  <div class="ctx-panel" id="ctxPanel">
+
+    <div class="ctx-title">What type of piece is this?</div>
+    <div class="ctx-grid">
+      <div class="ctx-btn on" data-v="top"    onclick="pickCtx(this)"><span class="ctx-btn-icon">👕</span>Top / blouse</div>
+      <div class="ctx-btn"    data-v="knit"   onclick="pickCtx(this)"><span class="ctx-btn-icon">🧶</span>Knitwear</div>
+      <div class="ctx-btn"    data-v="dress"  onclick="pickCtx(this)"><span class="ctx-btn-icon">👗</span>Dress</div>
+      <div class="ctx-btn"    data-v="bottom" onclick="pickCtx(this)"><span class="ctx-btn-icon">👖</span>Trousers / jeans</div>
+      <div class="ctx-btn"    data-v="outer"  onclick="pickCtx(this)"><span class="ctx-btn-icon">🧥</span>Jacket / coat</div>
+      <div class="ctx-btn"    data-v="shoes"  onclick="pickCtx(this)"><span class="ctx-btn-icon">👟</span>Shoes</div>
+      <div class="ctx-btn"    data-v="bag"    onclick="pickCtx(this)"><span class="ctx-btn-icon">👜</span>Bag</div>
+      <div class="ctx-btn"    data-v="acc"    onclick="pickCtx(this)"><span class="ctx-btn-icon">🧣</span>Accessory</div>
+    </div>
+
+    <div class="ctx-title">Where is this from?</div>
+    <div class="ctx-grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr));">
+      <div class="ctx-btn on" data-src="lookiero" onclick="pickSrc(this)"><span class="ctx-btn-icon">📦</span>Lookiero</div>
+      <div class="ctx-btn" data-src="store"    onclick="pickSrc(this)"><span class="ctx-btn-icon">🛍️</span>In-store</div>
+      <div class="ctx-btn" data-src="online"   onclick="pickSrc(this)"><span class="ctx-btn-icon">💻</span>Online</div>
+      <div class="ctx-btn" data-src="vinted"   onclick="pickSrc(this)"><span class="ctx-btn-icon">♻️</span>Vinted</div>
+    </div>
+
+    <label class="note-label">Anything to flag? (optional)</label>
+    <textarea class="note-field" id="noteField" rows="2" placeholder="e.g. not sure about the length, love the colour but unsure of the fit…"></textarea>
+  </div>
+
+
+  <!-- FABRIC CHECK -->
+  <div class="ctx-panel on" id="fabricPanel" style="display:none;">
+    <div class="ctx-title">Fabric check — feel it first</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="background:var(--yes-bg);border:1px solid #C8E0C8;padding:12px 14px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--yes);margin-bottom:8px;">✓ Good signs</div>
+        <ul style="list-style:none;padding:0;font-size:12px;color:var(--text);">
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Silk / satin — fluid, cool to touch</li>
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Fine cashmere / merino — soft, no scratch</li>
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Linen — structured, breathable</li>
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Quality cotton — substantial, not limp</li>
+          <li style="padding:4px 0;">Viscose / modal — fluid, drapes well</li>
+        </ul>
+      </div>
+      <div style="background:var(--no-bg);border:1px solid #E8D0D0;padding:12px 14px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--no);margin-bottom:8px;">✕ Put it back</div>
+        <ul style="list-style:none;padding:0;font-size:12px;color:var(--text);">
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Polyester — shiny, static, feels cheap</li>
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Acrylic knitwear — scratchy, pills fast</li>
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Very thin cotton — see-through or limp</li>
+          <li style="padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.06);">Stiff interfacing — won't drape</li>
+          <li style="padding:4px 0;">Strong chemical smell</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <button class="btn-ask on" id="askBtn" style="display:none;" onclick="ask()">
+    Get my verdict →
+  </button>
+
+  <!-- ERROR -->
+  <div class="error" id="errorDiv"></div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loadingDiv">
+    <div class="spinner"></div>
+    <div class="loading-title">Consulting your personal stylist…</div>
+    <div class="loading-sub">Checking colour, silhouette, neckline, wardrobe gaps, and outfit potential</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="resultsDiv"></div>
+
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+let b64 = null;
+let ctx = 'top';
+let src = 'lookiero';
+
+function pickCtx(el) {
+  document.querySelectorAll('[data-v]').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  ctx = el.dataset.v;
+}
+
+function pickSrc(el) {
+  document.querySelectorAll('[data-src]').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  src = el.dataset.src;
+}
+
+// ── File handling ─────────────────────────────────────────────────────────────
+function onFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    b64 = e.target.result.split(',')[1];
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('previewWrap').classList.add('on');
+    document.getElementById('uploadZone').style.display = 'none';
+    document.getElementById('ctxPanel').classList.add('on');
+    document.getElementById('fabricPanel').style.display = 'block';
+    document.getElementById('askBtn').style.display = 'flex';
+    document.getElementById('resultsDiv').classList.remove('on');
+    document.getElementById('errorDiv').classList.remove('on');
+  };
+  reader.readAsDataURL(file);
+}
+
+function reset() {
+  b64 = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('previewWrap').classList.remove('on');
+  document.getElementById('uploadZone').style.display = 'block';
+  document.getElementById('ctxPanel').classList.remove('on');
+  document.getElementById('fabricPanel').style.display = 'none';
+  document.getElementById('askBtn').style.display = 'none';
+  document.getElementById('resultsDiv').classList.remove('on');
+  document.getElementById('errorDiv').classList.remove('on');
+  document.getElementById('noteField').value = '';
+}
+
+// ── API call ──────────────────────────────────────────────────────────────────
+async function ask() {
+  if (!b64) return;
+  const btn  = document.getElementById('askBtn');
+  const note = document.getElementById('noteField').value.trim();
+  const srcLabels = { lookiero:'Lookiero delivery', store:'in a shop', online:'online', vinted:'Vinted' };
+  const ctxLabels = { top:'top or blouse', knit:'knitwear', dress:'dress', bottom:'trousers or jeans', outer:'jacket or coat', shoes:'shoes', bag:'bag', acc:'accessory' };
+
+  btn.disabled = true;
+  document.getElementById('loadingDiv').classList.add('on');
+  document.getElementById('resultsDiv').classList.remove('on');
+  document.getElementById('errorDiv').classList.remove('on');
+
+  const SYSTEM = `You are an expert personal stylist and colour analyst. You know the client intimately and give direct, honest, warm feedback — like a trusted friend who happens to be a professional stylist. Never vague. Never just positive. Always useful.`;
+
+  const PROMPT = `You are a personal stylist analysing a ${ctxLabels[ctx]} from ${srcLabels[src]} for a client.${note ? ' Client notes: "' + note + '".' : ''}
+
+CLIENT PROFILE:
+- Cool Summer season: cool undertone, muted colours only
+- YES colours: French Navy, Ecru, Slate Grey, Dove Grey, Powder Blue, Cornflower Blue, Dusty Rose, Soft Sage, Lavender, Dusty Mauve, Charcoal
+- NO colours: rust, mustard, warm camel, olive, golden yellow, tomato red, bright coral, chocolate brown, lime green, vivid purple, pure black, bright white
+- YES necklines: crew, boat, square, turtleneck, gentle scoop
+- NO necklines: V-neck (small bust)
+- YES silhouette: tailored, straight-leg, wide-leg, A-line, above-knee or midi dresses
+- NO silhouette: skinny, boxy, oversized, cap sleeves
+- NO heels: flats only (flat mule, loafer, trainer, sandal, Chelsea boot)
+- Already owns: blue stripe sleeveless shirt, white cashmere turtleneck, denim jacket, white trainers, dark jeans
+
+Analyse the image. Return ONLY a JSON object with these exact keys:
+{
+  "verdict": "yes or no or maybe",
+  "verdict_title": "short title max 6 words",
+  "verdict_reason": "2 sentences explanation",
+  "colour_score": 0 to 100,
+  "silhouette_score": 0 to 100,
+  "versatility_score": 0 to 100,
+  "colour_analysis": "1 sentence on colour",
+  "silhouette_analysis": "1 sentence on silhouette",
+  "neckline_analysis": "1 sentence on neckline or null",
+  "fills_gap": true or false,
+  "gap_note": "1 sentence",
+  "outfit_1_name": "outfit name",
+  "outfit_1_pieces": "piece + piece + piece",
+  "outfit_1_occasion": "occasion",
+  "outfit_2_name": "outfit name",
+  "outfit_2_pieces": "piece + piece + piece",
+  "outfit_2_occasion": "occasion",
+  "outfit_3_name": "outfit name",
+  "outfit_3_pieces": "piece + piece + piece",
+  "outfit_3_occasion": "occasion",
+  "check_1": "tick or cross then observation",
+  "check_2": "tick or cross then observation",
+  "check_3": "tick or cross then observation",
+  "check_4": "tick or cross then observation",
+  "lookiero_feedback": "feedback for Lookiero stylist or null",
+  "final_word": "one sentence buy or dont buy"
+}`;
+
+  try {
+    const API_KEY = localStorage.getItem('groq_api_key');
+    if (!API_KEY) {
+      throw new Error('No API key found. Please add your Groq API key at the top of the page.');
+    }
+
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'qwen/qwen3.6-27b',
+        temperature: 0.3,
+        max_tokens: 1500,
+        messages: [
+          { role: 'system', content: SYSTEM + ' You must respond with a JSON code block only. Wrap your entire response in ```json and ```. No thinking tags, no explanation outside the code block.' },
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: PROMPT },
+              { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${b64}` } }
+            ]
+          }
+        ]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
+    const data  = await res.json();
+    const raw   = data.choices?.[0]?.message?.content || '';
+    // Extract JSON — strip think blocks, find { }
+    const stripped = raw
+      .replace(/<think>[\s\S]*?<\/think>/gi, '')
+      .replace(/```json/gi, '')
+      .replace(/```/g, '')
+      .trim();
+    const jsonStart = stripped.indexOf('{');
+    const jsonEnd   = stripped.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found in response');
+    const clean = stripped.slice(jsonStart, jsonEnd + 1);
+    render(JSON.parse(clean));
+
+  } catch(e) {
+    document.getElementById('errorDiv').textContent = `Something went wrong: ${e.message}. Please try again.`;
+    document.getElementById('errorDiv').classList.add('on');
+    console.error(e);
+  } finally {
+    document.getElementById('loadingDiv').classList.remove('on');
+    btn.disabled = false;
+  }
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render(r) {
+  const icons = { yes:'✓', no:'✕', maybe:'~' };
+  const bvCls = { yes:'bv-yes', no:'bv-no', maybe:'bv-maybe' };
+
+  // Score colour helper
+  function barCol(v) {
+    if (v >= 70) return '#3A7A3A';
+    if (v >= 40) return '#C9A84C';
+    return '#8A3A3A';
+  }
+
+  // Colour chips
+  const chips = ''; // removed for JSON simplicity
+
+  // Outfit ideas
+  const outfitData = [
+    { name: r.outfit_1_name, pieces: r.outfit_1_pieces, occasion: r.outfit_1_occasion },
+    { name: r.outfit_2_name, pieces: r.outfit_2_pieces, occasion: r.outfit_2_occasion },
+    { name: r.outfit_3_name, pieces: r.outfit_3_pieces, occasion: r.outfit_3_occasion },
+  ].filter(o => o.name);
+  const outfits = outfitData.map(o => `<div class="outfit-row">
+      <div class="outfit-text"><strong style="color:var(--navy);font-weight:500;">${o.name}</strong><br>${o.pieces}<br><span style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);">${o.occasion}</span></div>
+    </div>`).join('');
+
+  // Checklist
+  const checkItems = [r.check_1, r.check_2, r.check_3, r.check_4].filter(Boolean);
+  const checks = checkItems.map(c => {
+    const col = c.startsWith('✓') ? 'var(--yes)' : c.startsWith('✕') ? 'var(--no)' : 'var(--maybe)';
+    const icon = c.slice(0,1);
+    const text = c.slice(1).trim();
+    return `<li><span class="cl-icon" style="color:${col}">${icon}</span>${text}</li>`;
+  }).join('');
+
+  // Scores
+  function scoreCard(val, label) {
+    const v = val || 0;
+    return `<div class="score-card">
+      <div class="sc-val">${v}</div>
+      <div class="sc-lbl">${label}</div>
+      <div class="sc-bar-wrap"><div class="sc-bar" style="width:${v}%;background:${barCol(v)}"></div></div>
+    </div>`;
+  }
+
+  const html = `
+    <div class="big-verdict ${bvCls[r.verdict]}">
+      <div class="bv-icon">${icons[r.verdict]}</div>
+      <div class="bv-body">
+        <div class="bv-title">${r.verdict_title}</div>
+        <div class="bv-reason">${r.verdict_reason}</div>
+      </div>
+    </div>
+
+    <div class="scores-row">
+      ${scoreCard(r.colour_score,'Colour match')}
+      ${scoreCard(r.silhouette_score,'Silhouette')}
+      ${scoreCard(r.versatility_score,'Versatility')}
+    </div>
+
+    ${chips ? `<div class="card"><div class="card-title">Colours detected</div><div class="colour-chips">${chips}</div></div>` : ''}
+
+    <div class="card">
+      <div class="card-title">Full analysis</div>
+      <div class="card-text">
+        ${r.colour_analysis ? `<p style="margin-bottom:10px;"><strong style="font-weight:500;color:var(--navy);">Colour</strong> ${r.colour_analysis}</p>` : ''}
+        ${r.silhouette_analysis ? `<p style="margin-bottom:10px;"><strong style="font-weight:500;color:var(--navy);">Silhouette</strong> ${r.silhouette_analysis}</p>` : ''}
+        ${r.neckline_analysis ? `<p><strong style="font-weight:500;color:var(--navy);">Neckline</strong> ${r.neckline_analysis}</p>` : ''}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Checklist</div>
+      <ul class="checklist">${checks}</ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Gap analysis — ${r.fills_gap ? '✓ Fills a wardrobe gap' : '— No gap filled'}</div>
+      <div class="card-text">${r.gap_note}</div>
+    </div>
+
+    ${outfits ? `<div class="card"><div class="card-title">How you'd wear it</div>${outfits}</div>` : ''}
+
+    ${r.lookiero_feedback ? `<div class="card" style="border-top:3px solid var(--navy);">
+      <div class="card-title">Lookiero feedback to leave</div>
+      <div class="card-text">${r.lookiero_feedback}</div>
+    </div>` : ''}
+
+    <div class="final-word">
+      <div class="fw-eyebrow">The verdict</div>
+      <div class="fw-text">${r.final_word}</div>
+    </div>
+
+    <button class="btn-retry" onclick="reset()">← Check another piece</button>
+  `;
+
+  const div = document.getElementById('resultsDiv');
+  div.innerHTML = html;
+  div.classList.add('on');
+  div.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+
+// ── API Key management ────────────────────────────────────────────────────────
+function initKey() {
+  const stored = localStorage.getItem('groq_api_key');
+  if (stored) {
+    document.getElementById('keySetIndicator').classList.add('on');
+    document.getElementById('keyInputWrap').style.display = 'none';
+  }
+}
+
+function saveKey() {
+  const val = document.getElementById('keyInput').value.trim();
+  if (!val.startsWith('gsk_')) {
+    document.getElementById('keyStatus').textContent = 'That doesn\'t look right — the key should start with gsk_';
+    document.getElementById('keyStatus').className = 'key-status error';
+    return;
+  }
+  localStorage.setItem('groq_api_key', val);
+  document.getElementById('keyInput').value = '';
+  document.getElementById('keySetIndicator').classList.add('on');
+  document.getElementById('keyInputWrap').style.display = 'none';
+  document.getElementById('keyStatus').className = 'key-status';
+}
+
+function showKeyInput() {
+  document.getElementById('keySetIndicator').classList.remove('on');
+  document.getElementById('keyInputWrap').style.display = 'block';
+  document.getElementById('keyInput').focus();
+}
+
+// Allow Enter key to save
+document.addEventListener('DOMContentLoaded', () => {
+  initKey();
+  document.getElementById('keyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveKey();
+  });
+});
+
+// ── Drag & drop ───────────────────────────────────────────────────────────────
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', ()  => zone.classList.remove('drag'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file?.type.startsWith('image/')) {
+    const dt = new DataTransfer(); dt.items.add(file);
+    document.getElementById('fileInput').files = dt.files;
+    onFile(document.getElementById('fileInput'));
+  }
+});
+</script>
+</body>
+</html>
