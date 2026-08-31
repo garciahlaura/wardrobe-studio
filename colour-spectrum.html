@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Colour Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:  #2A3550;
+    --slate: #7A8599;
+    --rule:  #E2DED9;
+    --bg:    #FAFAF8;
+    --text:  #2C2C2C;
+    --light: #6B6B6B;
+    --yes:   #3A7A3A;
+    --yes-bg:#EEF5EE;
+    --no:    #8A3A3A;
+    --no-bg: #F5EEEE;
+    --warn:  #7A6030;
+    --warn-bg:#F5F0E8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 24px 24px;
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,6vw,44px); font-weight: 300; line-height: 1.1; margin-bottom: 8px; }
+  .header h1 em { font-style: italic; color: #B8CEDD; }
+  .header-sub { font-size: 12px; opacity: 0.6; line-height: 1.65; max-width: 500px; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 36px; }
+  .section-title {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--slate); font-weight: 600; margin-bottom: 16px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+  }
+
+  /* ── SPECTRUM BAR ── */
+  .spectrum-wrap {
+    margin-bottom: 10px;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .spectrum-bar {
+    display: flex;
+    height: 64px;
+  }
+
+  .spectrum-swatch {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.12s;
+  }
+
+  .spectrum-swatch:hover { transform: scaleY(1.05); z-index: 1; }
+
+  .spectrum-swatch.active { transform: scaleY(1.08); z-index: 2; outline: 2px solid white; }
+
+  /* ── ZONE LABELS ── */
+  .zone-labels {
+    display: flex;
+    margin-bottom: 16px;
+    border: 1px solid var(--rule);
+    border-top: none;
+  }
+
+  .zone-label {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    border-right: 1px solid var(--rule);
+  }
+  .zone-label:last-child { border-right: none; }
+  .zone-yes   { background: var(--yes-bg);  color: var(--yes);  }
+  .zone-warn  { background: var(--warn-bg); color: var(--warn); }
+  .zone-no    { background: var(--no-bg);   color: var(--no);   }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.15s ease;
+  }
+  .detail-panel.on { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .detail-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .detail-swatch {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+
+  .detail-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .detail-verdict {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .verdict-yes  { background: var(--yes-bg);  color: var(--yes);  }
+  .verdict-warn { background: var(--warn-bg); color: var(--warn); }
+  .verdict-no   { background: var(--no-bg);   color: var(--no);   }
+
+  .detail-reason {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .detail-rule {
+    font-size: 11px;
+    color: var(--light);
+    font-style: italic;
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+    line-height: 1.6;
+  }
+
+  /* ── SKIN PREVIEW ── */
+  .skin-preview {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .skin-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .skin-pair {
+    display: flex;
+    border-radius: 2px;
+    overflow: hidden;
+    height: 28px;
+    width: 56px;
+  }
+
+  .skin-tone { flex: 1; background: #D4A088; }
+  .fabric-tone { flex: 1; }
+
+  .skin-label {
+    font-size: 9px;
+    color: var(--light);
+    text-align: center;
+    line-height: 1.3;
+    max-width: 60px;
+  }
+
+  /* ── COLOUR CARDS ── */
+  .colour-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+
+  .colour-card {
+    background: white;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+  }
+  .colour-card:hover { box-shadow: 0 2px 12px rgba(42,53,80,0.1); }
+
+  .cc-swatch { height: 56px; }
+
+  .cc-body { padding: 10px 12px; }
+
+  .cc-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .cc-verdict {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+
+  .cc-reason {
+    font-size: 11px;
+    color: var(--light);
+    line-height: 1.5;
+  }
+
+  /* ── RULE BOX ── */
+  .rule-box {
+    background: var(--navy);
+    color: white;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .rule-eyebrow { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 6px; }
+  .rule-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; line-height: 1.6; opacity: 0.92; }
+
+  /* ── TAB NAV ── */
+  .tab-nav {
+    display: flex;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 500; font-family: 'Inter', sans-serif;
+    color: var(--slate); padding: 12px 16px; background: none;
+    border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; white-space: nowrap; transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.on { color: var(--navy); border-bottom-color: var(--navy); }
+
+  .tab-panel { display: none; }
+  .tab-panel.on { display: block; }
+
+  /* ── PHOTO COLOUR MATCH ── */
+  .photo-upload-zone {
+    border: 2px dashed var(--rule);
+    background: white;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .photo-upload-zone:hover, .photo-upload-zone.drag { border-color: var(--navy); background: #F5F0EB; }
+  .photo-upload-zone input { position: absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .photo-upload-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; color:var(--navy); margin-bottom:4px; }
+  .photo-upload-sub { font-size:11px; color:var(--light); line-height:1.6; }
+  .photo-tip { font-size:10px; color:var(--slate); margin-top:6px; font-style:italic; }
+
+  .photo-results { display:none; }
+  .photo-results.on { display:block; }
+
+  .extracted-colours {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .ext-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: transform 0.12s;
+  }
+  .ext-chip:hover { transform: scale(1.08); }
+  .ext-chip.selected { transform: scale(1.12); }
+
+  .ext-dot {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.1);
+    transition: border-color 0.15s;
+  }
+  .ext-chip.selected .ext-dot { border-color: var(--navy); border-width: 3px; }
+
+  .ext-label { font-size: 9px; color: var(--light); text-align:center; max-width:48px; line-height:1.3; }
+
+  .spectrum-highlight {
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .spectrum-marker {
+    position: absolute;
+    top: -8px;
+    width: 4px;
+    height: 80px;
+    background: var(--navy);
+    border-radius: 2px;
+    transform: translateX(-50%);
+    transition: left 0.4s ease;
+    display: none;
+  }
+  .spectrum-marker.on { display: block; }
+  .spectrum-marker::after {
+    content: '▼';
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--navy);
+  }
+
+  .match-result {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .match-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+
+  .match-body { flex: 1; }
+  .match-name { font-size:13px; font-weight:500; color:var(--navy); margin-bottom:3px; }
+  .match-reason { font-size:12px; color:var(--light); line-height:1.5; }
+
+  .photo-preview-small {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid var(--rule);
+  }
+
+  .retry-btn {
+    background: none; border: 1px solid var(--rule);
+    font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.14em;
+    text-transform:uppercase; padding:8px 14px; cursor:pointer;
+    color:var(--slate); font-weight:500; transition:all 0.15s; margin-bottom:14px;
+  }
+  .retry-btn:hover { border-color:var(--navy); color:var(--navy); }
+
+  /* ── SHAPE CARDS ── */
+  .shape-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .shape-card {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 16px 12px 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+    position: relative;
+  }
+  .shape-card:hover { box-shadow: 0 2px 12px rgba(42,53,80,0.1); }
+  .shape-card.active { border-color: var(--navy); box-shadow: 0 0 0 2px var(--navy); }
+
+  .shape-verdict-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .shape-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .shape-desc {
+    font-size: 10px;
+    color: var(--light);
+    line-height: 1.4;
+  }
+
+  .shape-detail {
+    background: white;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--navy);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.15s ease;
+  }
+  .shape-detail.on { display: block; }
+
+  .shape-detail-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .shape-detail-verdict {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .shape-detail-body {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+
+  .shape-detail-tip {
+    font-size: 11px;
+    color: var(--light);
+    font-style: italic;
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+    line-height: 1.6;
+  }
+
+  /* Fabric weight bar */
+  .fabric-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 6px;
+    border: 1px solid var(--rule);
+  }
+  .fabric-seg { flex: 1; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Cool Summer · Colour Guide</div>
+  <h1>What colours <em>work for you</em></h1>
+  <div class="header-sub">Tap any colour to see why it works or doesn't — with a simple one-line explanation. No confusing undertone theory, just yes, no, or with care.</div>
+</div>
+
+<div class="main">
+
+  
+  <!-- PHOTO COLOUR MATCH -->
+  <div class="section" style="margin-bottom:28px;">
+    <div class="section-title">📸 Match a photo to your palette</div>
+    <p style="font-size:12.5px;color:var(--light);line-height:1.65;margin-bottom:14px;">Take a photo or upload an image of any clothing piece. The tool extracts the main colours and maps them onto your palette spectrum instantly — no AI needed, works offline.</p>
+
+    <!-- Hidden file input -->
+    <input type="file" accept="image/*" id="photoInput" style="display:none;" onchange="analysePhoto(this)">
+
+    <div class="photo-upload-zone" id="photoZone" onclick="document.getElementById('photoInput').click()">
+      <div style="font-size:28px;margin-bottom:8px;">📸</div>
+      <div class="photo-upload-title">Take or upload a photo</div>
+      <div class="photo-upload-sub">Works best in natural light</div>
+      <div class="photo-tip">No API needed — colour extraction runs directly on your device</div>
+    </div>
+
+    <!-- Explicit button as fallback -->
+    <button onclick="document.getElementById('photoInput').click()" style="width:100%;background:var(--navy);color:white;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;padding:14px;cursor:pointer;margin-bottom:14px;display:block;" id="photoBtn">
+      📸 Choose photo or take picture
+    </button>
+
+    <div class="photo-results" id="photoResults">
+      <img class="photo-preview-small" id="photoPreview" src="" alt="">
+      <button class="retry-btn" onclick="resetPhoto()">← Try another photo</button>
+
+      <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--slate);font-weight:600;margin-bottom:10px;">Dominant colours extracted</div>
+      <div class="extracted-colours" id="extractedColours"></div>
+
+      <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--slate);font-weight:600;margin:14px 0 8px;">Tap a colour to see your verdict</div>
+      <div id="photoMatchResult"></div>
+
+      <canvas id="photoCanvas" style="display:none;"></canvas>
+    </div>
+  </div>
+
+<nav class="tab-nav">
+    <button class="tab-btn on" onclick="showTab('neutrals',this)">Whites & Greys</button>
+    <button class="tab-btn" onclick="showTab('blues',this)">Blues</button>
+    <button class="tab-btn" onclick="showTab('pinks',this)">Pinks & Mauves</button>
+    <button class="tab-btn" onclick="showTab('greens',this)">Greens</button>
+    <button class="tab-btn" onclick="showTab('warms',this)">Warm colours</button>
+    <button class="tab-btn" onclick="showTab('darks',this)">Darks</button>
+  </nav>
+
+  <!-- DETAIL PANEL (shared) -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-top">
+      <div class="detail-swatch" id="detailSwatch"></div>
+      <div>
+        <div class="detail-name" id="detailName"></div>
+        <div class="detail-verdict" id="detailVerdict"></div>
+      </div>
+    </div>
+    <div class="detail-reason" id="detailReason"></div>
+    <div class="detail-rule" id="detailRule"></div>
+    <div class="skin-preview" id="skinPreview"></div>
+  </div>
+
+  <!-- ══ WHITES & GREYS ══ -->
+  <div class="tab-panel on" id="tab-neutrals">
+
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"White needs to go warmer to work. Grey needs to go cooler."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">White to grey spectrum — tap to learn</div>
+
+      <!-- WHITE SPECTRUM -->
+      <div class="spectrum-wrap">
+        <div class="spectrum-bar" id="whiteSpectrum"></div>
+      </div>
+      <div class="zone-labels">
+        <div class="zone-label zone-no">❌ Too cold</div>
+        <div class="zone-label zone-warn">⚠️ Borderline</div>
+        <div class="zone-label zone-yes">✅ Your zone</div>
+        <div class="zone-label zone-warn">⚠️ Getting warm</div>
+      </div>
+
+      <!-- GREY SPECTRUM -->
+      <div style="margin-top:20px;">
+        <div class="section-title">Grey spectrum</div>
+        <div class="spectrum-wrap">
+          <div class="spectrum-bar" id="greySpectrum"></div>
+        </div>
+        <div class="zone-labels">
+          <div class="zone-label zone-yes">✅ Charcoal</div>
+          <div class="zone-label zone-yes">✅ Slate grey</div>
+          <div class="zone-label zone-yes">✅ Dove grey</div>
+          <div class="zone-label zone-warn">⚠️ Silver</div>
+          <div class="zone-label zone-no">❌ Warm greige</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Named colours</div>
+      <div class="colour-cards" id="neutralCards"></div>
+    </div>
+
+  </div>
+
+  <!-- ══ BLUES ══ -->
+  <div class="tab-panel" id="tab-blues">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Almost all blues work — the only ones to avoid are very warm, greenish, or neon."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Blue spectrum</div>
+      <div class="spectrum-wrap">
+        <div class="spectrum-bar" id="blueSpectrum"></div>
+      </div>
+      <div class="zone-labels">
+        <div class="zone-label zone-yes">✅ Navy</div>
+        <div class="zone-label zone-yes">✅ Cornflower</div>
+        <div class="zone-label zone-yes">✅ Powder blue</div>
+        <div class="zone-label zone-warn">⚠️ Teal/turquoise</div>
+        <div class="zone-label zone-no">❌ Neon blue</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Named colours</div>
+      <div class="colour-cards" id="blueCards"></div>
+    </div>
+  </div>
+
+  <!-- ══ PINKS & MAUVES ══ -->
+  <div class="tab-panel" id="tab-pinks">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Dusty and muted pinks yes. Bright, warm, or coral pinks no."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Pink spectrum</div>
+      <div class="spectrum-wrap">
+        <div class="spectrum-bar" id="pinkSpectrum"></div>
+      </div>
+      <div class="zone-labels">
+        <div class="zone-label zone-yes">✅ Dusty mauve</div>
+        <div class="zone-label zone-yes">✅ Dusty rose</div>
+        <div class="zone-label zone-yes">✅ Lavender</div>
+        <div class="zone-label zone-warn">⚠️ Blush pink</div>
+        <div class="zone-label zone-no">❌ Coral/hot pink</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Named colours</div>
+      <div class="colour-cards" id="pinkCards"></div>
+    </div>
+  </div>
+
+  <!-- ══ GREENS ══ -->
+  <div class="tab-panel" id="tab-greens">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Only muted, grey-toned sage greens. Olive, lime, and warm greens are all no."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Green spectrum</div>
+      <div class="spectrum-wrap">
+        <div class="spectrum-bar" id="greenSpectrum"></div>
+      </div>
+      <div class="zone-labels">
+        <div class="zone-label zone-yes">✅ Soft sage</div>
+        <div class="zone-label zone-warn">⚠️ Mint</div>
+        <div class="zone-label zone-no">❌ Olive</div>
+        <div class="zone-label zone-no">❌ Lime</div>
+        <div class="zone-label zone-no">❌ Forest</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Named colours</div>
+      <div class="colour-cards" id="greenCards"></div>
+    </div>
+  </div>
+
+  <!-- ══ WARM COLOURS ══ -->
+  <div class="tab-panel" id="tab-warms">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Warm colours — yellow, orange, rust, camel, olive — all clash with your cool undertone. Avoid entirely."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Warm colours — all no</div>
+      <div class="colour-cards" id="warmCards"></div>
+    </div>
+  </div>
+
+  <!-- ══ DARKS ══ -->
+  <div class="tab-panel" id="tab-darks">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Navy and charcoal yes. Pure black at the face no — it's too stark. Dark brown never."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Dark colours</div>
+      <div class="colour-cards" id="darkCards"></div>
+    </div>
+  </div>
+
+  <!-- ══ FIT ══ -->
+  <div class="tab-panel" id="tab-fit">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Fitted through the shoulder, skims the body, never clings or swamps. Relaxed is fine — shapeless is not."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Tap a fit to see if it works for you</div>
+      <div class="shape-detail" id="fitDetail"></div>
+      <div class="shape-grid" id="fitGrid"></div>
+    </div>
+  </div>
+
+  <!-- ══ NECKLINES ══ -->
+  <div class="tab-panel" id="tab-neckline">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Horizontal lines and covered necklines — crew, boat, square, turtleneck. The only one to avoid is deep V which elongates downward and emphasises a small bust."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Tap a neckline to see if it works for you</div>
+      <div class="shape-detail" id="neckDetail"></div>
+      <div class="shape-grid" id="neckGrid"></div>
+    </div>
+  </div>
+
+  <!-- ══ SLEEVES ══ -->
+  <div class="tab-panel" id="tab-sleeve">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Fully sleeveless or full sleeves — both work. Cap sleeves are the one to avoid as they cut the arm at the widest point."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Tap a sleeve to see if it works for you</div>
+      <div class="shape-detail" id="sleeveDetail"></div>
+      <div class="shape-grid" id="sleeveGrid"></div>
+    </div>
+  </div>
+
+  <!-- ══ FABRIC WEIGHT ══ -->
+  <div class="tab-panel" id="tab-fabric">
+    <div class="rule-box">
+      <div class="rule-eyebrow">The rule</div>
+      <div class="rule-text">"Match fabric weight to season. Natural fibres always. Avoid synthetic — they trap heat, pill, and look cheap quickly."</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Fabric weight by season</div>
+      <div class="shape-detail" id="fabricDetail"></div>
+      <div class="shape-grid" id="fabricGrid"></div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+
+// ── PHOTO COLOUR EXTRACTION ───────────────────────────────────────────────────
+function analysePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      // Show preview
+      document.getElementById('photoPreview').src = e.target.result;
+      document.getElementById('photoZone').style.display = 'none';
+      document.getElementById('photoBtn').style.display = 'none';
+      document.getElementById('photoResults').classList.add('on');
+
+      // Extract colours using canvas
+      const canvas = document.getElementById('photoCanvas');
+      const ctx    = canvas.getContext('2d');
+
+      // Sample from centre of image (avoids background)
+      const size = 120;
+      canvas.width  = size;
+      canvas.height = size;
+
+      const sx = (img.width  - size) / 2;
+      const sy = (img.height - size) / 2;
+      ctx.drawImage(img, Math.max(0,sx), Math.max(0,sy), Math.min(size,img.width), Math.min(size,img.height), 0, 0, size, size);
+
+      const pixels = ctx.getImageData(0, 0, size, size).data;
+      const colours = extractDominantColours(pixels, 6);
+      displayExtractedColours(colours);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function extractDominantColours(pixels, count) {
+  // Sample every 8th pixel for speed
+  const samples = [];
+  for (let i = 0; i < pixels.length; i += 32) {
+    const r = pixels[i], g = pixels[i+1], b = pixels[i+2], a = pixels[i+3];
+    if (a < 128) continue; // skip transparent
+    // Skip near-white and near-black (likely background)
+    const brightness = (r + g + b) / 3;
+    if (brightness > 240 || brightness < 15) continue;
+    samples.push([r, g, b]);
+  }
+
+  if (!samples.length) return [['#C0BDB8', 'Dove grey']];
+
+  // Simple k-means clustering
+  const clusters = kMeans(samples, count);
+  return clusters
+    .filter(c => c.points.length > 0)
+    .sort((a, b) => b.points.length - a.points.length)
+    .slice(0, 6)
+    .map(c => {
+      const [r, g, b] = c.center.map(Math.round);
+      const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+      return [hex, getColourName(r, g, b)];
+    });
+}
+
+function kMeans(points, k) {
+  // Init clusters with spread points
+  let centers = [];
+  for (let i = 0; i < k; i++) {
+    centers.push(points[Math.floor(i * points.length / k)].slice());
+  }
+
+  let clusters = [];
+  for (let iter = 0; iter < 8; iter++) {
+    clusters = centers.map(c => ({ center: c.slice(), points: [] }));
+
+    points.forEach(p => {
+      let minD = Infinity, minI = 0;
+      centers.forEach((c, i) => {
+        const d = (p[0]-c[0])**2 + (p[1]-c[1])**2 + (p[2]-c[2])**2;
+        if (d < minD) { minD = d; minI = i; }
+      });
+      clusters[minI].points.push(p);
+    });
+
+    clusters.forEach((cl, i) => {
+      if (!cl.points.length) return;
+      centers[i] = [
+        cl.points.reduce((s,p) => s+p[0], 0) / cl.points.length,
+        cl.points.reduce((s,p) => s+p[1], 0) / cl.points.length,
+        cl.points.reduce((s,p) => s+p[2], 0) / cl.points.length,
+      ];
+    });
+  }
+  return clusters;
+}
+
+function getColourName(r, g, b) {
+  const brightness = (r + g + b) / 3;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const sat = max === 0 ? 0 : (max - min) / max;
+
+  if (brightness < 60)  return 'Very dark';
+  if (brightness > 220 && sat < 0.1) return 'Near white';
+  if (sat < 0.12) {
+    if (brightness < 100) return 'Charcoal';
+    if (brightness < 150) return 'Dark grey';
+    if (brightness < 190) return 'Mid grey';
+    return 'Light grey';
+  }
+  if (b > r && b > g) {
+    if (brightness < 80)  return 'Navy';
+    if (brightness < 140) return 'Blue';
+    return 'Light blue';
+  }
+  if (r > g && r > b) {
+    if (g > 100) return 'Warm pink/coral';
+    return 'Red/rust';
+  }
+  if (g > r && g > b) {
+    if (sat < 0.3) return 'Sage green';
+    return 'Green';
+  }
+  if (r > 180 && g > 150 && b < 120) return 'Yellow/mustard';
+  if (r > 160 && g > 100 && b < 80)  return 'Warm camel';
+  return 'Mixed tone';
+}
+
+function displayExtractedColours(colours) {
+  const container = document.getElementById('extractedColours');
+  container.innerHTML = '';
+  colours.forEach(([hex, name], i) => {
+    const chip = document.createElement('div');
+    chip.className = 'ext-chip' + (i === 0 ? ' selected' : '');
+    chip.innerHTML = `<div class="ext-dot" style="background:${hex}"></div><div class="ext-label">${name}</div>`;
+    chip.onclick = () => {
+      document.querySelectorAll('.ext-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      showPhotoMatch(hex, name);
+    };
+    container.appendChild(chip);
+  });
+  // Auto show first colour
+  if (colours.length) showPhotoMatch(colours[0][0], colours[0][1]);
+}
+
+function showPhotoMatch(hex, name) {
+  const allColours = Object.values(COLOURS).flat();
+
+  // Find closest named colour
+  let closest = allColours[0];
+  let minDist = 999999;
+  allColours.forEach(c => {
+    const d = hexDist(c.hex, hex);
+    if (d < minDist) { minDist = d; closest = c; }
+  });
+
+  const vEmoji  = closest.verdict === 'yes' ? '✅' : closest.verdict === 'no' ? '❌' : '⚠️';
+  const vText   = closest.verdict === 'yes' ? 'Works for you' : closest.verdict === 'no' ? 'Avoid this colour' : 'Use with care';
+  const vClass  = closest.verdict === 'yes' ? 'verdict-yes' : closest.verdict === 'no' ? 'verdict-no' : 'verdict-warn';
+
+  document.getElementById('photoMatchResult').innerHTML = `
+    <div class="match-result">
+      <div class="match-dot" style="background:${hex}"></div>
+      <div class="match-body">
+        <div class="match-name">${vEmoji} ${vText} — closest to <strong>${closest.name}</strong></div>
+        <div class="match-reason">${closest.reason}</div>
+        <div style="font-size:10px;color:var(--slate);margin-top:6px;font-style:italic;">→ ${closest.rule}</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;font-size:12px;color:var(--light);">
+      <div style="display:flex;border-radius:2px;overflow:hidden;height:24px;width:80px;flex-shrink:0;">
+        <div style="flex:1;background:#D4A088;"></div>
+        <div style="flex:1;background:${hex};"></div>
+      </div>
+      Extracted colour next to your skin tone
+    </div>`;
+
+  // Also show detail panel
+  showDetail({ ...closest, hex });
+}
+
+function resetPhoto() {
+  document.getElementById('photoInput').value = '';
+  document.getElementById('photoResults').classList.remove('on');
+  document.getElementById('photoZone').style.display = 'block';
+  document.getElementById('photoBtn').style.display = 'block';
+  document.getElementById('photoMatchResult').innerHTML = '';
+  document.getElementById('detailPanel').classList.remove('on');
+}
+
+// Drag and drop
+const pz = document.getElementById('photoZone');
+if (pz) {
+  pz.addEventListener('dragover', e => { e.preventDefault(); pz.classList.add('drag'); });
+  pz.addEventListener('dragleave', () => pz.classList.remove('drag'));
+  pz.addEventListener('drop', e => {
+    e.preventDefault(); pz.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const dt = new DataTransfer(); dt.items.add(file);
+      document.getElementById('photoInput').files = dt.files;
+      analysePhoto(document.getElementById('photoInput'));
+    }
+  });
+}
+
+
+
+// ── SHAPE DATA ────────────────────────────────────────────────────────────────
+
+const FIT_DATA = [
+  {
+    name: 'Body-con', verdict: 'no', emoji: '❌',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M20 5 Q30 3 40 5 L44 30 Q40 50 38 70 L36 95 L24 95 L22 70 Q20 50 16 30 Z" fill="#B8CEDD" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Very tight, maps every curve',
+    reason: 'Too tight and clingy. Shows everything underneath and loses the polished tailored look you're going for. Also uncomfortable for a full day.',
+    tip: 'If you love the silhouette, go one size up for a fitted rather than body-con result.',
+  },
+  {
+    name: 'Fitted', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M18 5 Q30 3 42 5 L46 28 Q42 52 40 72 L38 95 L22 95 L20 72 Q18 52 14 28 Z" fill="#B8CEDD" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Follows the body without clinging',
+    reason: 'Your best fit. Shoulders sit correctly, body follows your shape without mapping it. Looks polished and intentional. This is what the Reiss Gabi trouser aims for.',
+    tip: 'Check the shoulder seam — it should sit exactly on your shoulder, not drooping off.',
+  },
+  {
+    name: 'Relaxed', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M16 5 Q30 2 44 5 L50 28 Q48 52 46 72 L44 95 L16 95 L14 72 Q12 52 10 28 Z" fill="#B8CEDD" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Comfortable, skims the body',
+    reason: 'Works well for knitwear, silk tops, and casual pieces. The key is that it still skims — you can see the body shape suggested underneath. Your ivory turtleneck is this fit.',
+    tip: 'Relaxed works when the shoulder seam is still in the right place and the fabric has some drape.',
+  },
+  {
+    name: 'Oversized', verdict: 'warn', emoji: '⚠️',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M10 5 Q30 1 50 5 L58 28 Q56 52 54 72 L52 95 L8 95 L6 72 Q4 52 2 28 Z" fill="#B8CEDD" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Deliberately large, hangs away from body',
+    reason: 'Borderline. Can work as a deliberate styling choice — an oversized blazer worn open over a fitted base, for example. Falls apart when the whole outfit is oversized.',
+    tip: 'One oversized piece maximum per outfit. Always pair with something fitted underneath.',
+  },
+  {
+    name: 'Boxy', verdict: 'no', emoji: '❌',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M8 5 L52 5 L56 30 L56 70 L52 95 L8 95 L4 70 L4 30 Z" fill="#B8CEDD" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Square shape, no waist definition',
+    reason: 'On your no list. Creates a rectangular silhouette that hides your waist and makes you look wider than you are. The pink Vila blazer was rejected for this reason.',
+    tip: 'If a piece looks square on the hanger — it'll look square on you. Walk away.',
+  },
+  {
+    name: 'Shapeless', verdict: 'no', emoji: '❌',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M5 5 Q30 1 55 5 L60 40 Q55 65 50 95 L10 95 Q5 65 0 40 Z" fill="#B8CEDD" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'No structure, sack-like',
+    reason: 'Never. A shapeless garment swamps your frame entirely. The body disappears and the clothes wear you rather than the other way around.',
+    tip: 'Belt it, tuck it, or don't buy it.',
+  },
+];
+
+const NECK_DATA = [
+  {
+    name: 'Turtleneck', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><rect x="22" y="8" width="16" height="14" rx="7" fill="#2A3550"/></svg>`,
+    desc: 'High roll, covers the neck',
+    reason: 'One of your best necklines. Creates a strong horizontal line, adds presence to the upper body, and works beautifully with your colouring. Your cashmere turtleneck is a hero piece for this reason.',
+    tip: 'Works especially well in your neutral tones — écru and navy turtlenecks are your wardrobe foundation.',
+  },
+  {
+    name: 'Crew neck', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><path d="M20 18 Q30 24 40 18" fill="none" stroke="#7A8599" stroke-width="2"/></svg>`,
+    desc: 'Round, sits at base of neck',
+    reason: 'Excellent for you. Creates a soft horizontal line without being as high as a turtleneck. Very versatile — works for knitwear, t-shirts, and fine knits equally.',
+    tip: 'The most wearable neckline in your wardrobe. Seek it out in all your basic tops.',
+  },
+  {
+    name: 'Boat neck', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><line x1="12" y1="18" x2="48" y2="18" stroke="#7A8599" stroke-width="2.5"/></svg>`,
+    desc: 'Wide, horizontal, near collarbone',
+    reason: 'One of your best. The wide horizontal line balances your shoulders and draws the eye sideways rather than down. Creates the illusion of width on a small bust. Classic and elegant.',
+    tip: 'Breton stripes in a boat neck are a perfect combination for your frame.',
+  },
+  {
+    name: 'Square neck', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><path d="M18 14 L18 22 L42 22 L42 14" fill="none" stroke="#7A8599" stroke-width="2"/></svg>`,
+    desc: 'Angular, geometric neckline',
+    reason: 'Works well. The square shape creates a defined horizontal frame that suits your frame well. Not too open, not too closed. Good for dresses and summer tops.',
+    tip: 'A square neck with thin straps is a great summer dress formula for you.',
+  },
+  {
+    name: 'Gentle scoop', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><path d="M18 16 Q30 26 42 16" fill="none" stroke="#7A8599" stroke-width="2"/></svg>`,
+    desc: 'Soft curve, not too low',
+    reason: 'Fine when shallow. A gentle scoop that sits high on the chest is flattering and feminine. The key is "gentle" — it should curve softly, not plunge.',
+    tip: 'Test: if you can see more than 3cm of chest, it's getting too deep. Shallow scoops only.',
+  },
+  {
+    name: 'Shirt collar', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><path d="M22 14 L30 22 L38 14" fill="#2A3550" stroke="#7A8599" stroke-width="1.5"/><path d="M22 14 L18 10 M38 14 L42 10" fill="none" stroke="#7A8599" stroke-width="1.5"/></svg>`,
+    desc: 'Classic pointed collar',
+    reason: 'Works well. A shirt collar frames the face without plunging. Your blue stripe shirt has a shirt collar and it's a hero piece. Good for sleeveless shirts and blouses.',
+    tip: 'Keep the top button undone for a relaxed look. Fully buttoned can look stiff.',
+  },
+  {
+    name: 'V-neck (shallow)', verdict: 'warn', emoji: '⚠️',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><path d="M20 14 L30 26 L40 14" fill="none" stroke="#C04040" stroke-width="2"/></svg>`,
+    desc: 'Light V, not too deep',
+    reason: 'Borderline. A very shallow V — just 3-4cm below the collarbone — can work. The Morgan wrap top had a deep V which was wrong. A shallow V is very different and doesn't create the same downward emphasis.',
+    tip: 'If in doubt, layer a fine turtleneck or camisole underneath to fill the V.',
+  },
+  {
+    name: 'Deep V-neck', verdict: 'no', emoji: '❌',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M10 40 Q10 20 30 15 Q50 20 50 40 L50 65 L10 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><path d="M18 12 L30 38 L42 12" fill="none" stroke="#C04040" stroke-width="2"/></svg>`,
+    desc: 'Plunges deeply toward chest',
+    reason: 'On your no list. Creates a long vertical line downward which emphasises a small bust and looks empty. The Morgan mauve wrap top scored 60 on silhouette for exactly this reason.',
+    tip: 'Can be saved with a camisole or turtleneck underneath, but better to avoid entirely.',
+  },
+  {
+    name: 'Off-shoulder', verdict: 'warn', emoji: '⚠️',
+    svg: `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M5 30 Q5 22 30 18 Q55 22 55 30 L52 65 L8 65 Z" fill="#2A3550" stroke="#2A3550" stroke-width="0.5"/><line x1="5" y1="28" x2="55" y2="28" stroke="#7A8599" stroke-width="2.5"/></svg>`,
+    desc: 'Falls below shoulders',
+    reason: 'Occasional use only. The wide horizontal line is actually good for your frame, but it's impractical for everyday wear and can slip. Best for evenings or special occasions.',
+    tip: 'If it keeps slipping — it doesn't fit properly. Don't buy it.',
+  },
+];
+
+const SLEEVE_DATA = [
+  {
+    name: 'Sleeveless', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M18 8 Q30 5 42 8 L44 35 L44 95 L16 95 L16 35 Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M18 8 L14 20" stroke="#7A8599" stroke-width="1.5" fill="none"/><path d="M42 8 L46 20" stroke="#7A8599" stroke-width="1.5" fill="none"/></svg>`,
+    desc: 'No sleeve, bare arm from shoulder',
+    reason: 'Definitely yes. Fully sleeveless is clean and modern. Your blue stripe hero shirt is sleeveless. The arm is exposed from the shoulder — no sleeve fabric at all. Do not confuse with cap sleeves.',
+    tip: 'A sleeveless top immediately looks more polished than a cap sleeve equivalent.',
+  },
+  {
+    name: 'Cap sleeve', verdict: 'no', emoji: '❌',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M14 8 Q30 5 46 8 L46 35 L44 95 L16 95 L14 35 Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M14 8 Q8 14 10 24 L16 22 L14 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M46 8 Q52 14 50 24 L44 22 L46 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Short structured sleeve, mid-upper arm',
+    reason: 'On your no list. The sleeve fabric sits halfway down the upper arm, cutting it at the widest point. This makes arms look shorter and heavier. Also looks dated. The Uniqlo top you photographed had cap sleeves.',
+    tip: 'If you see a short sleeve that sits on the arm rather than at the shoulder — it's a cap sleeve. Walk away.',
+  },
+  {
+    name: 'Short sleeve', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M16 8 Q30 5 44 8 L44 95 L16 95 Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M16 8 Q6 12 8 32 L18 30 L16 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M44 8 Q54 12 52 32 L42 30 L44 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Sleeve reaches mid-upper arm or elbow',
+    reason: 'Works well. A proper short sleeve that starts at the shoulder and reaches toward the elbow is flattering and practical. Very different from a cap sleeve — the key is it starts at the shoulder seam.',
+    tip: 'Short sleeves that reach the elbow are especially flattering as they elongate the arm.',
+  },
+  {
+    name: 'Three-quarter', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M16 8 Q30 5 44 8 L44 95 L16 95 Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M16 8 Q4 14 6 58 L18 56 L16 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M44 8 Q56 14 54 58 L42 56 L44 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Sleeve reaches mid-forearm',
+    reason: 'Excellent. The three-quarter length is one of the most flattering sleeve lengths — shows the wrist and forearm which are slimmer, elongates the arm overall. Practical for office wear.',
+    tip: 'Three-quarter sleeves on a blazer are especially good — formal enough for work, shows the wrist elegantly.',
+  },
+  {
+    name: 'Full sleeve', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="100" viewBox="0 0 60 100"><path d="M16 8 Q30 5 44 8 L44 95 L16 95 Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M16 8 Q2 16 4 80 L18 78 L16 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/><path d="M44 8 Q58 16 56 80 L42 78 L44 8Z" fill="#2A3550" stroke="#7A8599" stroke-width="1"/></svg>`,
+    desc: 'Full length to the wrist',
+    reason: 'Always works. A full sleeve is classic, elegant, and practical. Works for all seasons — fine cotton or silk in summer, cashmere or wool in winter. Most of your wardrobe staples have full sleeves.',
+    tip: 'Roll or push up full sleeves for a relaxed look in warmer weather.',
+  },
+];
+
+const FABRIC_DATA = [
+  {
+    name: 'Sheer / chiffon', verdict: 'warn', emoji: '⚠️',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="none" stroke="#B8CEDD" stroke-width="1" stroke-dasharray="3 2"/><text x="30" y="45" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Sheer</text></svg>`,
+    desc: 'See-through, very lightweight',
+    reason: 'Needs layering. Sheer fabrics alone are too revealing for everyday wear. Work beautifully when layered over a camisole or turtleneck. Good for evenings and special occasions.',
+    tip: 'Always have a cami or slip underneath. The layered look is actually more interesting than wearing it alone.',
+    season: 'Summer · Evening',
+  },
+  {
+    name: 'Silk / satin', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#F5F0EB" stroke="#C0BDB8" stroke-width="1"/><path d="M5 25 Q30 20 55 25" fill="none" stroke="#B0A898" stroke-width="0.8" opacity="0.6"/><path d="M5 45 Q30 40 55 45" fill="none" stroke="#B0A898" stroke-width="0.8" opacity="0.6"/><text x="30" y="67" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Silk</text></svg>`,
+    desc: 'Fluid, lustrous, light',
+    reason: 'One of your best fabrics. Silk drapes beautifully, feels luxurious, and sits well against your colouring. The fluidity works with your relaxed-but-fitted aesthetic. Worth the investment for blouses and camisoles.',
+    tip: 'Sand-washed silk has a matte finish that looks more expensive and is more forgiving than shiny satin silk.',
+    season: 'Spring · Summer · Autumn',
+  },
+  {
+    name: 'Fine cotton', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#F8F8F8" stroke="#E0DDD8" stroke-width="1"/><line x1="5" y1="20" x2="55" y2="20" stroke="#E0DDD8" stroke-width="0.8"/><line x1="5" y1="35" x2="55" y2="35" stroke="#E0DDD8" stroke-width="0.8"/><line x1="5" y1="50" x2="55" y2="50" stroke="#E0DDD8" stroke-width="0.8"/><text x="30" y="67" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Cotton</text></svg>`,
+    desc: 'Breathable, clean, versatile',
+    reason: 'Excellent year-round fabric. Pima cotton and Supima cotton are the premium versions — smoother, softer, lasts longer. Your Breton stripe is cotton. Crisp cotton shirts in écru or navy are capsule essentials.',
+    tip: 'Look for Pima, Supima, or Egyptian cotton — the long-staple varieties that don't pill and wash beautifully.',
+    season: 'All year',
+  },
+  {
+    name: 'Linen', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#F2EDE4" stroke="#C8BEA8" stroke-width="1"/><line x1="15" y1="5" x2="15" y2="75" stroke="#C8BEA8" stroke-width="0.6"/><line x1="25" y1="5" x2="25" y2="75" stroke="#C8BEA8" stroke-width="0.6"/><line x1="35" y1="5" x2="35" y2="75" stroke="#C8BEA8" stroke-width="0.6"/><line x1="45" y1="5" x2="45" y2="75" stroke="#C8BEA8" stroke-width="0.6"/><text x="30" y="67" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Linen</text></svg>`,
+    desc: 'Textured, breathable, structured',
+    reason: 'Perfect for spring and summer. Linen creases naturally but that's part of its character — not a flaw. Écru and navy linen are particularly good for your palette. Gets softer with every wash.',
+    tip: 'A slight crease in linen is intentional and chic. Only iron if you want a very polished look.',
+    season: 'Spring · Summer',
+  },
+  {
+    name: 'Fine knit / merino', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#EEF2F7" stroke="#C0CCDC" stroke-width="1"/><path d="M5 15 Q15 12 25 15 Q35 18 45 15 Q55 12 55 15" fill="none" stroke="#B0BCCC" stroke-width="1"/><path d="M5 25 Q15 22 25 25 Q35 28 45 25 Q55 22 55 25" fill="none" stroke="#B0BCCC" stroke-width="1"/><path d="M5 35 Q15 32 25 35 Q35 38 45 35 Q55 32 55 35" fill="none" stroke="#B0BCCC" stroke-width="1"/><text x="30" y="67" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Fine knit</text></svg>`,
+    desc: 'Light knitwear, spring/autumn',
+    reason: 'Excellent transitional fabric. Merino wool is especially good — lightweight, temperature-regulating, barely wrinkes. Fine knit turtlenecks and crew necks in your palette are some of your most versatile pieces.',
+    tip: 'Merino is your friend — it works from 8°C to 18°C, travels without creasing, and looks polished.',
+    season: 'Spring · Autumn',
+  },
+  {
+    name: 'Cashmere', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#F5F0EB" stroke="#C4BAB0" stroke-width="1.5"/><circle cx="30" cy="35" r="18" fill="none" stroke="#C4BAB0" stroke-width="0.8" stroke-dasharray="2 2"/><text x="30" y="39" text-anchor="middle" font-size="8" fill="#7A8599" font-family="Inter">Cashmere</text><text x="30" y="67" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Premium</text></svg>`,
+    desc: 'Luxury wool, extremely soft',
+    reason: 'Worth every penny for turtlenecks and cardigans. Cashmere below £100 pills quickly — budget £150-300 for pieces you'll wear 100+ times. Your white cashmere turtleneck is a hero piece for this reason.',
+    tip: 'Always hand wash or use the cashmere cycle. A cashmere comb removes pills and makes it look new again.',
+    season: 'Autumn · Winter',
+  },
+  {
+    name: 'Heavy knit / wool', verdict: 'yes', emoji: '✅',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#EEEFF2" stroke="#B0B8C4" stroke-width="1.5"/><path d="M5 15 Q12 10 20 15 Q28 20 36 15 Q44 10 55 15" fill="none" stroke="#A0A8B4" stroke-width="2"/><path d="M5 30 Q12 25 20 30 Q28 35 36 30 Q44 25 55 30" fill="none" stroke="#A0A8B4" stroke-width="2"/><path d="M5 45 Q12 40 20 45 Q28 50 36 45 Q44 40 55 45" fill="none" stroke="#A0A8B4" stroke-width="2"/><text x="30" y="67" text-anchor="middle" font-size="9" fill="#7A8599" font-family="Inter">Chunky knit</text></svg>`,
+    desc: 'Thick knitwear, winter warmth',
+    reason: 'Winter staple. Chunky cable knits in écru and navy are timeless. The key is they shouldn't be so bulky they make you look wider than you are — a medium-weight chunky is better than an extreme cable knit.',
+    tip: 'Wear chunky knits with slim trousers to balance the volume on top.',
+    season: 'Winter',
+  },
+  {
+    name: 'Polyester', verdict: 'no', emoji: '❌',
+    svg: `<svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="5" width="50" height="70" rx="2" fill="#F5EEEE" stroke="#D0C0C0" stroke-width="1"/><line x1="5" y1="5" x2="55" y2="75" stroke="#C04040" stroke-width="1.5"/><text x="30" y="67" text-anchor="middle" font-size="9" fill="#C04040" font-family="Inter">Avoid</text></svg>`,
+    desc: 'Synthetic, shiny, traps heat',
+    reason: 'Avoid. Polyester looks cheap after a few washes, traps heat and sweat, creates static, and pills. No amount of low price compensates for how it looks and feels. Even blended with natural fibres it degrades the quality.',
+    tip: 'Check the label before buying. 100% natural or at least 70% natural. Any more polyester than 30% and you'll feel it.',
+    season: 'Never',
+  },
+];
+
+function buildShapeGrid(gridId, detailId, data) {
+  const grid = document.getElementById(gridId);
+  const detail = document.getElementById(detailId);
+  if (!grid) return;
+
+  data.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'shape-card';
+    card.innerHTML = `
+      <div class="shape-verdict-badge">${item.emoji}</div>
+      ${item.svg}
+      <div class="shape-name">${item.name}</div>
+      <div class="shape-desc">${item.desc}</div>`;
+    card.onclick = () => {
+      document.querySelectorAll('#' + gridId + ' .shape-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      showShapeDetail(detailId, item);
+    };
+    grid.appendChild(card);
+  });
+}
+
+function showShapeDetail(detailId, item) {
+  const panel = document.getElementById(detailId);
+  const vClass = item.verdict === 'yes' ? 'verdict-yes' : item.verdict === 'no' ? 'verdict-no' : 'verdict-warn';
+  const vText  = item.verdict === 'yes' ? '✅ Works for you' : item.verdict === 'no' ? '❌ Avoid' : '⚠️ With care';
+
+  panel.innerHTML = `
+    <div class="shape-detail-title">${item.name}</div>
+    <div class="shape-detail-verdict ${vClass}">${vText}</div>
+    ${item.season ? `<div style="font-size:10px;color:var(--slate);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">${item.season}</div>` : ''}
+    <div class="shape-detail-body">${item.reason}</div>
+    <div class="shape-detail-tip">→ ${item.tip}</div>`;
+  panel.classList.add('on');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Build all shape grids
+buildShapeGrid('fitGrid',    'fitDetail',    FIT_DATA);
+buildShapeGrid('neckGrid',   'neckDetail',   NECK_DATA);
+buildShapeGrid('sleeveGrid', 'sleeveDetail', SLEEVE_DATA);
+buildShapeGrid('fabricGrid', 'fabricDetail', FABRIC_DATA);
+
+
+// ── COLOUR DATABASE ────────────────────────────────────────────────────────────
+const COLOURS = {
+  neutrals: [
+    { hex:'#F8F8F8', name:'Stark cold white', verdict:'no',   reason:'Too cold and harsh. The blue tone reflects onto your face and makes your complexion look grey and tired.', rule:'The "bright white to avoid" rule — this is the one.' },
+    { hex:'#F4F2F0', name:'Cool off-white',   verdict:'warn', reason:'Borderline. If it looks slightly blue or cold in person, avoid. If it looks neutral — fine.', rule:'Test in natural light before buying.' },
+    { hex:'#F5F0EB', name:'Écru',             verdict:'yes',  reason:'Perfect. Soft, warm-leaning white that sits gently next to your cool skin without overwhelming it.', rule:'This is your neutral — écru, ivory, and cream are all this family.' },
+    { hex:'#F0EAE0', name:'Ivory',            verdict:'yes',  reason:'Excellent. Slightly deeper than écru, very flattering. Your cashmere turtleneck is this colour.', rule:'Ivory = YES always.' },
+    { hex:'#EDE3D0', name:'Warm cream',       verdict:'yes',  reason:'Works well. The warm tone softens the contrast with your cool skin rather than fighting it.', rule:'Any cream that reads warm (not yellow) is fine.' },
+    { hex:'#E0D5C0', name:'Deep cream/linen', verdict:'warn', reason:'Getting too warm and yellow. Can look slightly muddy depending on lighting. Try in natural light first.', rule:'If it looks yellow against your skin, put it back.' },
+    { hex:'#4A4A4A', name:'Charcoal',         verdict:'yes',  reason:'Excellent dark neutral. Cool enough to work with your palette, softer than black. Great for trousers and blazers.', rule:'Charcoal is your alternative to black.' },
+    { hex:'#7A8599', name:'Slate grey',       verdict:'yes',  reason:'Your primary grey. The cool blue undertone makes it crisp and harmonious with your skin. Trousers, cardigans, blazers.', rule:'If grey has a blue or cool tone — yes.' },
+    { hex:'#C0BDB8', name:'Dove grey',        verdict:'yes',  reason:'Soft, light grey with a cool undertone. Perfect for knitwear and cardigans. Very feminine against your colouring.', rule:'Light cool grey = dove grey = yes.' },
+    { hex:'#B8B8C0', name:'Silver grey',      verdict:'warn', reason:'Can work but risky — very pale and slightly metallic. Can wash you out if too close to the face.', rule:'As an accent or away from the face — ok. As a top — careful.' },
+    { hex:'#B0A898', name:'Warm greige',      verdict:'no',   reason:'The taupe/greige family — grey with a yellow-brown undertone. Looks muddy against your cool skin. This is what the Zara taupe scored 20/100.', rule:'If grey looks brown or yellow — it\'s a no.' },
+    { hex:'#A89880', name:'Warm taupe',       verdict:'no',   reason:'Too warm and brown. Clashes with your cool undertone and makes your complexion look dull.', rule:'Taupe and greige are always no for Cool Summer.' },
+  ],
+  blues: [
+    { hex:'#2A3550', name:'French Navy',      verdict:'yes',  reason:'Your anchor colour. Deep, rich, cool blue that works with everything in your wardrobe. The foundation of your capsule.', rule:'Navy = always yes.' },
+    { hex:'#3B5998', name:'True blue',        verdict:'yes',  reason:'Classic cool blue. Not as deep as navy but same family. Works well for denim and casual pieces.', rule:'Pure cool blues are always yes.' },
+    { hex:'#7B9FD4', name:'Cornflower blue',  verdict:'yes',  reason:'One of your best accent colours. Soft, muted, cool. Perfect for blouses and knit tops. Currently a priority gap.', rule:'Cornflower = top priority gap piece.' },
+    { hex:'#B8CEDD', name:'Powder blue',      verdict:'yes',  reason:'Very soft, almost pastel blue. Cool and delicate. Works beautifully for summer pieces. The Uniqlo top you photographed was this colour.', rule:'Powder blue = yes, especially for summer.' },
+    { hex:'#5B9BD5', name:'Sky blue',         verdict:'yes',  reason:'Clean, medium blue. Slightly lighter than cornflower. Cool and fresh. Works well for tops and shirts.', rule:'Any clear, unmuddy medium blue is yes.' },
+    { hex:'#4A9B8A', name:'Teal',             verdict:'warn', reason:'Borderline. Teal has green in it which can push toward warm territory. Depends on the specific shade — test in person.', rule:'Cool teal (blue-dominant) = maybe. Warm teal (green-dominant) = no.' },
+    { hex:'#40C0C0', name:'Turquoise',        verdict:'warn', reason:'Too bright and vivid for Cool Summer. The intensity is the issue — muted versions might work but standard turquoise is too much.', rule:'Cool Summer needs muted, not vivid.' },
+    { hex:'#0050FF', name:'Electric blue',    verdict:'no',   reason:'Too vivid and saturated. Cool Summer needs soft, muted tones — this is too intense and will overwhelm your colouring.', rule:'Vivid/neon blues = no. Too much contrast.' },
+  ],
+  pinks: [
+    { hex:'#A0768A', name:'Dusty mauve',      verdict:'yes',  reason:'One of your best accent colours. Muted, cool-leaning pink-purple that complements your Cool Summer palette perfectly.', rule:'Dusty mauve = yes. It\'s in your core palette.' },
+    { hex:'#C4879A', name:'Dusty rose',       verdict:'yes',  reason:'Soft, muted rose with a cool undertone. Excellent for dresses and tops. Not too pink, not too purple.', rule:'Dusty rose = yes. Classic Cool Summer colour.' },
+    { hex:'#B8A9C9', name:'Lavender',         verdict:'yes',  reason:'Soft purple-pink. Feminine and cool. Works beautifully for dresses and evening pieces.', rule:'Lavender and soft purple = yes.' },
+    { hex:'#C4B0C8', name:'Soft lilac',       verdict:'yes',  reason:'Even softer than lavender. Delicate and very Cool Summer. Good for light tops and accessories.', rule:'Muted, cool purples and lilacs = yes.' },
+    { hex:'#E8B4C0', name:'Blush pink',       verdict:'warn', reason:'Borderline. If it leans cool/mauve = ok. If it leans warm/peach = no. The Morgan wrap top colour was dusty mauve = yes. A peachy blush = no.', rule:'Test whether it looks cool-pink or warm-peach. Only cool-pink works.' },
+    { hex:'#F4A0A0', name:'Warm blush',       verdict:'no',   reason:'Too warm and peachy. The warmth clashes with your cool undertone. This is closer to coral territory.', rule:'Peach-pink = no. Mauve-pink = yes.' },
+    { hex:'#E85870', name:'Hot pink',         verdict:'no',   reason:'Too vivid and warm. The intensity and warmth both work against Cool Summer. Will make your skin look reddish.', rule:'Bright, vivid pinks = always no.' },
+    { hex:'#E87060', name:'Coral',            verdict:'no',   reason:'Explicitly on your no list. Coral is warm orange-pink — the opposite of your cool palette. Will clash immediately.', rule:'Coral = always no. One of the clearest rejections.' },
+  ],
+  greens: [
+    { hex:'#8FAF8B', name:'Soft sage',        verdict:'yes',  reason:'Your only green. Muted, grey-toned, cool sage. Think dusty herb garden, not grass. Subtle and beautiful next to navy.', rule:'Sage must be muted and grey-toned to work. Vibrant sage = no.' },
+    { hex:'#A8C8A0', name:'Mint green',       verdict:'warn', reason:'Borderline. Can work if it\'s a very soft, cool mint. Gets risky if it tips towards bright or warm. Test in person.', rule:'Very soft cool mint = maybe. Anything brighter = no.' },
+    { hex:'#6B7C3B', name:'Olive green',      verdict:'no',   reason:'Explicitly on your no list. Olive has a warm yellow-brown undertone that clashes directly with your cool palette. Scored 10/100.', rule:'Olive = always no. Warm yellow-green = wrong for Cool Summer.' },
+    { hex:'#228B22', name:'Forest green',     verdict:'no',   reason:'Too vivid and warm-toned. The saturation and yellow undertone don\'t work for Cool Summer. Too much intensity.', rule:'Warm, saturated greens = no.' },
+    { hex:'#90EE90', name:'Lime green',       verdict:'no',   reason:'Explicitly on your no list. Neon/lime green is vivid, warm, and completely opposite to your muted cool palette.', rule:'Lime/neon green = never. Opposite of Cool Summer.' },
+    { hex:'#4A7A6A', name:'Teal green',       verdict:'no',   reason:'The green dominates here, making it warm-toned. If a teal reads more blue than green it might work — but this shade doesn\'t.', rule:'Green-dominant teal = no. Blue-dominant teal = borderline.' },
+  ],
+  warms: [
+    { hex:'#C9A84C', name:'Mustard yellow',   verdict:'no',   reason:'Explicitly on your no list. Warm, golden, high contrast against your cool skin. Scored 10/100 in testing.', rule:'Yellow = always no for Cool Summer.' },
+    { hex:'#E8A030', name:'Golden yellow',    verdict:'no',   reason:'Warm, saturated, the opposite of your palette. Will make your complexion look sallow and tired.', rule:'All yellows and golds = no.' },
+    { hex:'#8B3A2A', name:'Rust',             verdict:'no',   reason:'Explicitly on your no list. Warm orange-brown. Scored 10/100 in testing. One of the clearest no colours for Cool Summer.', rule:'Rust = always no.' },
+    { hex:'#E8714A', name:'Bright coral',     verdict:'no',   reason:'Warm orange-pink. Explicitly on your no list. The warmth and vibrancy both clash with your cool undertone.', rule:'Coral and orange = always no.' },
+    { hex:'#C19A6B', name:'Warm camel',       verdict:'no',   reason:'Warm yellow-brown. On your no list. The Zara taupe was this family — rejected correctly in testing.', rule:'Camel and warm beige = no.' },
+    { hex:'#8B4513', name:'Chocolate brown',  verdict:'no',   reason:'On your no list. Dark, warm brown. Works against your cool palette and muddy next to your skin.', rule:'Brown tones = always no.' },
+    { hex:'#E05030', name:'Tomato red',       verdict:'no',   reason:'Warm red with orange undertone. On your no list. If red were cool (more blue-toned) it could be borderline but warm red = no.', rule:'Warm red = no. Cool burgundy = borderline.' },
+    { hex:'#C04840', name:'Brick red',        verdict:'no',   reason:'Still warm, still problematic. Red in general sits in difficult territory for Cool Summer — the warm versions are all no.', rule:'All warm reds = no.' },
+  ],
+  darks: [
+    { hex:'#2A3550', name:'French Navy',      verdict:'yes',  reason:'Your anchor dark. Richer and more interesting than black. Works everywhere — trousers, blazers, dresses, outerwear.', rule:'Navy = always yes and always better than black.' },
+    { hex:'#4A4A4A', name:'Charcoal',         verdict:'yes',  reason:'Your dark neutral. Cool-toned, sophisticated. Works as a substitute for black in most situations.', rule:'Charcoal = yes. Softer than black, harder than navy.' },
+    { hex:'#2A2A2A', name:'Near-black',       verdict:'warn', reason:'Borderline. Very dark charcoal is fine away from the face — trousers, shoes, bags. As a top or dress at the face, it can be too stark.', rule:'Near-black away from face = ok. At face level = prefer navy or charcoal.' },
+    { hex:'#000000', name:'Pure black',       verdict:'warn', reason:'On your list to avoid at the face. Pure black creates harsh contrast against Cool Summer skin and can make you look washed out. Fine for shoes, bags, and accessories.', rule:'Black for accessories = fine. Black top or dress = prefer navy instead.' },
+    { hex:'#1A0A0A', name:'Black-brown',      verdict:'no',   reason:'The worst of both worlds — the darkness of black with a warm brown undertone. Clashes with your cool palette.', rule:'Any brown-toned dark = no.' },
+    { hex:'#3D2B1F', name:'Dark chocolate',   verdict:'no',   reason:'Warm dark brown. On your no list. No brown tones work for Cool Summer — this is no exception.', rule:'Dark brown = always no.' },
+  ],
+};
+
+// ── SPECTRUMS ──────────────────────────────────────────────────────────────────
+const SPECTRUMS = {
+  whiteSpectrum: [
+    '#F0F4F6','#F2F2F2','#F4F2F0','#F5F1ED','#F5F0EB',
+    '#F2EDE5','#EDE8DE','#EDE3D0','#E8DCC8','#E0D5C0',
+  ],
+  greySpectrum: [
+    '#4A4A4A','#606060','#7A8599','#909090','#A8A8A8',
+    '#B8B8B8','#C0BDB8','#C8C4BC','#C8C0A8','#B8AA90',
+  ],
+  blueSpectrum: [
+    '#2A3550','#2A4A80','#3B5998','#5B7EC9','#7B9FD4',
+    '#90B8E0','#B8CEDD','#C8DCF0','#40C0C0','#0080FF',
+  ],
+  pinkSpectrum: [
+    '#A0768A','#B888A0','#C4879A','#D4A0B4','#E0B8C8',
+    '#E8C8D4','#EECCD8','#F0D4DC','#F4C0C0','#E87060',
+  ],
+  greenSpectrum: [
+    '#8FAF8B','#9ABF96','#A8C8A0','#7AB070','#5A9850',
+    '#6B7C3B','#4A7A3A','#228B22','#90EE90','#70CC30',
+  ],
+};
+
+function buildSpectrum(id, hexes) {
+  const bar = document.getElementById(id);
+  if (!bar) return;
+  hexes.forEach((hex, i) => {
+    const div = document.createElement('div');
+    div.className = 'spectrum-swatch';
+    div.style.background = hex;
+    div.title = hex;
+    div.onclick = () => showSpectrumDetail(hex, id, i);
+    bar.appendChild(div);
+  });
+}
+
+function showSpectrumDetail(hex, spectrumId, index) {
+  // Find closest named colour
+  const allColours = Object.values(COLOURS).flat();
+  let closest = allColours[0];
+  let minDist = 999999;
+
+  allColours.forEach(c => {
+    const d = hexDist(c.hex, hex);
+    if (d < minDist) { minDist = d; closest = c; }
+  });
+
+  showDetail({ ...closest, hex });
+}
+
+function hexDist(a, b) {
+  const ar = parseInt(a.slice(1,3),16), ag = parseInt(a.slice(3,5),16), ab = parseInt(a.slice(5,7),16);
+  const br = parseInt(b.slice(1,3),16), bg = parseInt(b.slice(3,5),16), bb = parseInt(b.slice(5,7),16);
+  return Math.sqrt((ar-br)**2 + (ag-bg)**2 + (ab-bb)**2);
+}
+
+function showDetail(colour) {
+  const panel   = document.getElementById('detailPanel');
+  const swatch  = document.getElementById('detailSwatch');
+  const name    = document.getElementById('detailName');
+  const verdict = document.getElementById('detailVerdict');
+  const reason  = document.getElementById('detailReason');
+  const rule    = document.getElementById('detailRule');
+  const skin    = document.getElementById('skinPreview');
+
+  swatch.style.background = colour.hex;
+  name.textContent         = colour.name;
+  reason.textContent       = colour.reason;
+  rule.textContent         = '→ ' + colour.rule;
+
+  const vClass = colour.verdict === 'yes' ? 'verdict-yes' : colour.verdict === 'no' ? 'verdict-no' : 'verdict-warn';
+  const vText  = colour.verdict === 'yes' ? '✅ Works for you' : colour.verdict === 'no' ? '❌ Avoid' : '⚠️ With care';
+  verdict.className   = 'detail-verdict ' + vClass;
+  verdict.textContent = vText;
+
+  // Skin preview — show how this colour sits next to Cool Summer skin
+  skin.innerHTML = `
+    <div class="skin-chip">
+      <div class="skin-pair">
+        <div class="skin-tone"></div>
+        <div class="fabric-tone" style="background:${colour.hex}"></div>
+      </div>
+      <div class="skin-label">Next to your skin</div>
+    </div>`;
+
+  panel.classList.add('on');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function buildCards(containerId, colours) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  colours.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'colour-card';
+    const vClass = c.verdict === 'yes' ? 'verdict-yes' : c.verdict === 'no' ? 'verdict-no' : 'verdict-warn';
+    const vText  = c.verdict === 'yes' ? '✅ Yes' : c.verdict === 'no' ? '❌ No' : '⚠️ With care';
+    card.innerHTML = `
+      <div class="cc-swatch" style="background:${c.hex}"></div>
+      <div class="cc-body">
+        <div class="cc-name">${c.name}</div>
+        <div class="cc-verdict ${vClass}">${vText}</div>
+        <div class="cc-reason">${c.reason.split('.')[0]}.</div>
+      </div>`;
+    card.onclick = () => showDetail(c);
+    container.appendChild(card);
+  });
+}
+
+function showTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + tab).classList.add('on');
+  btn.classList.add('on');
+  document.getElementById('detailPanel').classList.remove('on');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildSpectrum('whiteSpectrum', SPECTRUMS.whiteSpectrum);
+buildSpectrum('greySpectrum',  SPECTRUMS.greySpectrum);
+buildSpectrum('blueSpectrum',  SPECTRUMS.blueSpectrum);
+buildSpectrum('pinkSpectrum',  SPECTRUMS.pinkSpectrum);
+buildSpectrum('greenSpectrum', SPECTRUMS.greenSpectrum);
+
+buildCards('neutralCards', COLOURS.neutrals);
+buildCards('blueCards',    COLOURS.blues);
+buildCards('pinkCards',    COLOURS.pinks);
+buildCards('greenCards',   COLOURS.greens);
+buildCards('warmCards',    COLOURS.warms);
+buildCards('darkCards',    COLOURS.darks);
+</script>
+</body>
+</html>
